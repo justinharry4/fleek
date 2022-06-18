@@ -1,0 +1,107 @@
+<%- include('../../partials/head') %>
+    <link rel="stylesheet" href="/css/main-content.css">
+</head>
+<body>
+    <section class="home-section">
+        <header class="flex-wrapper">
+            <h1 class="fleek-logo"><!--<img src="/images/fleek-logo.svg" alt="fleek logo">--><span class="native">FLEEK</span></h1>
+            <button type="button" class="native">Sign In</button>
+        </header>
+        <div class="home-section-text-wrapper">
+            <h2 class="home-section-heading">Unlimited movies, TV<br> shows, and more.</h2>
+            <h3 class="home-section-subheading">Watch anywhere. Cancel anytime</h3>
+            <div class="form-signup-wrapper"> 
+                <p class="home-text">Ready to watch? Enter your email to create or restart your membership.</p>
+                <form method="POST" action="" id="form-signup-top">
+                    <ul>
+                        <li>
+                            <label class="off-screen" for="form-signup-top-email">Email</label>
+                            <input type="email" name="email" value="Email address" id="form-signup-top-email">
+                            <button type="button" class="native">Get Started ></button>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </section>
+    <section class="home-section">
+        <div class="flex-wrapper">
+            <div class="home-section-text-wrapper">
+                <h2 class="home-section-heading">Enjoy on your TV</h2>
+                <h3 class="home-section-subheading">Watch on Smart Tvs, PlayStation. Xbox, Chromecast, Apple TV, Blu-ray players, and more.</h3>
+            </div>
+            <div id="img-wrapper-tvset" class="img-wrapper">
+                <img src="/images/" alt="tv set" id="home-tvset">
+                <video src="/videos/" id="home-vid-tvset"></video>
+            </div>
+        </div>
+    </section>
+    <section class="home-section">
+        <div class="flex-wrapper">
+            <div id="img-wrapper-tvset" class="img-wrapper">
+                <img src="/images/" alt="trending movie cover" id="home-trending-movie">
+            </div>
+            <div class="home-section-text-wrapper">
+                <h2 class="home-section-heading">Download your shows to watch offline.</h2>
+                <h3 class="home-section-subheading">Save your favorites easily and always have something to watch.</h3>
+            </div>
+        </div>
+    </section>
+    <section class="home-section">
+        <div class="flex-wrapper">
+            <div class="home-section-text-wrapper">
+                <h2 class="home-section-heading">Watch everywhere.</h2>
+                <h3 class="home-section-subheading">Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV.</h3>
+            </div>
+        </div>
+    </section>
+    <section class="home-section">
+        <div class="flex-wrapper">
+            <div id="img-wrapper-tvset" class="img-wrapper">
+                <img src="/images/" alt="kids cartoon" id="home-kids-cartoon">
+            </div>
+            <div class="home-section-text-wrapper">
+                <h2 class="home-section-heading">Create profiles for kids.</h2>
+                <h3 class="home-section-subheading">Send kids on adventures with their favorite characters in a space made just for them&mdash;free with your membership.</h3>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div id="home-section-text-wrapper">
+            <h2 class="home-section-heading">Frequently Asked Questions</h2>
+            <ul>
+                <% for (let faq of faqList) { %>
+                    <li>
+                        <div class="flex-wrapper home-faq-button">
+                            <button type="button"><%= faq.question %><!--<svg></svg>--><span>+</span></button>
+                        </div>
+                        <div class="off-screen"><%= faq.answer %></div>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+        <div class="form-signup-wrapper"> 
+            <p class="home-text">Ready to watch? Enter your email to create or restart your membership.</p>
+            <form method="POST" action="" id="form-signup-top">
+                <ul>
+                    <li>
+                        <label class="off-screen" for="form-signup-top-email">Email</label>
+                        <input type="email" name="email" value="Email address" id="form-signup-top-email">
+                        <button type="button" class="native">Get Started ></button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </section>
+    <footer id="home-footer">
+        <nav id="home-footer-wrapper">
+            <h3 class="home-footer-heading">Questons? <a href="">Contact us.</a></h3>
+            <ul class="flex-wrapper">
+                <% for (let navItem of navList) { %>
+                    <li class="home-footer-nav-item"><a><%= navItem %></a></li>
+                <% } %>
+            </ul>
+            <a>Netflix Nigeria</a>
+        <nav>
+    </footer>
+<%- include('../../partials/end') %>
