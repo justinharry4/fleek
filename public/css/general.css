@@ -1,0 +1,61 @@
+@charset "utf-8";
+
+/* neutral styles */
+h1, h2, h3, h4, h5, p, ul {
+    margin: 0;
+    padding: 0;
+}
+button, input {
+    border: none;
+    border-radius: 0px;
+    padding: 0;
+}
+li {
+    list-style: none;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* general styles */
+.flex-wrapper {
+    display: flex;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+.native-bg {
+    background-color: #da1a1a;
+}
+.native-fg {
+    color: #da1a1a;
+}
+.off-screen {
+    display: none;
+}
+input {
+    padding: 0px .5em;
+}
+img {
+    max-width: 100%;
+}
+.overlay {
+    position: absolute;
+}
+.overlay-wrapper {
+    position: relative;
+}
+.text-bold {
+    font-weight: bold;
+}
+
+/* header styles */
+#toplevel-header {
+    padding: 1.2em 3%;
+}
+.fleek-logo {
+    width: 150px;
+    letter-spacing: .1em;
+    font-size: 1.7em;
+}

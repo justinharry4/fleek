@@ -8,26 +8,7 @@ html {
     box-sizing: inherit;
 }
 
-/* neutral styles */
-h1, h2, h3, p, ul {
-    margin: 0;
-    padding: 0;
-}
-button, input {
-    border: none;
-    border-radius: 0px;
-    padding: 0;
-}
-li {
-    list-style: none;
-}
-a {
-    text-decoration: none;
-    color: #000;
-}
-
 /* HOME PAGE STYLES */
-
 
 /* background styles */
 body {
@@ -48,18 +29,22 @@ section.home-section {
 }
 
 /* header styles */
-#toplevel-header {
+/* #toplevel-header {
     padding: 1.2em 3%;
 }
 .fleek-logo {
     width: 100px;
-}
+} */
 #home-header-signin {
     margin-left: auto;
     align-self: center;
     padding: .5em 1em;
     border-radius: 3px;
     color: #fff;
+}
+#home-header-signin:hover, #home-header-signin:active,
+.form-signup-ul li button:hover, .form-signup-ul li button:active {
+    background-color: #dd2d2d;
 }
 
 /* home main section styles */
@@ -190,52 +175,26 @@ section.home-section {
 
 /* footer styles */
 #home-footer {
-    padding: 2.5em 2% 1em;
+    padding: 2em 2% 1em;
 }
 #home-footer nav {
     margin: 0% 10%;
+    font-size: .7rem;
 }
 #home-footer nav a, #home-footer nav {
     color: #5c5959;
 }
+#home-footer nav a:hover, #home-footer nav a:active {
+    color: #aca8a8;
+}
+
 #home-footer nav ul {
     margin: 1.5em 0em;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 10em;
+    height: 7em;
 }
 #home-footer nav ul li {
-    height: 2.5em;
+    height: 1.75em;
 }
 
-/* general styles */
-.flex-wrapper {
-    display: flex;
-}
-.flex-wrap {
-    flex-wrap: wrap;
-}
-.native-bg {
-    background-color: #da1a1a;
-}
-.native-fg {
-    color: #da1a1a;
-}
-.off-screen {
-    display: none;
-}
-input {
-    padding: 0px .5em;
-}
-img {
-    max-width: 100%;
-}
-.overlay {
-    position: absolute;
-}
-.overlay-wrapper {
-    position: relative;
-}
-.text-bold {
-    font-weight: bold;
-}

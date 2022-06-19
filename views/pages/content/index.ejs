@@ -1,4 +1,5 @@
 <%- include('../../partials/head') %>
+    <link rel="stylesheet" href="/css/general.css">
     <link rel="stylesheet" href="/css/main-content.css">
     <script src="/scripts/jquery.js"></script>
     <script src="/scripts/index.js"></script>  
@@ -6,9 +7,8 @@
 <body>
     <div id="home-container">
         <section class="home-section" id="home-section-1">
-            <header class="flex-wrapper" id="toplevel-header">
-                <h1 class="fleek-logo"><!--<img src="/images/fleek-logo.svg" alt="fleek logo">--><span class="native-fg">FLEEK</span></h1>
-                <button type="button" class="native-bg" id="home-header-signin">Sign In</button>
+            <%- include('../../partials/header') %>
+                <button type="button" class="native-bg" id="home-header-signin"><a href="/auth/sign-in">Sign In</a></button>
             </header>
             <div class="home-section-text-wrapper">
                 <h2 class="home-section-heading">Unlimited movies, TV<br> shows, and more.</h2>
@@ -20,7 +20,7 @@
                             <li class="flex-wrapper">
                                 <label class="off-screen" for="form-signup-top-email">Email</label>
                                 <input type="email" name="email" placeholder="Email address" id="form-signup-top-email">
-                                <button type="button" class="native-bg">Get Started ></button>
+                                <button type="button" class="native-bg"><a href="">Get Started ></a></button>
                             </li>
                         </ul>
                     </form>
@@ -105,7 +105,7 @@
                         <li class="home-footer-nav-item"><a><%= navItem %></a></li>
                     <% } %>
                 </ul>
-                <a>Netflix Nigeria</a>
+                <span>Netflix Nigeria</span>
             <nav>
         </footer>
     </div>

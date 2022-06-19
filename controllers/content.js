@@ -1,20 +1,22 @@
-const fs = require('fs');
-const path = require('path');
+const fileUtil = require('../util/file');
 
-module.exports.getIndex = (req, res, next) => {
-    let faqFilePath = path.join(__dirname, '..', 'data', 'home-data.json');
-    fs.readFile(faqFilePath, (err, data) => {
-        if (err){
-            return next(err);
-        }
-        let homePageData = JSON.parse(data);
+const ROOTDIR = fileUtil.ROOTDIR;
+
+module.exports.getIndex = async (req, res, next) => {
+    let homePageDataPath = 'data/home-data.json';
+    
+    try {
+        let dataString = await fileUtil.loadFile(homePageDataPath);
+        let homePageData = JSON.parse(dataString);
         let faqList = homePageData.faqList;
         let navList = homePageData.footerNavList;
+
         res.render('pages/content/index', {
             pageTitle: 'Fleek',
             faqList: faqList,
             navList: navList,
         })
-    })
-}
-
+    } catch (error){
+        next(error);
+    }
+};
