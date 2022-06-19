@@ -26,6 +26,7 @@ app.use(errorRoutes);
 // ERROR HANDLING MIDDLEWARE
 app.use((error, req, res, next) => {
     console.log('INSIDE ERROR HANDLER', error);
+    res.redirect('/server-error');
 })
 
 console.log(`server running on port ${PORT}`);

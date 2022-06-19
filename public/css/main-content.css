@@ -1,0 +1,229 @@
+@charset "utf-8";
+
+html {
+    box-sizing: border-box;
+    font-size: 22px;
+}
+* {
+    box-sizing: inherit;
+}
+
+/* neutral styles */
+h1, h2, h3, p, ul {
+    margin: 0;
+    padding: 0;
+}
+button, input {
+    border: none;
+    border-radius: 0px;
+}
+li {
+    list-style: none;
+}
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+/* HOME PAGE STYLES */
+
+
+/* background styles */
+body {
+    margin: 0;
+    padding: 0;
+    color: #e6e4e4;
+    font-family: sans-serif;
+}
+#home-container {
+    background-color: #424141;
+}
+section.home-section {
+    background-color: #000;
+    margin-bottom: .3em;
+}
+#home-footer {
+    background-color: #000;
+}
+
+/* header styles */
+#toplevel-header {
+    padding: 1.2em 3%;
+}
+.fleek-logo {
+    width: 100px;
+}
+#home-header-signin {
+    margin-left: auto;
+    align-self: center;
+    padding: .5em 1em;
+    border-radius: 3px;
+    color: #fff;
+}
+
+/* home main section styles */
+.home-section:first-child {
+    background-image: url('/images/home-movie-wall-alpha.png');
+    background-size: cover;
+}
+.home-section:first-child .home-section-text-wrapper {
+    text-align: center;
+    padding: 3.5em 0em;
+}
+.home-section-subheading {
+    margin: .7em 0em;
+    font-weight: normal;
+}
+.form-signup-ul {
+    padding: .8em 0em;
+}
+.form-signup-ul li {
+    height: 2em;
+    justify-content: center;
+    padding: 0% 2%;
+}
+.form-signup-ul li button {
+    padding-left: 1em;
+    padding-right: 1em;
+    color: #fff;
+}
+.form-signup-ul input[type="email"] {
+    flex: 0 1 32em;
+}
+.form-signup-wrapper p {
+    color: #cecccc
+}
+.home-text-small {
+    font-size: .8rem;
+}
+.img-wrapper img {
+    max-width: 100%;
+}
+.home-section > div.flex-wrapper {
+    padding: 6%;
+    align-items: center;
+    justify-content: space-between;
+} 
+.home-section > div.flex-wrapper > div {
+    flex: 1 1 50%;
+    margin: 0px 1em;
+}
+#img-wrapper-tvset, #img-wrapper-trending {
+    margin-top: -6%;
+}
+#img-wrapper-trending {
+    right: 3%;
+}
+#home-tvset {
+    position: relative;
+    z-index: 10;
+}
+#home-vid-tvset {
+    top: 20.5%;
+    left: 13%;
+    width: 73%;
+}
+#img-wrapper-downloading {
+    width: 80%;
+    border: #747171 2px solid;
+    border-radius: .7em;
+    align-items: center;
+    padding: 2%;
+    left: 10%;
+    bottom: 8%;
+    width: 80%;
+    background-color: #000;
+}
+#img-wrapper-downloading img {
+    width: 20%;
+}
+#img-wrapper-downloading > * {
+    margin: 0% 3%;
+}
+#img-wrapper-downloading span:last-child {
+    margin-left: auto;
+}
+.home-section:nth-child(4) > div.flex-wrapper > div {
+    flex: 0 1 50%;
+}
+.home-section:nth-child(6) {
+    padding: 2.5em 0em 1em;
+    text-align: center;
+}
+.home-faq-button {
+    padding: 0% 2%;
+    justify-content: center;
+    margin-bottom: .3em;
+    height: 2em;
+}
+.home-faq-button .faq-button-wrapper {
+    flex: 0 1 23em;
+    text-align: left;
+    padding-left: .7em;
+    padding-right: .7em;
+    align-items: center;
+    background-color: #424141;
+}
+.home-faq-button .faq-button-wrapper span:last-child {
+    margin-left: auto;
+}
+.home-faq-button .faq-button-wrapper button {
+    background-color: transparent;
+    color: #fff;
+    font-size: .8em;
+}
+#home-ul-faq {
+    margin: 2em 0em;
+}
+
+/* footer styles */
+#home-footer {
+    padding: 2.5em 2% 1em;
+}
+#home-footer nav {
+    margin: 0% 10%;
+}
+#home-footer nav a, #home-footer nav {
+    color: #5c5959;
+}
+#home-footer nav ul {
+    margin: 1.5em 0em;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 10em;
+}
+#home-footer nav ul li {
+    height: 2.5em;
+}
+
+/* general styles */
+.flex-wrapper {
+    display: flex;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+.native-bg {
+    background-color: #da1a1a;
+}
+.native-fg {
+    color: #da1a1a;
+}
+.off-screen {
+    display: none;
+}
+input {
+    padding: 0px .5em;
+}
+img {
+    max-width: 100%;
+}
+.overlay {
+    position: absolute;
+}
+.overlay-wrapper {
+    position: relative;
+}
+.text-bold {
+    font-weight: bold;
+}
