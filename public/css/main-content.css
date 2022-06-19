@@ -16,6 +16,7 @@ h1, h2, h3, p, ul {
 button, input {
     border: none;
     border-radius: 0px;
+    padding: 0;
 }
 li {
     list-style: none;
@@ -151,18 +152,20 @@ section.home-section {
     text-align: center;
 }
 .home-faq-button {
-    padding: 0% 2%;
+    /* padding: 0% 2%; */
     justify-content: center;
-    margin-bottom: .3em;
+    margin-bottom: .3rem;
     height: 2em;
 }
 .home-faq-button .faq-button-wrapper {
-    flex: 0 1 23em;
-    text-align: left;
-    padding-left: .7em;
-    padding-right: .7em;
+    flex: 0 1 23rem;
     align-items: center;
+}
+.home-faq-button .faq-button-wrapper, .home-faq-answer {
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
     background-color: #424141;
+    text-align: left;
 }
 .home-faq-button .faq-button-wrapper span:last-child {
     margin-left: auto;
@@ -170,10 +173,19 @@ section.home-section {
 .home-faq-button .faq-button-wrapper button {
     background-color: transparent;
     color: #fff;
-    font-size: .8em;
 }
 #home-ul-faq {
-    margin: 2em 0em;
+    margin: 2em 2%;
+}
+.home-faq-answer, .home-faq-button .faq-button-wrapper button {
+    font-size: .8em;
+}
+.home-faq-answer {
+    max-width: 23rem;
+    margin: -0.2rem auto .3rem;
+    padding-top: .3rem;
+    padding-bottom: .3rem;
+    line-height: 1.2rem;
 }
 
 /* footer styles */

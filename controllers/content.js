@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports.getIndex = (req, res, next) => {
-    let faqFilePath = path.join(__dirname, '..', 'data', 'home-faqs.json');
+    let faqFilePath = path.join(__dirname, '..', 'data', 'home-data.json');
     fs.readFile(faqFilePath, (err, data) => {
         if (err){
             return next(err);
