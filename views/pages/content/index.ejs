@@ -77,7 +77,7 @@
                     <% for (let faq of faqList) { %>
                         <li>
                             <div class="flex-wrapper home-faq-button">
-                                <span class="faq-button-wrapper flex-wrapper"><button type="button"><%= faq.question %></button><!--<svg></svg>--><span>+</span></span>
+                                <span class="faq-button-wrapper flex-wrapper"><span><%= faq.question %></span><!--<svg></svg>--><span>+</span></span>
                             </div>
                             <div class="off-screen home-faq-answer"><%- faq.answer %></div>
                         </li>

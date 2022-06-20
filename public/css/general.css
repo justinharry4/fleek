@@ -1,14 +1,30 @@
 @charset "utf-8";
 
+/* variables */
+:root {
+    --native-color: #da1a1a;
+}
+
+/* box-sizing */
+html {
+    box-sizing: border-box;
+}
+* {
+    box-sizing: inherit;
+}
+
 /* neutral styles */
-h1, h2, h3, h4, h5, p, ul {
+h1, h2, h3, h4, h5, p, ul, button, input, fieldset, body {
     margin: 0;
     padding: 0;
 }
-button, input {
+button, input, fieldset {
     border: none;
     border-radius: 0px;
-    padding: 0;
+    font-size: inherit;
+}
+input:focus {
+    outline: none;
 }
 li {
     list-style: none;
@@ -26,10 +42,10 @@ a {
     flex-wrap: wrap;
 }
 .native-bg {
-    background-color: #da1a1a;
+    background-color: var(--native-color)
 }
 .native-fg {
-    color: #da1a1a;
+    color: var(--native-color)
 }
 .off-screen {
     display: none;
@@ -52,7 +68,7 @@ img {
 
 /* header styles */
 #toplevel-header {
-    padding: 1.2em 3%;
+    padding: 1.2rem 3%;
 }
 .fleek-logo {
     width: 150px;

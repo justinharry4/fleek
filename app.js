@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const favicon = require('serve-favicon');
 
 // importing routes
 const contentRoutes = require('./routes/content');
@@ -14,11 +15,13 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 // middleware configurations
-const PORT = 4000;
+const PORT = 10000;
 const publicPath = fileUtil.makePath('public');
+const faviconPath = fileUtil.makePath('public/images/favicon.ico');
 
 // CATCH-ALL MIDDLEWARE
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(favicon(faviconPath));
 app.use(express.static(publicPath));
 
 // END POINTS

@@ -1,5 +1,109 @@
 @charset "utf-8";
 
+/* GENERAL STYLES */
+/* variables */
+footer {
+    --footer-nav-ul-height: 5em;
+}
+
+/* footer styles */
+footer {
+    padding: 2em 2% 1em;
+}
+footer nav {
+    margin: 0% 10%;
+    /* font-size: .4em; */
+}
+footer nav ul {
+    margin: 1.5em 0em;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: var(--footer-nav-ul-height);
+}
+footer nav ul li {
+    height: calc(var(--footer-nav-ul-height) / 2)
+}
+
+/* misc styles */
+a:hover, a:active {
+    text-decoration: underline;
+}
+.signin-text-small {
+    font-size: .8em;
+}
+
 /* SIGN IN PAGE STYLES */
+/* background styles */
+body {
+    color: rgb(119, 111, 111);
+    font-family: sans-serif;
+}
+#signin-container {
+    background-color: #000;
+    background-image: url('/images/home-movie-wall-alpha.png');
+    background-size: cover;
+}
+#signin-main-container {
+    padding: 0% 2%;
+}
 
 /* main styles */
+#signin-main-wrapper {
+    margin: 0em auto 6em;
+    max-width: 28em;
+    padding: 3.5em;
+    background-color: rgba(0, 0, 0, .7);
+    border-radius: 3px;
+}
+#signin-main-wrapper h2 {
+    font-size: 2em;
+    color: #fff;
+}
+#form-signin ul {
+    margin: 1.5em 0em 2.5em;
+}
+#form-signin-ul-wrapper input {
+    display: block;
+    height: 3em;
+    width: 100%;
+    margin-bottom: 1em;
+    border-radius: 4px;
+    padding: 0em 1em;
+}
+#form-signin ul li input {
+    background-color: #454546;
+}
+#form-signin ul li input::placeholder {
+    color: #919191;
+}
+#form-signin input[type="submit"] {
+    color: #fff;
+    background-color: var(--native-color);
+    font-weight: bold;
+}
+#form-signin-remember-wrapper {
+    font-size: .8em;
+    font-weight: bold;
+}
+#form-signin-remember-wrapper label {
+    margin-left: .5em;
+}
+#form-signin-remember-wrapper span:last-child {
+    margin-left: auto;
+}
+#signin-main-wrapper > div:last-child {
+    margin: 5em 0em 4em;
+}
+#signin-main-wrapper > div:last-child p:first-child a {
+    color: #fff;
+}
+#signin-main-wrapper > div:last-child p:last-child {
+    margin-top: 1em;
+} 
+#signin-main-wrapper > div:last-child p:last-child a {
+    color: #1010f1;
+}
+/* footer styles */
+#signin-footer {
+    background-color: rgba(0, 0, 0, .7);
+}

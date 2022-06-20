@@ -3,43 +3,43 @@
     <link rel="stylesheet" href="/css/auth.css">
 </head>
 <body>
-    <div id="container">
+    <div id="signin-container">
         <%- include('../../partials/header') %>
         </header>
-        <div id="signin-main-wrapper"> 
-            <h2 id="signin-main-header">Sign In</h2>
-            <form id="form-signin" action="" method="POST">
-                <fieldset id="form-sigin-ul-wrapper">
-                    <ul>
-                        <li>
-                            <label for="form-signin-email" class="off-screen">Email</label>
-                            <input type="email" id="form-signin-email" name="email" placeholder="Email or phone number">
-                        </li>
-                        <li>
-                            <label for="form-signin-password" class="off-screen">Password</label>
-                            <input type="password" id="form-signin-password" name="password" placeholder="Password">
-                        </li>
-                    </ul>
-                </fieldset>
-                <fieldset id="form-signin-submit-wrapper">
-                    <input type="submit" value="Sign In" class="text-bold">
-                    <div class="flex-wrapper signin-text-small" id="form-signin-remenber-wrapper">
-                        <label><input type="checkbox" name="remember-user" value="true">Remember me</label>
-                        <span><a>need help?</a></span>
-                    </div>
-                </fieldset>
-            </form>
-            <div>
-                <p>New to Fleek? <span><a href="/">Sign up now</a></span></p>
-                <p class="signin-text-small">This page is protected by Google reCAPTCHA to ensure you're not a bot. <span><a>Learn more.</a></span></p>
+        <div id="signin-main-container">
+            <div id="signin-main-wrapper"> 
+                <h2 id="signin-main-header">Sign In</h2>
+                <form id="form-signin" action="" method="POST">
+                    <fieldset id="form-signin-ul-wrapper">
+                        <ul>
+                            <li>
+                                <label for="form-signin-email" class="off-screen">Email</label>
+                                <input type="email" id="form-signin-email" name="email" placeholder="Email or phone number">
+                            </li>
+                            <li>
+                                <label for="form-signin-password" class="off-screen">Password</label>
+                                <input type="password" id="form-signin-password" name="password" placeholder="Password">
+                            </li>
+                        </ul>
+                        <input type="submit" value="Sign In">
+                    </fieldset>
+                    <fieldset id="form-signin-remember-wrapper" class="flex-wrapper">
+                        <input type="checkbox" name="remember-user" value="true" id="form-signin-checkbox"><label for="form-signin-checkbox">Remember me</label>
+                        <span><a href="">Need help?</a></span>
+                    </fieldset>
+                </form>
+                <div >
+                    <p>New to Fleek? <span><a href="/">Sign up now</a></span></p>
+                    <p class="signin-text-small">This page is protected by Google reCAPTCHA to ensure you're not a bot. <span><a>Learn more.</a></span></p>
+                </div>
             </div>
         </div>
         <footer id="signin-footer">
             <nav id="signin-footer-nav-wrapper">
                 <p class="signin-footer-heading">Questons? <a>Contact us.</a></p>
-                <ul class="flex-wrapper" id="signin-footer-nav-list" class="signin-text-small">
+                <ul class="flex-wrapper signin-text-small" id="signin-footer-nav-list">
                     <% for (let navItem of navList) { %>
-                        <li class="signin-footer-nav-item"><a><%= navItem %></a></li>
+                        <li class="signin-footer-nav-item"><a href=""><%= navItem %></a></li>
                     <% } %>
                 </ul>
             <nav>
