@@ -78,7 +78,7 @@ body {
 }
 #form-signin input[type="submit"] {
     color: #fff;
-    background-color: var(--native-color);
+    /* background-color: var(--native-color); */
     font-weight: bold;
 }
 #form-signin-remember-wrapper {
@@ -103,7 +103,10 @@ body {
 #signin-main-wrapper > div:last-child p:last-child a {
     color: #1010f1;
 }
+
 /* footer styles */
-#signin-footer {
+.signin-footer {
     background-color: rgba(0, 0, 0, .7);
 }
+
+/* SIGNUP PAGE STYLES */

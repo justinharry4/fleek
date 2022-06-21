@@ -1,4 +1,4 @@
-<%- include('../../partials/head') %>
+<%- include('../partials/head') %>
     <link rel="stylesheet" href="/css/general.css">
     <link rel="stylesheet" href="/css/main-content.css">
     <script src="/scripts/jquery.js"></script>
@@ -7,8 +7,8 @@
 <body>
     <div id="home-container">
         <section class="home-section" id="home-section-1">
-            <%- include('../../partials/header') %>
-                <button type="button" class="native-bg" id="home-header-signin"><a href="/auth/sign-in">Sign In</a></button>
+            <%- include('../partials/header') %>
+                <button type="button" class="native-bg" id="home-header-signin"><a href="/auth/signin">Sign In</a></button>
             </header>
             <div class="home-section-text-wrapper">
                 <h2 class="home-section-heading">Unlimited movies, TV<br> shows, and more.</h2>
@@ -20,7 +20,7 @@
                             <li class="flex-wrapper">
                                 <label class="off-screen" for="form-signup-top-email">Email</label>
                                 <input type="email" name="email" placeholder="Email address" id="form-signup-top-email">
-                                <button type="button" class="native-bg"><a href="">Get Started ></a></button>
+                                <button type="button" class="native-bg"><a href="/auth/signup">Get Started ></a></button>
                             </li>
                         </ul>
                     </form>
@@ -109,4 +109,4 @@
             <nav>
         </footer>
     </div>
-<%- include('../../partials/end') %>
+<%- include('../partials/end') %>

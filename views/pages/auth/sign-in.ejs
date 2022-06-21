@@ -21,7 +21,7 @@
                                 <input type="password" id="form-signin-password" name="password" placeholder="Password">
                             </li>
                         </ul>
-                        <input type="submit" value="Sign In">
+                        <input type="submit" value="Sign In" class="native-bg">
                     </fieldset>
                     <fieldset id="form-signin-remember-wrapper" class="flex-wrapper">
                         <input type="checkbox" name="remember-user" value="true" id="form-signin-checkbox"><label for="form-signin-checkbox">Remember me</label>
@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <footer id="signin-footer">
+        <!-- <footer id="signin-footer">
             <nav id="signin-footer-nav-wrapper">
                 <p class="signin-footer-heading">Questons? <a>Contact us.</a></p>
                 <ul class="flex-wrapper signin-text-small" id="signin-footer-nav-list">
@@ -43,6 +43,7 @@
                     <% } %>
                 </ul>
             <nav>
-        </footer>
+        </footer> -->
+        <%- include('../../partials/auth/footer') %>
     </div>
 <%- include('../../partials/end') %>

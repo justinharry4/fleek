@@ -1,0 +1,10 @@
+<footer class="<%= leadAuthName %>-footer">
+    <nav id="<%= leadAuthName %>-footer-nav-wrapper">
+        <p class="<%= leadAuthName %>-footer-heading">Questons? <a>Contact us.</a></p>
+        <ul class="flex-wrapper <%= leadAuthName %>-text-small" id="<%= leadAuthName %>-footer-nav-list">
+            <% for (let navItem of navList) { %>
+                <li class="<%= leadAuthName %>-footer-nav-item"><a href=""><%= navItem %></a></li>
+            <% } %>
+        </ul>
+    <nav>
+</footer>

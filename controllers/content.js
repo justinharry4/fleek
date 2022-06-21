@@ -11,7 +11,7 @@ module.exports.getIndex = async (req, res, next) => {
         let faqList = homePageData.faqList;
         let navList = homePageData.footerNavList;
 
-        res.render('pages/content/index', {
+        res.render('pages/index', {
             pageTitle: 'Fleek',
             faqList: faqList,
             navList: navList,
