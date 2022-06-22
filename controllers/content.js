@@ -3,7 +3,7 @@ const fileUtil = require('../util/file');
 const ROOTDIR = fileUtil.ROOTDIR;
 
 module.exports.getIndex = async (req, res, next) => {
-    let homePageDataPath = 'data/home-data.json';
+    let homePageDataPath = 'data/home.json';
     
     try {
         let dataString = await fileUtil.loadFile(homePageDataPath);

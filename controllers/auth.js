@@ -2,7 +2,7 @@ const { selectFields } = require('express-validator/src/select-fields');
 const fileUtil = require('../util/file');
 
 module.exports.getSignin = async (req, res, next) => {
-    let authDataPath = 'data/authpage-data.json';
+    let authDataPath = 'data/auth.json';
 
     let dataString = await fileUtil.loadFile(authDataPath);
     let authData = JSON.parse(dataString);
@@ -18,7 +18,7 @@ module.exports.getSignin = async (req, res, next) => {
 module.exports.getSignup = async (req, res, next) => {
     let steps = ['1-1', '1-2', '2-1', '2-2', '3-1', '3-2'];
     let reqData = req.query || req.body;
-    let signupStep = reqData['signup-step'];
+    let signupStep = reqData['signup-step'] || '1-0';
     let accountInfo = reqData.accountInfo;
     if (accountInfo === 'credentials'){
         // do stuff
@@ -30,18 +30,26 @@ module.exports.getSignup = async (req, res, next) => {
 
     }
     let stepIndex = steps.findIndex(step => step === signupStep);
-    let nextSignupStep = steps[stepIndex + 1]
+    let nextSignupStep = steps[stepIndex + 1];
 
-    let authDataPath = 'data/authpage-data.json';
-    let dataString = await fileUtil.loadFile(authDataPath);
-    let authData = JSON.parse(dataString);
-    let navList = authData.footerNavList;
-
-    res.render('pages/auth/sign-up', {
-        pageTitle: 'Fleek | Sign up',
-        navList: navList,
-        leadName: 'signup',
-        signupStep: nextSignupStep,
-    })
+    let authDataPath = 'data/auth.json';
+    try {
+        let dataString = await fileUtil.loadFile(authDataPath);
+        let authData = JSON.parse(dataString);
+        let navList = authData.footerNavList;
+        let subscriptionData;
+        if (nextSignupStep === '2-2'){
+            subscriptionData = authData.subscriptionInfo;
+        }
+        res.render('pages/auth/sign-up', {
+            pageTitle: 'Fleek | Sign up',
+            navList: navList,
+            leadName: 'signup',
+            signupStep: nextSignupStep,
+            subscriptionData: subscriptionData,
+        })
+    } catch (error){
+        next(error);
+    }
 };
 

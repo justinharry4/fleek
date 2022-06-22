@@ -1,6 +1,7 @@
 <%- include('../../partials/head') %>
     <link rel="stylesheet" href="/css/general.css">
     <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/components/checkbox.css">
     <script src="/scripts/jquery.js"></script>
     <script src="/scripts/auth/signup.js"></script>
 </head>
@@ -8,21 +9,123 @@
     <div id="signup-toplevel-container">
         <% if (signupStep === '1-1') { %>
             <%- include('../../partials/header') %>
-                <span class="signup-header-signin-text"><a href="/auth/signin">Sign In</a></span>
+                <span class="toplevel-header-link-text"><a href="/auth/signin">Sign In</a></span>
             </header>
             <div class="signup-main-container">
-                <div class="signup-main-wrapper">
+                <div class="signup-main-wrapper signup-step-<%= signupStep %>">
                     <div class="signup-step-img-wrapper">
                         <img src="/images/devices.png" alt="laptop tv tablet">
                     </div>
                     <h2 class="signup-stepno-heading">step <span class="small-num">1</span> of <span class="small-num">3</span></h2>
                     <h3 class="signup-step-heading">Finish setting up your account</h3>
                     <p class="signup-step-info-text">Fleek is personalized for you.<br>Create a password to watch on any device at any time</p>
-                    <button class="native-bg block-strech" data-account-info="" data-signup-pageno="1-1">Next</button>
+                    <button type="button" class="native-bg block-strech" data-account-info="" data-signup-stepno="1-1">Next</button>
                 </div>
             </div>
         <% } else if (signupStep === '1-2') { %>
-            <h1>Sign up 1-2 page</h1>
+            <%- include('../../partials/header') %>
+                <span class="toplevel-header-link-text"><a href="/auth/signin">Sign In</a></span>
+            </header>
+            <div class="signup-main-container">
+                <div class="signup-main-wrapper signup-step-<%= signupStep %>">
+                    <h2 class="signup-stepno-heading">step <span class="small-num">1</span> of <span class="small-num">3</span></h2>
+                    <h3 class="signup-step-heading">Create a password to start your membership</h3>
+                    <p class="signup-step-info-text">Just a few more steps and you're done!<br>We hate paperwork, too.</p>
+                    <form class="signup-form">
+                        <fieldset>
+                            <ul class="signup-form-ul">
+                                <li>
+                                    <label for="signup-form-email" class="off-screen">Email</label>
+                                    <input type="email" name="emailo" id="signup-form-email" class="block-strech" placeholder="Add an email address">
+                                </li>
+                                <li>
+                                    <label for="signup-form-password" class="off-screen">Password</label>
+                                    <input type="password" name="passwordo" id="signup-form-password" class="block-strech" placeholder="Add a password">
+                                </li>
+                            </ul>
+                        </fieldset>
+                        <label for="signup-form-offers-checkbox" class="signup-sub-form-text">
+                        <span class="custom-checkbox-wrapper">
+                            <input type="checkbox" name="fleek-special-offers" class="native-checkbox off-screen" id="signup-form-offers-checkbox">
+                            <span class="custom-checkbox"></span>
+                        </span>
+                        Please do not email me Fleek special offers.</label>
+                        <!-- <input type="button" class="native-bg block-strech" value="Next" data-account-info="credentials" data-signup-stepno="1-2"> -->
+                        <button type="button" class="native-bg block-strech" data-account-info="credentials" data-signup-stepno="1-2">Next</button>
+                    </form>
+                </div>
+            </div>
+        <% } else if (signupStep === '2-1') { %>
+            <%- include('../../partials/header') %>
+                <span class="toplevel-header-link-text"><a href="">Sign Out</a></span>
+            </header>
+            <div class="signup-main-container">
+                <div class="signup-main-wrapper signup-step-<%= signupStep %>">
+                    <div class="signup-step-img-wrapper">
+                        <img src="/images/checkmark.png" alt="checkmark">
+                    </div>
+                    <h2 class="signup-stepno-heading">step <span class="small-num">2</span> of <span class="small-num">3</span></h2>
+                    <h3 class="signup-step-heading">Choose your plan.</h3>
+                    <ul class="signup-step-info-ul">
+                        <li class="flex-wrapper">
+                            <span class="svg-wraper"><%- include('../../../public/images/svg/checkmark.svg') %></span>
+                            <span class="signup-step-info-text">No commitments, Cancel anytime.</span>
+                        </li>
+                        <li class="flex-wrapper">
+                            <span class="svg-wraper"><%- include('../../../public/images/svg/checkmark.svg') %></span>
+                            <span class="signup-step-info-text">Everything on Fleek for one low price</span>
+                        </li>
+                        <li class="flex-wrapper">
+                            <span class="svg-wraper"><%- include('../../../public/images/svg/checkmark.svg') %></span>
+                            <span class="signup-step-info-text">No ads and no extra fees. Ever.</span>
+                        </li>
+                    </ul>
+                    <button type="button" class="native-bg block-strech" data-account-info="" data-signup-stepno="2-1">Next</button>
+                </div>
+            </div>
+        <% } else if (signupStep === '2-2') { %>
+            <%- include('../../partials/header') %>
+                <span class="toplevel-header-link-text"><a href="/auth/signin">Sign Out</a></span>
+            </header>
+            <div class="signup-main-container">
+                <div class="signup-main-wrapper signup-step-<%= signupStep %>">
+                    <h2 class="signup-stepno-heading">step <span class="small-num">2</span> of <span class="small-num">3</span></h2>
+                    <h3 class="signup-step-heading">Choose the plan that's right for you</h3>
+                    <ul class="signup-step-info-ul">
+                        <li class="flex-wrapper">
+                            <span class="svg-wraper"><%- include('../../../public/images/svg/checkmark.svg') %></span>
+                            <span class="signup-step-info-text">Watch all you want. Ad-free.</span>
+                        </li>
+                        <li class="">
+                            <span class="svg-wraper"><%- include('../../../public/images/svg/checkmark.svg') %></span>
+                            <span class="signup-step-info-text">Recommendations just for you.</span>
+                        </li>
+                        <li class="">
+                            <span class="svg-wraper"><%- include('../../../public/images/svg/checkmark.svg') %></span>
+                            <span class="signup-step-info-text">Change or cancel your plan anytime.</span>
+                        </li>
+                    </ul>
+                    <form id="form-signup-sub-plan"></form>
+                    <table id="sub-plan-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <td><label class="sub-plan-button"><input type="radio" name="sub-plan" form="form-signup-sub-plan" class="off-screen block-strech">Mobile</label></td>
+                                <td><label class="sub-plan-button">Basic</label></td>
+                                <td><label class="sub-plan-button">Standard</label></td>
+                                <td><label class="sub-plan-button">Premium</label></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr></tr>
+                            <tr></tr>
+                            <tr></tr>
+                            <tr></tr>
+                        </tbody>
+                    </table>
+                    <button type="button" class="native-bg block-strech" data-account-info="" data-signup-stepno="1-1">Next</button>
+                </div>
+            </div>
         <% } %>
         <%- include('../../partials/auth/footer') %>
     </div>

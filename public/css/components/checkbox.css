@@ -1,0 +1,29 @@
+@charset "utf-8";
+
+/* CUSTOM CHECKBOX STYLES */
+/* variables */
+.custom-checkbox-wrapper {
+    --custom-checkbox-wrapper-width: 40px;
+    --checkmark-width: 5px
+}
+
+.custom-checkbox-wrapper .native-checkbox {
+    display: none;
+}
+.custom-checkbox-wrapper {
+    display: none;
+    border: 1px solid #0c0b0b;
+    width: var(--custom-checkbox-wrapper-width);
+    height: var(--custom-checkbox-wrapper-width);
+    position: relative;
+}
+.custom-checkbox {
+    width: calc(0.7778 * var(--custom-checkbox-wrapper-width));
+    height: calc(0.2828 * var(--custom-checkbox-wrapper-width));
+    border-left: var(--checkmark-width) solid #1662d4;
+    border-bottom: var(--checkmark-width) solid #1662d4;
+    position: absolute;
+    bottom: 30%;
+    left: 30%;
+    transform: rotate(-45deg);
+}
