@@ -36,6 +36,9 @@ a {
 }
 
 /* general styles */
+body {
+    font-family: sans-serif;
+}
 .flex-wrapper {
     display: flex;
 }
@@ -66,13 +69,16 @@ img {
 .text-bold {
     font-weight: bold;
 }
+.block-strech {
+    display: block;
+    width: 100%;
+}
 
 /* header styles */
-#toplevel-header {
-    padding: 1.2rem 3%;
+.toplevel-header {
+    padding: .7rem 3%;
 }
 .fleek-logo {
-    width: 150px;
-    letter-spacing: .1em;
-    font-size: 1.7em;
+    width: 190px;
+    font-size: 50px;
 }

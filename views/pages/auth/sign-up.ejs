@@ -1,16 +1,29 @@
 <%- include('../../partials/head') %>
     <link rel="stylesheet" href="/css/general.css">
     <link rel="stylesheet" href="/css/auth.css">
+    <script src="/scripts/jquery.js"></script>
+    <script src="/scripts/auth/signup.js"></script>
 </head>
 <body>
-    <div id="signup-main-container">
-        <div id="signup-head-img-wrapper">
-            <img src="/images/" alt="laptop tv tablet">
-        </div>
-        <h2 class="signup-step-no-heading">Step 1 of 3</h2>
-        <h3 class="signup-step-heading">Finish setting up your account</h3>
-        <p class="signup-step-info-text">Fleek is personalized for you.<br>Create a password to watch on any device at any time</p>
-        <button class="native-bg">Next</button>
+    <div id="signup-toplevel-container">
+        <% if (signupStep === '1-1') { %>
+            <%- include('../../partials/header') %>
+                <span class="signup-header-signin-text"><a href="/auth/signin">Sign In</a></span>
+            </header>
+            <div class="signup-main-container">
+                <div class="signup-main-wrapper">
+                    <div class="signup-step-img-wrapper">
+                        <img src="/images/devices.png" alt="laptop tv tablet">
+                    </div>
+                    <h2 class="signup-stepno-heading">step <span class="small-num">1</span> of <span class="small-num">3</span></h2>
+                    <h3 class="signup-step-heading">Finish setting up your account</h3>
+                    <p class="signup-step-info-text">Fleek is personalized for you.<br>Create a password to watch on any device at any time</p>
+                    <button class="native-bg block-strech" data-account-info="" data-signup-pageno="1-1">Next</button>
+                </div>
+            </div>
+        <% } else if (signupStep === '1-2') { %>
+            <h1>Sign up 1-2 page</h1>
+        <% } %>
+        <%- include('../../partials/auth/footer') %>
     </div>
-    <%- include('../../partials/auth/footer') %>
 <%- include('../../partials/end') %>

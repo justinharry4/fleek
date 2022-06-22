@@ -15,6 +15,7 @@ module.exports.getIndex = async (req, res, next) => {
             pageTitle: 'Fleek',
             faqList: faqList,
             navList: navList,
+            leadName: 'home',
         })
     } catch (error){
         next(error);
