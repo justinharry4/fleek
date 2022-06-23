@@ -15,22 +15,28 @@ module.exports.getSignin = async (req, res, next) => {
     })
 };
 
-module.exports.getSignup = async (req, res, next) => {
-    let steps = ['1-1', '1-2', '2-1', '2-2', '3-1', '3-2'];
-    let reqData = req.query || req.body;
-    let signupStep = reqData['signup-step'] || '1-0';
+module.exports.signup = async (req, res, next) => {
+    let steps = ['step1', 'add-password', 'step2', 'choose-plan', 'step3', 'credit-option'];
+    let reqData = req.method === 'GET' ? req.query: req.body;
+    let nextSignupStep = 'step1';
+    if (steps.find(step => step === reqData.step)){
+        nextSignupStep = reqData.step;
+    }
     let accountInfo = reqData.accountInfo;
-    if (accountInfo === 'credentials'){
-        // do stuff
+    if (accountInfo === 'credentials' && req.method === 'POST'){
+        // reach out to database
+        let email = reqData.email;
+        let password = reqData.password;
+        console.log('email', email);
+        console.log('password', password)
     } else if (accountInfo === 'subscription-plan'){
         //  do stuff
     } else if (accountInfo === 'credit-info'){
 
-    } else {
-
     }
-    let stepIndex = steps.findIndex(step => step === signupStep);
-    let nextSignupStep = steps[stepIndex + 1];
+
+    let stepIndex = steps.findIndex(step => step === nextSignupStep);
+    let upperSignupStep = steps[stepIndex + 1];
 
     let authDataPath = 'data/auth.json';
     try {
@@ -38,7 +44,7 @@ module.exports.getSignup = async (req, res, next) => {
         let authData = JSON.parse(dataString);
         let navList = authData.footerNavList;
         let subscriptionData;
-        if (nextSignupStep === '2-2'){
+        if (nextSignupStep === 'choose-plan'){
             subscriptionData = authData.subscriptionInfo;
         }
         res.render('pages/auth/sign-up', {
@@ -46,10 +52,10 @@ module.exports.getSignup = async (req, res, next) => {
             navList: navList,
             leadName: 'signup',
             signupStep: nextSignupStep,
+            nextSignupStep: upperSignupStep,
             subscriptionData: subscriptionData,
         })
     } catch (error){
         next(error);
     }
 };
-

@@ -132,13 +132,16 @@ a:hover, a:active {
     margin-right: auto;
     margin-bottom: 7em;
 }
-.signup-step-1-1, .signup-step-2-1 {
+.signup-step-step1, .signup-step-step2 {
     max-width: 26em;
     text-align: center;
     margin-top: 3em;
 }
-.signup-step-1-2 {
+.signup-step-add-password {
     max-width: 30em;
+}
+.signup-step-choose-plan {
+    max-width: 80%;
 }
 .signup-step-img-wrapper {
     margin: 2em 3.5em;
@@ -159,8 +162,8 @@ a:hover, a:active {
 .signup-step-heading {
     font-size: 2em;
 }
-.signup-step-1-1 .signup-step-info-text,
-.signup-step-2-1 .signup-step-info-ul {
+.signup-step-step1 .signup-step-info-text,
+.signup-step-step2 .signup-step-info-ul {
     margin: 1.5em 2em 0em;
 }
 .signup-step-info-text {
@@ -170,12 +173,13 @@ a:hover, a:active {
     border-radius: 4px;
     height: 3.9rem;
 }
-.signup-main-wrapper button {
+.signup-main-wrapper button,
+.signup-main-wrapper input[type="submit"] {
     color: #fff;
     font-size: 1.3em;
     margin-top: 1.5rem;
 }
-.signup-step-1-2 .signup-step-info-text {
+.signup-step-add-password .signup-step-info-text {
     margin: .7em 0em;
 }
 .signup-main-wrapper input {
@@ -185,13 +189,84 @@ a:hover, a:active {
 .signup-step-info-ul .signup-step-info-text {
     margin-left: 1em;
 }
-.signup-step-2-1 .signup-step-info-ul {
+.signup-step-step2 .signup-step-info-ul {
     text-align: left;
     margin-left: 1em;
     margin-right: 4em;
 }
-.signup-step-2-1 .signup-step-info-ul li {
+.signup-step-step2 .signup-step-info-ul li {
     margin-bottom: 1em;
+}
+.signup-step-choose-plan .signup-step-info-ul {
+    margin: 1em 0em;
+}
+.signup-extra-plan-info {
+    color: #7a7a7a;
+}
+.signup-extra-plan-info p:last-child {
+    margin-top: 1em;
+}
+.signup-step-choose-plan button:last-child {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* table styles */  
+#sub-plan-table td { 
+    text-align: center;
+}
+#sub-plan-table tr {
+    justify-content: flex-end;
+}
+#sub-plan-table tbody tr {
+    padding: 1em 0em;
+}
+.tr-plans th {
+    border-radius: 3px;
+    height: 7.5em;
+}
+.lead-cell-th {
+    flex: 0 0 auto;
+    text-align: left;
+    margin-right: auto;
+    width: 27em;
+    font-weight: normal;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+.lead-cell-th ~ *{
+    flex: 1 0 0px;
+    margin: 0em .5em;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+#sub-plan-table thead .lead-cell-th ~ * {
+    align-items: center;
+    color: #fff;
+    justify-content: center;
+}
+.tr-plans {
+    padding-bottom: 1em;
+}
+#sub-plan-table tbody tr:last-child {
+    height: auto;
+}
+.tr-devices td div {
+    flex-direction: column;
+    align-items: center;
+}
+.tr-devices .tr-svg-wrapper {
+    display: block;
+}
+.tr-devices .tr-svg-icon-container {
+    margin-bottom: .7em;
+}
+#sub-plan-table tbody tr:not(:last-child) {
+    border-bottom: 2px solid #c7c3c3;
+}
+#sub-plan-table tbody td {
+    color: #8d8c8c;
 }
 
 /* footer styles */
@@ -207,9 +282,18 @@ a:hover, a:active {
 .signup-text-small {
     font-size: .8em;
 }
-.signup-sub-form-text {
+.signup-sub-main-text {
     font-size: .9em;
 }
 .signup-checkmark-svg {
+    color: var(--native-color);
+}
+#sub-plan-table .signup-inactive-native-bg {
+    background-color: #e96565;
+}
+#sub-plan-table .signup-native-bg {
+    background-color: var(--native-color);
+}
+#sub-plan-table .signup-native-fg {
     color: var(--native-color);
 }

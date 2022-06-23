@@ -7,7 +7,7 @@
 </head>
 <body>
     <div id="signup-toplevel-container">
-        <% if (signupStep === '1-1') { %>
+        <% if (signupStep === 'step1') { %>
             <%- include('../../partials/header') %>
                 <span class="toplevel-header-link-text"><a href="/auth/signin">Sign In</a></span>
             </header>
@@ -19,10 +19,10 @@
                     <h2 class="signup-stepno-heading">step <span class="small-num">1</span> of <span class="small-num">3</span></h2>
                     <h3 class="signup-step-heading">Finish setting up your account</h3>
                     <p class="signup-step-info-text">Fleek is personalized for you.<br>Create a password to watch on any device at any time</p>
-                    <button type="button" class="native-bg block-strech" data-account-info="" data-signup-stepno="1-1">Next</button>
+                    <button type="button" class="native-bg block-strech" data-account-info="" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                 </div>
             </div>
-        <% } else if (signupStep === '1-2') { %>
+        <% } else if (signupStep === 'add-password') { %>
             <%- include('../../partials/header') %>
                 <span class="toplevel-header-link-text"><a href="/auth/signin">Sign In</a></span>
             </header>
@@ -36,26 +36,26 @@
                             <ul class="signup-form-ul">
                                 <li>
                                     <label for="signup-form-email" class="off-screen">Email</label>
-                                    <input type="email" name="emailo" id="signup-form-email" class="block-strech" placeholder="Add an email address">
+                                    <input type="email" name="email" id="signup-form-email" class="block-strech" placeholder="Add an email address">
                                 </li>
                                 <li>
                                     <label for="signup-form-password" class="off-screen">Password</label>
-                                    <input type="password" name="passwordo" id="signup-form-password" class="block-strech" placeholder="Add a password">
+                                    <input type="password" name="password" id="signup-form-password" class="block-strech" placeholder="Add a password">
                                 </li>
                             </ul>
                         </fieldset>
-                        <label for="signup-form-offers-checkbox" class="signup-sub-form-text">
+                        <label for="signup-form-offers-checkbox" class="signup-sub-main-text">
                         <span class="custom-checkbox-wrapper">
                             <input type="checkbox" name="fleek-special-offers" class="native-checkbox off-screen" id="signup-form-offers-checkbox">
                             <span class="custom-checkbox"></span>
                         </span>
                         Please do not email me Fleek special offers.</label>
                         <!-- <input type="button" class="native-bg block-strech" value="Next" data-account-info="credentials" data-signup-stepno="1-2"> -->
-                        <button type="button" class="native-bg block-strech" data-account-info="credentials" data-signup-stepno="1-2">Next</button>
+                        <button type="button" class="native-bg block-strech" data-account-info="credentials" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                     </form>
                 </div>
             </div>
-        <% } else if (signupStep === '2-1') { %>
+        <% } else if (signupStep === 'step2') { %>
             <%- include('../../partials/header') %>
                 <span class="toplevel-header-link-text"><a href="">Sign Out</a></span>
             </header>
@@ -80,10 +80,10 @@
                             <span class="signup-step-info-text">No ads and no extra fees. Ever.</span>
                         </li>
                     </ul>
-                    <button type="button" class="native-bg block-strech" data-account-info="" data-signup-stepno="2-1">Next</button>
+                    <button type="button" class="native-bg block-strech" data-account-info="" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                 </div>
             </div>
-        <% } else if (signupStep === '2-2') { %>
+        <% } else if (signupStep === 'choose-plan') { %>
             <%- include('../../partials/header') %>
                 <span class="toplevel-header-link-text"><a href="/auth/signin">Sign Out</a></span>
             </header>
@@ -96,34 +96,75 @@
                             <span class="svg-wraper"><%- include('../../../public/images/svg/checkmark.svg') %></span>
                             <span class="signup-step-info-text">Watch all you want. Ad-free.</span>
                         </li>
-                        <li class="">
+                        <li class="flex-wrapper">
                             <span class="svg-wraper"><%- include('../../../public/images/svg/checkmark.svg') %></span>
                             <span class="signup-step-info-text">Recommendations just for you.</span>
                         </li>
-                        <li class="">
+                        <li class="flex-wrapper">
                             <span class="svg-wraper"><%- include('../../../public/images/svg/checkmark.svg') %></span>
                             <span class="signup-step-info-text">Change or cancel your plan anytime.</span>
                         </li>
                     </ul>
-                    <form id="form-signup-sub-plan"></form>
-                    <table id="sub-plan-table">
+                    <table id="sub-plan-table" cellspacing="0">
                         <thead>
-                            <tr>
-                                <th></th>
-                                <td><label class="sub-plan-button"><input type="radio" name="sub-plan" form="form-signup-sub-plan" class="off-screen block-strech">Mobile</label></td>
-                                <td><label class="sub-plan-button">Basic</label></td>
-                                <td><label class="sub-plan-button">Standard</label></td>
-                                <td><label class="sub-plan-button">Premium</label></td>
+                            <tr class="tr-plans flex-wrapper">
+                                <th class="lead-cell-th"></th>
+                                <% for (let plan in subscriptionData.plans) { %>
+                                    <th class="signup-<%= (plan==='premium') ? '' : 'inactive-' %>native-bg flex-wrapper sub-plan-button sub-plan-<%= plan %>" data-sub-plan="<%= plan %>">
+                                        <label class="off-screen" for="signup-sub-plan-radio"><%= plan %> Plan</label>
+                                        <input type="radio" name="sub-plan" value="<%= plan %>" class="off-screen" id="signup-sub-plan-radio" <%= (plan==='premium') ? 'checked' : '' %>>
+                                        <span><%= plan %></span>
+                                    </th>
+                                <% } %>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr></tr>
-                            <tr></tr>
-                            <tr></tr>
-                            <tr></tr>
+                            <tr class="tr-price flex-wrapper">
+                                <th scope="row" class="lead-cell-th">Monthly Price</th>
+                                <% for (let plan in subscriptionData.plans) { %>
+                                    <td class="<%= (plan==='premium') ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>"><span>N<%= subscriptionData.plans[plan].price %></span></td>
+                                <% } %>
+                            </tr>
+                            <tr class="tr-vid-quality flex-wrapper">
+                                <th scope="row" class="lead-cell-th">Video Quality</th>
+                                <% for (let plan in subscriptionData.plans) { %>
+                                    <td class="<%= (plan==='premium') ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>"><span><%= subscriptionData.plans[plan].videoQuality %></span></td>
+                                <% } %>
+                            </tr>
+                            <tr class="tr-resolution flex-wrapper">
+                                <th scope="row" class="lead-cell-th">Resolution</th>
+                                <% for (let plan in subscriptionData.plans) { %>
+                                    <td class="<%= (plan==='premium') ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>"><span><%= subscriptionData.plans[plan].resolution %></span></td>
+                                <% } %>
+                            </tr>
+                            <tr class="tr-devices flex-wrapper">
+                                <th scope="row" class="lead-cell-th">Devices you can use to watch</th>
+                                <% for (let plan in subscriptionData.plans) { %>
+                                    <td class="<%= (plan==='premium') ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>">
+                                        <div class="flex-wrapper">
+                                            <% for (let device of subscriptionData.plans[plan].devices) { %>
+                                                <span class="tr-svg-icon-container signup-sub-main-text">
+                                                    <span class="tr-svg-wrapper signup-sub-main-text"><%- include(subscriptionData.urls[device]) %></span>
+                                                    <%= device %>
+                                                </span>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                <% } %>
+                            </tr>
                         </tbody>
                     </table>
-                    <button type="button" class="native-bg block-strech" data-account-info="" data-signup-stepno="1-1">Next</button>
+                    <div class="signup-sub-main-text signup-extra-plan-info">
+                        <p>
+                            HD (720p), Full HD (1080p), Ultra HD (4K) and HDR availability subject to your internet service and device capabilities.
+                            Not all content is available in all resolutions. See our <a>Terms of Use</a> for more details.
+                        </p>
+                        <p>
+                            Only people who live with you may use your account.
+                            Watch on 4 different devices at the same time with Premium, 2 with Standard, and 1 with Basic and Mobile.
+                        </p>
+                    </div>
+                    <button class="native-bg block-strech" data-account-info="subscription-plan" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                 </div>
             </div>
         <% } %>
