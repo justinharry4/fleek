@@ -28,9 +28,9 @@ function setHistoryState(){
     let newUrl = '/auth/signup?step=' + stepName;
     history.pushState(stateObject, '', newUrl);
 
-    setTimeout(() => {
-        $currentPageDivContainer.removeClass('off-screen-left on-screen-to-right');
-    }, 100)
+    // setTimeout(() => {
+    //     $currentPageDivContainer.removeClass('off-screen-left on-screen-to-right');
+    // }, 100)
 }
 
 function getNextSignupPage(e){
@@ -59,6 +59,7 @@ function getNextSignupPage(e){
     })
         .done(htmlData => {
             let $currentBody = $('body');
+            let $currentPageDivContainer = $('#signup-toplevel-container');
             let $nextPage = $(htmlData);
             let $nextPageDivContainer = $nextPage.filter('#signup-toplevel-container');
             $nextPageDivContainer.addClass('off-screen-left');
@@ -66,7 +67,8 @@ function getNextSignupPage(e){
             setTimeout(() => {
                 $nextPageDivContainer.addClass('on-screen-to-right');
             }, 1);
-
+            $currentPageDivContainer.addClass('off-screen-left');
+            $currentPageDivContainer.removeClass('on-screen-to-right');
             setHistoryState();
             setEventHandlers();
         })
@@ -98,12 +100,14 @@ function selectSubPlan(e){
 function showPageInHistory(e){
     let stepName = history.state.ref;
     let $newDivContainer = window.signupStates[stepName];
+    console.log($newDivContainer);
     let $currentBody = $('body');
-    $newDivContainer.addClass('off-screen-left');
+    let $oldDivContainer = $('#signup-toplevel-container');
     $currentBody.html($newDivContainer);
     setTimeout(() => {
         $newDivContainer.addClass('on-screen-to-right');
     }, 1);
-
+    $oldDivContainer.addClass('off-screen-left');
+    $oldDivContainer.removeClass('on-screen-to-right')
     setEventHandlers();
 }
