@@ -225,19 +225,22 @@ a:hover, a:active {
 .tr-plans th {
     border-radius: 3px;
     height: 7.5em;
+    /* height: 100%; */
 }
 .lead-cell-th {
     flex: 0 0 auto;
     text-align: left;
     margin-right: auto;
-    width: 27em;
+    /* width: 27em; */
+    width: 44%;
     font-weight: normal;
     padding-left: 1em;
     padding-right: 1em;
 }
 .lead-cell-th ~ *{
     flex: 1 0 0px;
-    margin: 0em .5em;
+    /* margin: 0em .5em; */
+    margin: 0% 1.5%;
     text-transform: capitalize;
     font-weight: bold;
 }

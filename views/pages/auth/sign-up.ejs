@@ -19,7 +19,7 @@
                     <h2 class="signup-stepno-heading">step <span class="small-num">1</span> of <span class="small-num">3</span></h2>
                     <h3 class="signup-step-heading">Finish setting up your account</h3>
                     <p class="signup-step-info-text">Fleek is personalized for you.<br>Create a password to watch on any device at any time</p>
-                    <button type="button" class="native-bg block-strech" data-account-info="" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
+                    <button type="button" class="native-bg block-strech proceed-button" data-account-info="" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                 </div>
             </div>
         <% } else if (signupStep === 'add-password') { %>
@@ -51,7 +51,7 @@
                         </span>
                         Please do not email me Fleek special offers.</label>
                         <!-- <input type="button" class="native-bg block-strech" value="Next" data-account-info="credentials" data-signup-stepno="1-2"> -->
-                        <button type="button" class="native-bg block-strech" data-account-info="credentials" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
+                        <button type="button" class="native-bg block-strech proceed-button" data-account-info="credentials" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                     </form>
                 </div>
             </div>
@@ -80,7 +80,7 @@
                             <span class="signup-step-info-text">No ads and no extra fees. Ever.</span>
                         </li>
                     </ul>
-                    <button type="button" class="native-bg block-strech" data-account-info="" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
+                    <button type="button" class="native-bg block-strech proceed-button" data-account-info="" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                 </div>
             </div>
         <% } else if (signupStep === 'choose-plan') { %>
@@ -164,7 +164,7 @@
                             Watch on 4 different devices at the same time with Premium, 2 with Standard, and 1 with Basic and Mobile.
                         </p>
                     </div>
-                    <button class="native-bg block-strech" data-account-info="subscription-plan" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
+                    <button class="native-bg block-strech proceed-button" data-account-info="subscription-plan" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                 </div>
             </div>
         <% } %>

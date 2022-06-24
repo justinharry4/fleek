@@ -27,14 +27,13 @@ module.exports.signup = async (req, res, next) => {
         // reach out to database
         let email = reqData.email;
         let password = reqData.password;
-        console.log('email', email);
-        console.log('password', password)
-    } else if (accountInfo === 'subscription-plan'){
-        //  do stuff
-    } else if (accountInfo === 'credit-info'){
-
+        console.log('email:', email);
+        console.log('password:', password);
+    } else if (accountInfo === 'subscription-plan' && req.method === 'POST'){
+        //  reach out to database
+        let subPlan = reqData.subPlan;
+        console.log('selected plan:', subPlan)
     }
-
     let stepIndex = steps.findIndex(step => step === nextSignupStep);
     let upperSignupStep = steps[stepIndex + 1];
 

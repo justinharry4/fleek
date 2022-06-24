@@ -1,17 +1,36 @@
-$(setInitialEventHandlers);
+$(initializePage);
 
-function setInitialEventHandlers(){
+function initializePage(){
+    $(window).on('popstate', showPageInHistory)
+    window.signupStates = {};
+
+    let stepName = $('.proceed-button').data('signup-stepname');
+    let $currentPageDivContainer = $('#signup-toplevel-container');
+    window.signupStates[stepName] = $currentPageDivContainer;
+    let stateObject = { ref: stepName };
+    history.replaceState(stateObject, '');
     setEventHandlers();
 }
 
 function setEventHandlers(){
-    let $proceedButtons = $('.signup-main-wrapper button');
-    $proceedButtons.on('click', getNextSignupPage);
+    let $proceedButton = $('.proceed-button');
+    $proceedButton.on('click', getNextSignupPage);
+
     let $subPlanButtons = $('.sub-plan-button');
     $subPlanButtons.on('click', selectSubPlan);
-    
-    let arr = Array.from($('#signup-sub-plan-radio'));
-    console.log(arr, typeof arr);
+}
+
+function setHistoryState(){
+    let stepName = $('.proceed-button').data('signup-stepname');
+    let $currentPageDivContainer = $('#signup-toplevel-container');
+    window.signupStates[stepName] = $currentPageDivContainer;
+    let stateObject = { ref: stepName };
+    let newUrl = '/auth/signup?step=' + stepName;
+    history.pushState(stateObject, '', newUrl);
+
+    setTimeout(() => {
+        $currentPageDivContainer.removeClass('off-screen-left on-screen-to-right');
+    }, 100)
 }
 
 function getNextSignupPage(e){
@@ -19,15 +38,16 @@ function getNextSignupPage(e){
     let method = 'GET';
     let accountInfo = $(this).data('account-info');
     let nextStepName = $(this).data('next-signup-stepname');
-    let requestData = { 'step': nextStepName, accountInfo: accountInfo };
+    let requestData = { step: nextStepName, accountInfo: accountInfo };
     if (accountInfo === 'credentials'){
         method = 'POST';
         let email = $('#signup-form-email').val();
         let password = $('#signup-form-password').val();
-        requestData = {...requestData, accountInfo: 'credentials', email: email, password: password };
+        requestData = { ...requestData, email: email, password: password };
     } else if (accountInfo === 'subscription-plan'){
         method = 'POST';
-
+        let subPlan = $('input[type="radio"]:checked').val();
+        requestData = { ...requestData, subPlan: subPlan }
     } else if (accountInfo === 'credit-info'){
         
     }
@@ -41,16 +61,13 @@ function getNextSignupPage(e){
             let $currentBody = $('body');
             let $nextPage = $(htmlData);
             let $nextPageDivContainer = $nextPage.filter('#signup-toplevel-container');
-            $nextPageDivContainer.css({
-                right: '100%',
-                position: 'relative'
-            });
+            $nextPageDivContainer.addClass('off-screen-left');
             $currentBody.html($nextPageDivContainer);
-            $nextPageDivContainer.animate({right: '0%'}, 200);
-        
-            let stateObject = { signupStepName: nextStepName };
-            let newUrl = '/auth/signup?step=' + nextStepName;
-            history.pushState(stateObject, '', newUrl);
+            setTimeout(() => {
+                $nextPageDivContainer.addClass('on-screen-to-right');
+            }, 1);
+
+            setHistoryState();
             setEventHandlers();
         })
 }
@@ -76,4 +93,17 @@ function selectSubPlan(e){
         btn.checked = false;
     });
     $radioButton.get(0).checked = true;
+}
+
+function showPageInHistory(e){
+    let stepName = history.state.ref;
+    let $newDivContainer = window.signupStates[stepName];
+    let $currentBody = $('body');
+    $newDivContainer.addClass('off-screen-left');
+    $currentBody.html($newDivContainer);
+    setTimeout(() => {
+        $newDivContainer.addClass('on-screen-to-right');
+    }, 1);
+
+    setEventHandlers();
 }

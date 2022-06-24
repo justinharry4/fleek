@@ -80,6 +80,15 @@ img {
     display: block;
     width: 100%;
 }
+.off-screen-left {
+    position: relative;
+    right: 100%;
+    transition-property: right;
+    transition-duration: 200ms;
+}
+.on-screen-to-right {
+    right: 0%;
+}
 
 /* header styles */
 .toplevel-header {
