@@ -167,6 +167,68 @@
                     <button class="native-bg block-strech proceed-button" data-account-info="subscription-plan" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                 </div>
             </div>
+        <% } else if (signupStep === 'step3') { %>
+            <%- include('../../partials/header') %>
+                <span class="toplevel-header-link-text"><a href="/auth/signin">Sign Out</a></span>
+            </header>
+            <div class="signup-main-container">
+                <div class="signup-main-wrapper signup-step-<%= signupStep %>">
+                    <div class="signup-step-img-wrapper">
+                        <img src="/images/lock.png" alt="lock">
+                    </div>
+                    <h2 class="signup-stepno-heading">step <span class="small-num">3</span> of <span class="small-num">3</span></h2>
+                    <h3 class="signup-step-heading">Set up your payment</h3>
+                    <div class="signup-step-info-text-wrapper">
+                        <p class="signup-step-info-text">Your membership starts<br>as soon as you set up<br>payment.</p>
+                        <p class="signup-step-info-text">No commitments.<br>Cancel online anytime</p>
+                    </div>
+                    <div class="signup-proceed-button-wrapper">
+                        <div class="flex-wrapper signup-secure-server-wrapper signup-sub-main-text">
+                            <span>Secure Server</span><img src="/images/svg/secure.svg" id="signup-secure-server-icon" alt="padlock icon">
+                        </div>
+                        <button type="button" class="proceed-button flex-wrapper" data-account-info="" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">
+                            <span>Credit or Debit Card</span>
+                            <img class="signup-card-option-icon" src="/images/svg/visa.svg">
+                            <img class="signup-card-option-icon" src="/images/svg/mastercard.svg">
+                            <img class="signup-card-option-icon" src="/images/verve.png">
+                            <%- include('../../../public/images/svg/next-button.svg') %>
+                            <!-- <img src="/images/svg/next-button.svg"> -->
+                        </button>
+                    </div>
+                </div>
+            </div>
+        <% } else if (signupStep === 'credit-option') { %>
+            <%- include('../../partials/header') %>
+                <span class="toplevel-header-link-text"><a href="/auth/signin">Sign Out</a></span>
+            </header>
+            <div class="signup-main-container">
+                <div class="signup-main-wrapper signup-step-<%= signupStep %>">
+                    <h2 class="signup-stepno-heading">step <span class="small-num">1</span> of <span class="small-num">3</span></h2>
+                    <h3 class="signup-step-heading">Create a password to start your membership</h3>
+                    <p class="signup-step-info-text">Just a few more steps and you're done!<br>We hate paperwork, too.</p>
+                    <form class="signup-form">
+                        <fieldset>
+                            <ul class="signup-form-ul">
+                                <li>
+                                    <label for="signup-form-email" class="off-screen">Email</label>
+                                    <input type="email" name="email" id="signup-form-email" class="block-strech" placeholder="Add an email address">
+                                </li>
+                                <li>
+                                    <label for="signup-form-password" class="off-screen">Password</label>
+                                    <input type="password" name="password" id="signup-form-password" class="block-strech" placeholder="Add a password">
+                                </li>
+                            </ul>
+                        </fieldset>
+                        <label for="signup-form-offers-checkbox" class="signup-sub-main-text">
+                        <span class="custom-checkbox-wrapper">
+                            <input type="checkbox" name="fleek-special-offers" class="native-checkbox off-screen" id="signup-form-offers-checkbox">
+                            <span class="custom-checkbox"></span>
+                        </span>
+                        Please do not email me Fleek special offers.</label>
+                        <button type="button" class="native-bg block-strech proceed-button" data-account-info="credentials" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
+                    </form>
+                </div>
+            </div>
         <% } %>
         <%- include('../../partials/auth/footer') %>
     </div>

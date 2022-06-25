@@ -132,7 +132,8 @@ a:hover, a:active {
     margin-right: auto;
     margin-bottom: 7em;
 }
-.signup-step-step1, .signup-step-step2 {
+.signup-step-step1, .signup-step-step2,
+.signup-step-step3 {
     max-width: 26em;
     text-align: center;
     margin-top: 3em;
@@ -144,7 +145,7 @@ a:hover, a:active {
     max-width: 80%;
 }
 .signup-step-img-wrapper {
-    margin: 2em 3.5em;
+    margin: 0em 3.5em 2em;
     height: var(--step-header-img-height);
 }
 .signup-step-img-wrapper img {
@@ -210,6 +211,52 @@ a:hover, a:active {
     width: 50%;
     margin-left: auto;
     margin-right: auto;
+}
+.signup-step-step3 {
+    max-width: 35em;
+}
+#signup-secure-server-icon {
+    width: 10px;
+} 
+.signup-step-step3 .signup-step-info-text-wrapper {
+    margin-top: 1em;
+}
+.signup-step-step3 .signup-step-info-text:last-child {
+    margin-top: .5em;
+    font-weight: bold;
+}
+.signup-proceed-button-wrapper 
+.signup-secure-server-wrapper {
+    justify-content: flex-end;
+    padding: .3em 0em;
+    font-size: .8em;
+}
+#signup-secure-server-icon {
+    margin: 0em 5px;
+}
+.signup-proceed-button-wrapper {
+    margin-top: 1em;
+}
+.signup-step-step3 .proceed-button {
+    margin-top: 0em;
+    width: 100%;
+    color: #000;
+    font-size: 1em;
+    background-color: #fff;
+    border: 2px solid #c4c3c3;
+    align-items: center;
+    padding: 1em;
+}
+.signup-step-step3 .proceed-button .signup-card-option-icon {
+    margin: 0em .2em;
+}
+.signup-step-step3 .proceed-button span {
+    margin-right: .5em;
+}
+.signup-step-step3 .proceed-button svg:last-child {
+    margin-left: auto;
+    height: 20px;
+    color: #c4c3c3;
 }
 
 /* table styles */  
