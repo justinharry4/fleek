@@ -94,6 +94,9 @@ a:hover, a:active {
 #signin-main-wrapper > div:last-child p:last-child a {
     color: #1010f1;
 }
+#signin-main-wrapper .custom-checkbox-wrapper {
+    background-color: #fff;
+}
 
 /* footer styles */
 .signin-footer {
@@ -174,6 +177,9 @@ a:hover, a:active {
     border-radius: 4px;
     height: 3.9rem;
 }
+.signup-main-wrapper input:focus {
+    border-color: #2181da;
+}
 .signup-main-wrapper button,
 .signup-main-wrapper input[type="submit"] {
     color: #fff;
@@ -184,7 +190,7 @@ a:hover, a:active {
     margin: .7em 0em;
 }
 .signup-main-wrapper input {
-    border: 1px solid #c9c7c7;
+    border: 2px solid #c9c7c7;
     margin-bottom: .7em;
 }
 .signup-step-info-ul .signup-step-info-text {
@@ -258,6 +264,60 @@ a:hover, a:active {
     height: 20px;
     color: #c4c3c3;
 }
+.signup-step-credit-option {
+    max-width: 33em;
+}
+.signup-card-icons-wrapper {
+    height: 1.2em;
+    margin: .5em 0em;
+}
+.signup-header-card-icon {
+    margin-right: .3em;
+}
+.signup-step-credit-option .signup-form 
+.signup-form-ul li:last-of-type div {
+    /* border: 2px solid #c9c7c7; */
+    border: solid 2px #c9c7c7;
+    width: 100%;
+    align-items: center;
+    border-radius: 4px;
+}
+#signup-form-moreinfo-icon {
+    width: 40px;
+    margin: 0em .7em;
+}
+#signup-form-cvv {
+    flex: 1 1 auto;
+    margin-bottom: 0em;
+    border: none;
+}
+.signup-step-credit-option button {
+    width: 100%;
+    padding: 1em;
+    align-items: center;
+    color: #000;
+    font-size: 1em;
+    margin-bottom: 1.5em;
+    text-transform: capitalize;
+}
+#signup-change-plan-link {
+    margin-left: auto;
+}
+#signup-change-plan-link:hover {
+    text-decoration: none;
+}
+.signup-step-credit-option button ~ p:first-of-type {
+    margin-bottom: 2em;
+}
+.signup-step-credit-option button ~ p:nth-of-type(2) {
+    margin-bottom: 1em;
+}
+.signup-step-credit-option .submit-button {
+    border-radius: 4px;
+    color: #fff;
+    border: none;
+}
+
 
 /* table styles */  
 #sub-plan-table td { 
@@ -328,6 +388,26 @@ a:hover, a:active {
     margin: 0% 5%;
 }
 
+/* error styles */
+.validation-error {
+    color: #fff;
+    background-color: #f8ae0e;
+    padding: 1em;
+    border-radius: 2px;
+    align-items: center;
+    margin-bottom: 1.5em;
+}
+.validation-error::before {
+    content: "!";
+    margin-right: 1em;
+}
+.signup-step-credit-option p.warning-text {
+    margin: .4em 0em;
+}
+.signup-main-wrapper .invalid-input {
+    border: 2px solid #e64e4e;
+}
+
 /* misc styles */
 .signup-text-small {
     font-size: .8em;
@@ -346,4 +426,13 @@ a:hover, a:active {
 }
 #sub-plan-table .signup-native-fg {
     color: var(--native-color);
+}
+.greyed-text {
+    color: #757775;
+}
+.link-blue {
+    color: #0676df;
+}
+.warning-text {
+    color: #bb2924;
 }

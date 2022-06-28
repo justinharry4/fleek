@@ -56,12 +56,13 @@ section.home-section {
     font-size: .8em;
 }
 .form-signup-ul {
-    padding: .8em 0em;
+    padding: .8em 2%;
 }
 .form-signup-ul li {
+    position: relative;
     height: 1.8em;
     justify-content: center;
-    padding: 0% 2%;
+    /* padding: 0% 2%; */
 }
 .form-signup-ul li button {
     padding-left: 1em;
@@ -72,7 +73,17 @@ section.home-section {
 .form-signup-ul input[type="email"] {
     flex: 0 1 23em;
     font-size: .6em;
+    border-bottom: 2px solid transparent;
+    position: relative;
 }
+/* .form-signup-ul input[type="email"]::before {
+    color: red;
+    /* position: absolute;
+    left: 0%;
+    top: 0%;
+    font-size: .8em; 
+    content: "content"
+} */
 .form-signup-wrapper p {
     color: #cecccc
 }
@@ -172,6 +183,18 @@ section.home-section {
     line-height: 1.2em;
 }
 
+
+/* error styles */
+.validation-error {
+    font-size: .5em;
+    color: #f3c809;
+    text-align: left;
+    padding: .5em;
+    position: absolute;
+    left: 11%;
+    top: 100%;
+}
+
 /* footer styles */
 #home-footer {
     padding: 2em 2% 1em;
@@ -198,4 +221,3 @@ section.home-section {
     /* height: 2em; */
     height: calc(var(--footer-nav-ul-height) / 4)
 }
-

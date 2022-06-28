@@ -1,6 +1,8 @@
 <%- include('../../partials/head') %>
     <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/components/checkbox.css">
     <link rel="stylesheet" href="/css/auth.css">
+    <script src="/scripts/jquery.js"></script>
 </head>
 <body>
     <div id="signin-container">
@@ -24,7 +26,11 @@
                         <input type="submit" value="Sign In" class="native-bg block-strech">
                     </fieldset>
                     <fieldset id="form-signin-remember-wrapper" class="flex-wrapper">
-                        <input type="checkbox" name="remember-user" value="true" id="form-signin-checkbox"><label for="form-signin-checkbox">Remember me</label>
+                        <label for="form-signin-checkbox" class="custom-checkbox-container">
+                            <%- include('../../components/checkbox', {checkboxName: 'remember-name', checkboxId: 'form-signin-checkbox', checkboxValue: 'true'}) %>
+                            <!-- <input type="checkbox" name="remember-user" value="true" id="form-signin-checkbox"> -->
+                            Remember me
+                        </label>
                         <span><a href="">Need help?</a></span>
                     </fieldset>
                 </form>

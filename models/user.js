@@ -13,7 +13,7 @@ const userSchema = Schema({
     },
     name: {
         type: String,
-        required: true
+        default: 'New Fleek User'
     },
     profilePhoto: {
         type: String,

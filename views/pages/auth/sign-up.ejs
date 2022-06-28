@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="/css/components/checkbox.css">
     <script src="/scripts/jquery.js"></script>
     <script src="/scripts/auth/signup.js"></script>
+    <!-- <script src="/scripts/components/checkbox.js"></script> -->
 </head>
 <body>
     <div id="signup-toplevel-container">
@@ -36,7 +37,7 @@
                             <ul class="signup-form-ul">
                                 <li>
                                     <label for="signup-form-email" class="off-screen">Email</label>
-                                    <input type="email" name="email" id="signup-form-email" class="block-strech" placeholder="Add an email address">
+                                    <input type="email" name="email" value="<%= regEmail %>" id="signup-form-email" class="block-strech" placeholder="Add an email address">
                                 </li>
                                 <li>
                                     <label for="signup-form-password" class="off-screen">Password</label>
@@ -44,12 +45,10 @@
                                 </li>
                             </ul>
                         </fieldset>
-                        <label for="signup-form-offers-checkbox" class="signup-sub-main-text">
-                        <span class="custom-checkbox-wrapper">
-                            <input type="checkbox" name="fleek-special-offers" class="native-checkbox off-screen" id="signup-form-offers-checkbox">
-                            <span class="custom-checkbox"></span>
-                        </span>
-                        Please do not email me Fleek special offers.</label>
+                        <label class="signup-sub-main-text custom-checkbox-container">
+                            <%- include('../../components/checkbox', {checkboxName: 'fleek-special-offers', checkboxId: 'signup-form-offers-checkbox', checkboxValue: 'true'}) %>
+                            Please do not email me Fleek special offers.
+                        </label>
                         <!-- <input type="button" class="native-bg block-strech" value="Next" data-account-info="credentials" data-signup-stepno="1-2"> -->
                         <button type="button" class="native-bg block-strech proceed-button" data-account-info="credentials" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                     </form>
@@ -192,7 +191,6 @@
                             <img class="signup-card-option-icon" src="/images/svg/mastercard.svg">
                             <img class="signup-card-option-icon" src="/images/verve.png">
                             <%- include('../../../public/images/svg/next-button.svg') %>
-                            <!-- <img src="/images/svg/next-button.svg"> -->
                         </button>
                     </div>
                 </div>
@@ -203,29 +201,54 @@
             </header>
             <div class="signup-main-container">
                 <div class="signup-main-wrapper signup-step-<%= signupStep %>">
-                    <h2 class="signup-stepno-heading">step <span class="small-num">1</span> of <span class="small-num">3</span></h2>
-                    <h3 class="signup-step-heading">Create a password to start your membership</h3>
-                    <p class="signup-step-info-text">Just a few more steps and you're done!<br>We hate paperwork, too.</p>
-                    <form class="signup-form">
+                    <h2 class="signup-stepno-heading">step <span class="small-num">3</span> of <span class="small-num">3</span></h2>
+                    <h3 class="signup-step-heading">Set up your credit or debit card</h3>
+                    <h2 class="flex-wrapper signup-card-icons-wrapper">
+                        <img src="/images/svg/visa.svg" class="signup-header-card-icon">
+                        <img src="/images/svg/mastercard.svg" class="signup-header-card-icon">
+                        <img src="/images/verve.png" class="signup-header-card-icon">
+                    </h2>
+                    <form class="signup-form" method="POST" action="/auth/complete-registration">
                         <fieldset>
                             <ul class="signup-form-ul">
                                 <li>
-                                    <label for="signup-form-email" class="off-screen">Email</label>
-                                    <input type="email" name="email" id="signup-form-email" class="block-strech" placeholder="Add an email address">
+                                    <label for="signup-form-first-name" class="off-screen">First Name</label>
+                                    <input type="text" name="first-name" id="signup-form-first-name" class="block-strech" placeholder="First name">
                                 </li>
                                 <li>
-                                    <label for="signup-form-password" class="off-screen">Password</label>
-                                    <input type="password" name="password" id="signup-form-password" class="block-strech" placeholder="Add a password">
+                                    <label for="signup-form-last-name" class="off-screen">Last Name</label>
+                                    <input type="text" name="last-name" id="signup-form-last-name" class="block-strech" placeholder="Last name">
+                                </li>
+                                <li>
+                                    <label for="signup-form-card-number" class="off-screen">Card Number</label>
+                                    <input type="number" name="card-number" id="signup-form-card-number" class="block-strech" placeholder="Card number">
+                                </li>
+                                <li>
+                                    <label for="signup-form-expiry-date" class="off-screen">Expiry Date</label>
+                                    <input type="number" name="expiry-date" id="signup-form-expiry-date" class="block-strech" placeholder="Expiry date (MM/YY)">
+                                </li>
+                                <li>
+                                    <label for="signup-form-cvv" class="off-screen">Security Code</label>
+                                    <div class="flex-wrapper">
+                                        <input type="number" name="cvv" id="signup-form-cvv" class="" placeholder="Security code (CVV)">
+                                        <img src="/images/svg/question-mark.svg" id="signup-form-moreinfo-icon">
+                                    </div>
                                 </li>
                             </ul>
                         </fieldset>
-                        <label for="signup-form-offers-checkbox" class="signup-sub-main-text">
-                        <span class="custom-checkbox-wrapper">
-                            <input type="checkbox" name="fleek-special-offers" class="native-checkbox off-screen" id="signup-form-offers-checkbox">
-                            <span class="custom-checkbox"></span>
-                        </span>
-                        Please do not email me Fleek special offers.</label>
-                        <button type="button" class="native-bg block-strech proceed-button" data-account-info="credentials" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
+                        <button type="button" class="flex-wrapper">
+                            <span><span class="text-bold">N<%= subscriptionData.plans[regSubPlan].price %>/month</span><br><span class="greyed-text"><%= regSubPlan %> Plan</span></span><a id="signup-change-plan-link" class="text-bold link-blue">Change</a>
+                        </button>
+                        <p class="signup-sub-main-text greyed-text">Your payments will be processed internationally. Additional bank fees may apply.</p>
+                        <p class="signup-sub-main-text greyed-text">
+                            By checking the checkbox below you agree to our <a class="link-blue text-bold">Terms of Use</a>, <a class="link-blue text-bold">Privacy Statement</a>,
+                            and that you are over 18. Fleek will automatically continue your membership and charge the membership fee (currently N4400/month) to your payment method until you cancel. You may cancel at any time to avoid future charges.
+                        </p>
+                        <label for="signup-form-tou-checkbox" class="signup-tou-checkbox-label custom-checkbox-container">
+                            <%- include('../../components/checkbox', {checkboxName: 'terms-of-use', checkboxId: 'signup-form-tou-checkbox', checkboxValue: 'true'}) %>
+                            I agree
+                        </label>
+                        <input type="submit" class="native-bg block-strech submit-button" value="Start Membership" data-account-info="" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">
                     </form>
                 </div>
             </div>

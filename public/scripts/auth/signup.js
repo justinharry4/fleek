@@ -1,5 +1,5 @@
 $(initializePage);
-
+console.log('running script');
 function initializePage(){
     $(window).on('popstate', showPageInHistory)
     window.signupStates = {};
@@ -18,19 +18,22 @@ function setEventHandlers(){
 
     let $subPlanButtons = $('.sub-plan-button');
     $subPlanButtons.on('click', selectSubPlan);
+
+    let $creditInfoForm = $('.signup-step-credit-option .signup-form');
+    $creditInfoForm.on('submit', submitCreditInfo);
+    console.log($creditInfoForm);
+
+    let $termsCheckboxLabel = $('.signup-step-credit-option .signup-tou-checkbox-label');
+    $termsCheckboxLabel.on('customCheck:', clearWarningText)
 }
 
 function setHistoryState(){
-    let stepName = $('.proceed-button').data('signup-stepname');
+    let stepName = $('.proceed-button, .submit-button').data('signup-stepname');
     let $currentPageDivContainer = $('#signup-toplevel-container');
     window.signupStates[stepName] = $currentPageDivContainer;
     let stateObject = { ref: stepName };
     let newUrl = '/auth/signup?step=' + stepName;
     history.pushState(stateObject, '', newUrl);
-
-    // setTimeout(() => {
-    //     $currentPageDivContainer.removeClass('off-screen-left on-screen-to-right');
-    // }, 100)
 }
 
 function getNextSignupPage(e){
@@ -48,9 +51,8 @@ function getNextSignupPage(e){
         method = 'POST';
         let subPlan = $('input[type="radio"]:checked').val();
         requestData = { ...requestData, subPlan: subPlan }
-    } else if (accountInfo === 'credit-info'){
-        
     }
+
     $.ajax({
         url: url,
         method: method,
@@ -72,10 +74,32 @@ function getNextSignupPage(e){
             setHistoryState();
             setEventHandlers();
         })
+        .fail( jqXHR => {
+            if (jqXHR.status === 422){
+                let body = JSON.parse(jqXHR.responseText);
+                let inputFields = ['email', 'password']
+                inputFields.forEach(inputField => {
+                    let $formInput = $(`.signup-form input[name="${inputField}"]`)
+                    if (body.fields.includes(inputField)){
+                        $formInput.addClass('invalid-input');
+                    } else {
+                        $formInput.removeClass('invalid-input');
+                    }
+                })
+                let $messageDiv = $('<div><span></span></div>')
+                    .addClass('validation-error flex-wrapper text-bold');
+                let $messageSpan = $messageDiv.find('span').text(body.message);
+                let $parentDiv = $('.signup-main-wrapper');
+                let $prevDiv = $parentDiv.find('.validation-error');
+                if ($prevDiv.length !== 0){
+                    $prevDiv.remove();
+                }
+                $parentDiv.prepend($messageDiv);
+            }
+        })
 }
 
 function selectSubPlan(e){
-    let subPlanList = ['mobile', 'basic', 'standard', 'premium']
     let selectedSubPlan = $(this).data('sub-plan');
     let selectedClass = 'sub-plan-' + selectedSubPlan;
     let $selectedTds = $(`td.${selectedClass}`);
@@ -100,7 +124,6 @@ function selectSubPlan(e){
 function showPageInHistory(e){
     let stepName = history.state.ref;
     let $newDivContainer = window.signupStates[stepName];
-    console.log($newDivContainer);
     let $currentBody = $('body');
     let $oldDivContainer = $('#signup-toplevel-container');
     $currentBody.html($newDivContainer);
@@ -110,4 +133,41 @@ function showPageInHistory(e){
     $oldDivContainer.addClass('off-screen-left');
     $oldDivContainer.removeClass('on-screen-to-right')
     setEventHandlers();
+}
+
+function submitCreditInfo(e){
+    if (!e.eventData || !e.eventData.termsAgreed){
+        e.preventDefault();
+        let $termsCheckbox = $(this).find('#signup-form-tou-checkbox');
+        console.log($termsCheckbox.get(0).checked);
+        if ($termsCheckbox.get(0).checked){
+            let submitEvent = $.Event('submit');
+            submitEvent.eventData = { termsAgreed: true };
+            return $(this).trigger(submitEvent);
+        }
+        let $parentForm = $(this);
+        let $prevPara = $parentForm.find('p.warning-text');
+        if ($prevPara.length === 0){
+            let message = 'You must acknowledge that you have read and agree to the Terms of Use to continue.';
+            let $messagePara = $('<p>').text(message).addClass('warning-text');
+            $parentForm.find('.submit-button').before($messagePara);
+        }
+    }
+}
+
+function clearWarningText(e){
+    let $parentForm = $(this).parent()
+    let $prevPara = $parentForm.find('p.warning-text');
+    if (e.checkState === 'checked'){
+        if ($prevPara.length !== 0){
+            $prevPara.remove();
+        }
+    }
+    if (e.checkState === 'unchecked'){
+        if ($prevPara.length === 0){
+            let message = 'You must acknowledge that you have read and agree to the Terms of Use to continue.';
+            let $messagePara = $('<p>').text(message).addClass('warning-text');
+            $(this).after($messagePara);
+        }
+    }
 }

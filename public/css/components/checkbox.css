@@ -3,27 +3,37 @@
 /* CUSTOM CHECKBOX STYLES */
 /* variables */
 .custom-checkbox-wrapper {
-    --custom-checkbox-wrapper-width: 40px;
-    --checkmark-width: 5px
+    --custom-checkbox-wrapper-width: 20px;
+    --checkmark-width: 3px
 }
 
 .custom-checkbox-wrapper .native-checkbox {
     display: none;
 }
 .custom-checkbox-wrapper {
-    display: none;
+    display: inline-block;
     border: 1px solid #0c0b0b;
     width: var(--custom-checkbox-wrapper-width);
     height: var(--custom-checkbox-wrapper-width);
     position: relative;
+    margin-right: .5em;
 }
-.custom-checkbox {
-    width: calc(0.7778 * var(--custom-checkbox-wrapper-width));
+.custom-checkmark {
+    width: calc(0.6 * var(--custom-checkbox-wrapper-width));
     height: calc(0.2828 * var(--custom-checkbox-wrapper-width));
-    border-left: var(--checkmark-width) solid #1662d4;
-    border-bottom: var(--checkmark-width) solid #1662d4;
+    border-left: var(--checkmark-width) solid transparent;
+    border-bottom: var(--checkmark-width) solid transparent;
     position: absolute;
-    bottom: 30%;
-    left: 30%;
+    bottom: 20%;
+    left: 40%;
+    transform-origin: 0% 100%;
     transform: rotate(-45deg);
+}
+.custom-checkbox-container {
+    align-items: center;
+    display: flex;
+}
+.checked-custom {
+    border-left-color: #1662d4;
+    border-bottom-color: #1662d4;
 }

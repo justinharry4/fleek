@@ -1,6 +1,6 @@
 <%- include('../partials/head') %>
     <link rel="stylesheet" href="/css/general.css">
-    <link rel="stylesheet" href="/css/main-content.css">
+    <link rel="stylesheet" href="/css/index.css">
     <script src="/scripts/jquery.js"></script>
     <script src="/scripts/index.js"></script>  
 </head>
@@ -15,12 +15,13 @@
                 <h3 class="home-section-subheading">Watch anywhere. Cancel anytime</h3>
                 <div class="form-signup-wrapper"> 
                     <p class="home-text-small">Ready to watch? Enter your email to create or restart your membership.</p>
-                    <form method="POST" action="" id="form-signup-top">
+                    <form method="POST" action="/auth/signup" class="form-signup">
                         <ul class="form-signup-ul">
                             <li class="flex-wrapper">
-                                <label class="off-screen" for="form-signup-top-email">Email</label>
-                                <input type="email" name="email" placeholder="Email address" id="form-signup-top-email">
-                                <button type="button" class="native-bg"><a href="/auth/signup">Get Started ></a></button>
+                                    <label class="off-screen" for="form-signup-top-email">Email</label>
+                                    <input type="email" name="email" placeholder="Email Address" id="form-signup-top-email">
+                                    <button type="submit" class="native-bg">Get Started ></button>
+                                    <input type="hidden" name="_email" value="">
                             </li>
                         </ul>
                     </form>
@@ -86,12 +87,12 @@
             </div>
             <div class="form-signup-wrapper"> 
                 <p class="home-text-small">Ready to watch? Enter your email to create or restart your membership.</p>
-                <form method="POST" action="" id="form-signup-top">
+                <form method="POST" action="/auth/signup" class="form-signup">
                     <ul class="form-signup-ul">
                         <li class="flex-wrapper">
                             <label class="off-screen" for="form-signup-top-email">Email</label>
                             <input type="email" name="email" placeholder="Email address" id="form-signup-top-email">
-                            <button type="button" class="native-bg">Get Started ></button>
+                            <button type="submit" class="native-bg">Get Started ></button>
                         </li>
                     </ul>
                 </form>
