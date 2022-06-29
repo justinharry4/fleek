@@ -20,7 +20,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 // configurations
-const PORT = 11000;
+const PORT = 14000;
 const publicPath = fileUtil.makePath('public');
 const faviconPath = fileUtil.makePath('public/images/favicon.ico');
 const MONGO_DB_URI = 'mongodb://127.0.0.1:27017/fleek';
@@ -39,7 +39,7 @@ app.use(session({
 
 // END POINTS
 app.use(contentRoutes);
-app.use('/auth', authRoutes);
+app.use(authRoutes);
 app.use(errorRoutes);
 
 // ERROR HANDLING MIDDLEWARE

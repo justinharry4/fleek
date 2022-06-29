@@ -7,8 +7,8 @@ function setEventHandlers(){
     let $signupForm = $('.form-signup');
     $signupForm.on('submit', validateEmail)
 
-    let $emailInput = $('.form-signup input[type="email"]');
-    $emailInput.on('input', setHiddenInput)
+    // let $emailInput = $('.form-signup input[type="email"]');
+    // $emailInput.on('input', setHiddenInput)
 }
 
 // EVENT HANDLERS 
@@ -50,8 +50,8 @@ function validateEmail(e){
     }
 }
 
-function setHiddenInput(e){
-    let $hiddenInput = $('.form-signup input[type="hidden"]');
-    let emailValue = $(this).val();
-    $hiddenInput.val(emailValue);
-}
+// function setHiddenInput(e){
+//     let $hiddenInput = $('.form-signup input[type="hidden"]');
+//     let emailValue = $(this).val();
+//     $hiddenInput.val(emailValue);
+// }

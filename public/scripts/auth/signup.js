@@ -4,7 +4,7 @@ function initializePage(){
     $(window).on('popstate', showPageInHistory)
     window.signupStates = {};
 
-    let stepName = $('.proceed-button').data('signup-stepname');
+    let stepName = $('.proceed-button, .submit-button').data('signup-stepname');
     let $currentPageDivContainer = $('#signup-toplevel-container');
     window.signupStates[stepName] = $currentPageDivContainer;
     let stateObject = { ref: stepName };
@@ -21,7 +21,6 @@ function setEventHandlers(){
 
     let $creditInfoForm = $('.signup-step-credit-option .signup-form');
     $creditInfoForm.on('submit', submitCreditInfo);
-    console.log($creditInfoForm);
 
     let $termsCheckboxLabel = $('.signup-step-credit-option .signup-tou-checkbox-label');
     $termsCheckboxLabel.on('customCheck:', clearWarningText)
@@ -32,26 +31,30 @@ function setHistoryState(){
     let $currentPageDivContainer = $('#signup-toplevel-container');
     window.signupStates[stepName] = $currentPageDivContainer;
     let stateObject = { ref: stepName };
-    let newUrl = '/auth/signup?step=' + stepName;
+    let newUrl = '/signup/' + stepName;
     history.pushState(stateObject, '', newUrl);
 }
 
 function getNextSignupPage(e){
-    let url = '/auth/signup';
-    let method = 'GET';
-    let accountInfo = $(this).data('account-info');
+    let stepName = $(this).data('signup-stepname');
     let nextStepName = $(this).data('next-signup-stepname');
-    let requestData = { step: nextStepName, accountInfo: accountInfo };
-    if (accountInfo === 'credentials'){
+
+    let url = '/signup/' + nextStepName;
+    let method = 'GET';
+    let requestData = {};
+    console.log(stepName, nextStepName);
+
+    if (stepName === 'regform'){
         method = 'POST';
         let email = $('#signup-form-email').val();
         let password = $('#signup-form-password').val();
-        requestData = { ...requestData, email: email, password: password };
-    } else if (accountInfo === 'subscription-plan'){
+        requestData.email = email;
+        requestData.password = password;
+    } else if (stepName === 'chooseplan'){
         method = 'POST';
         let subPlan = $('input[type="radio"]:checked').val();
-        requestData = { ...requestData, subPlan: subPlan }
-    }
+        requestData.subPlan = subPlan;
+    } 
 
     $.ajax({
         url: url,
@@ -88,7 +91,7 @@ function getNextSignupPage(e){
                 })
                 let $messageDiv = $('<div><span></span></div>')
                     .addClass('validation-error flex-wrapper text-bold');
-                let $messageSpan = $messageDiv.find('span').text(body.message);
+                $messageDiv.find('span').text(body.message);
                 let $parentDiv = $('.signup-main-wrapper');
                 let $prevDiv = $parentDiv.find('.validation-error');
                 if ($prevDiv.length !== 0){
@@ -126,13 +129,34 @@ function showPageInHistory(e){
     let $newDivContainer = window.signupStates[stepName];
     let $currentBody = $('body');
     let $oldDivContainer = $('#signup-toplevel-container');
-    $currentBody.html($newDivContainer);
-    setTimeout(() => {
-        $newDivContainer.addClass('on-screen-to-right');
-    }, 1);
-    $oldDivContainer.addClass('off-screen-left');
-    $oldDivContainer.removeClass('on-screen-to-right')
-    setEventHandlers();
+    if (!$newDivContainer){
+        $.get({
+            url: '/signup/' + stepName,
+            // method: 'GET',
+            dataType: 'html'
+        })
+            .done(htmlData => {
+                let $newPage = $(htmlData);
+                $newDivContainer = $newPage.filter('#signup-toplevel-container');
+                $newDivContainer.addClass('off-screen-left');
+                $currentBody.html($newDivContainer);
+                setTimeout(() => {
+                    $newDivContainer.addClass('on-screen-to-right');
+                }, 1);
+                $oldDivContainer.addClass('off-screen-left');
+                $oldDivContainer.removeClass('on-screen-to-right');
+                setEventHandlers();
+            })
+    } else {
+        $currentBody.html($newDivContainer);
+        setTimeout(() => {
+            $newDivContainer.addClass('on-screen-to-right');
+        }, 1);
+        $oldDivContainer.addClass('off-screen-left');
+        $oldDivContainer.removeClass('on-screen-to-right')
+        setEventHandlers();
+    }
+    console.log('expected last');
 }
 
 function submitCreditInfo(e){

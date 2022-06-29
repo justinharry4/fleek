@@ -135,16 +135,16 @@ a:hover, a:active {
     margin-right: auto;
     margin-bottom: 7em;
 }
-.signup-step-step1, .signup-step-step2,
-.signup-step-step3 {
+.signup-step-regstep1, .signup-step-regstep2,
+.signup-step-regstep3 {
     max-width: 26em;
     text-align: center;
     margin-top: 3em;
 }
-.signup-step-add-password {
+.signup-step-regform {
     max-width: 30em;
 }
-.signup-step-choose-plan {
+.signup-step-chooseplan {
     max-width: 80%;
 }
 .signup-step-img-wrapper {
@@ -166,8 +166,8 @@ a:hover, a:active {
 .signup-step-heading {
     font-size: 2em;
 }
-.signup-step-step1 .signup-step-info-text,
-.signup-step-step2 .signup-step-info-ul {
+.signup-step-regstep1 .signup-step-info-text,
+.signup-step-regstep2 .signup-step-info-ul {
     margin: 1.5em 2em 0em;
 }
 .signup-step-info-text {
@@ -186,7 +186,7 @@ a:hover, a:active {
     font-size: 1.3em;
     margin-top: 1.5rem;
 }
-.signup-step-add-password .signup-step-info-text {
+.signup-step-regform .signup-step-info-text {
     margin: .7em 0em;
 }
 .signup-main-wrapper input {
@@ -196,15 +196,15 @@ a:hover, a:active {
 .signup-step-info-ul .signup-step-info-text {
     margin-left: 1em;
 }
-.signup-step-step2 .signup-step-info-ul {
+.signup-step-regstep2 .signup-step-info-ul {
     text-align: left;
     margin-left: 1em;
     margin-right: 4em;
 }
-.signup-step-step2 .signup-step-info-ul li {
+.signup-step-regstep2 .signup-step-info-ul li {
     margin-bottom: 1em;
 }
-.signup-step-choose-plan .signup-step-info-ul {
+.signup-step-chooseplan .signup-step-info-ul {
     margin: 1em 0em;
 }
 .signup-extra-plan-info {
@@ -213,21 +213,21 @@ a:hover, a:active {
 .signup-extra-plan-info p:last-child {
     margin-top: 1em;
 }
-.signup-step-choose-plan button:last-child {
+.signup-step-chooseplan button:last-child {
     width: 50%;
     margin-left: auto;
     margin-right: auto;
 }
-.signup-step-step3 {
+.signup-step-regstep3 {
     max-width: 35em;
 }
 #signup-secure-server-icon {
     width: 10px;
 } 
-.signup-step-step3 .signup-step-info-text-wrapper {
+.signup-step-regstep3 .signup-step-info-text-wrapper {
     margin-top: 1em;
 }
-.signup-step-step3 .signup-step-info-text:last-child {
+.signup-step-regstep3 .signup-step-info-text:last-child {
     margin-top: .5em;
     font-weight: bold;
 }
@@ -243,7 +243,7 @@ a:hover, a:active {
 .signup-proceed-button-wrapper {
     margin-top: 1em;
 }
-.signup-step-step3 .proceed-button {
+.signup-step-regstep3 .proceed-button {
     margin-top: 0em;
     width: 100%;
     color: #000;
@@ -253,18 +253,18 @@ a:hover, a:active {
     align-items: center;
     padding: 1em;
 }
-.signup-step-step3 .proceed-button .signup-card-option-icon {
+.signup-step-regstep3 .proceed-button .signup-card-option-icon {
     margin: 0em .2em;
 }
-.signup-step-step3 .proceed-button span {
+.signup-step-regstep3 .proceed-button span {
     margin-right: .5em;
 }
-.signup-step-step3 .proceed-button svg:last-child {
+.signup-step-regstep3 .proceed-button svg:last-child {
     margin-left: auto;
     height: 20px;
     color: #c4c3c3;
 }
-.signup-step-credit-option {
+.signup-step-creditoption {
     max-width: 33em;
 }
 .signup-card-icons-wrapper {
@@ -274,7 +274,7 @@ a:hover, a:active {
 .signup-header-card-icon {
     margin-right: .3em;
 }
-.signup-step-credit-option .signup-form 
+.signup-step-creditoption .signup-form 
 .signup-form-ul li:last-of-type div {
     /* border: 2px solid #c9c7c7; */
     border: solid 2px #c9c7c7;
@@ -291,7 +291,7 @@ a:hover, a:active {
     margin-bottom: 0em;
     border: none;
 }
-.signup-step-credit-option button {
+.signup-step-creditoption button {
     width: 100%;
     padding: 1em;
     align-items: center;
@@ -306,13 +306,13 @@ a:hover, a:active {
 #signup-change-plan-link:hover {
     text-decoration: none;
 }
-.signup-step-credit-option button ~ p:first-of-type {
+.signup-step-creditoption button ~ p:first-of-type {
     margin-bottom: 2em;
 }
-.signup-step-credit-option button ~ p:nth-of-type(2) {
+.signup-step-creditoption button ~ p:nth-of-type(2) {
     margin-bottom: 1em;
 }
-.signup-step-credit-option .submit-button {
+.signup-step-creditoption .submit-button {
     border-radius: 4px;
     color: #fff;
     border: none;
@@ -401,7 +401,7 @@ a:hover, a:active {
     content: "!";
     margin-right: 1em;
 }
-.signup-step-credit-option p.warning-text {
+.signup-step-creditoption p.warning-text {
     margin: .4em 0em;
 }
 .signup-main-wrapper .invalid-input {

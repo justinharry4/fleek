@@ -90,6 +90,9 @@ img {
 .on-screen-to-right {
     right: 0%;
 }
+.page-error {
+    text-align: center;
+}
 
 /* header styles */
 .toplevel-header {

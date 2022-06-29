@@ -8,9 +8,9 @@
 </head>
 <body>
     <div id="signup-toplevel-container">
-        <% if (signupStep === 'step1') { %>
+        <% if (signupStep === 'regstep1') { %>
             <%- include('../../partials/header') %>
-                <span class="toplevel-header-link-text"><a href="/auth/signin">Sign In</a></span>
+                <span class="toplevel-header-link-text"><a href="/signin">Sign In</a></span>
             </header>
             <div class="signup-main-container">
                 <div class="signup-main-wrapper signup-step-<%= signupStep %>">
@@ -23,9 +23,9 @@
                     <button type="button" class="native-bg block-strech proceed-button" data-account-info="" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                 </div>
             </div>
-        <% } else if (signupStep === 'add-password') { %>
+        <% } else if (signupStep === 'regform') { %>
             <%- include('../../partials/header') %>
-                <span class="toplevel-header-link-text"><a href="/auth/signin">Sign In</a></span>
+                <span class="toplevel-header-link-text"><a href="/signin">Sign In</a></span>
             </header>
             <div class="signup-main-container">
                 <div class="signup-main-wrapper signup-step-<%= signupStep %>">
@@ -54,7 +54,7 @@
                     </form>
                 </div>
             </div>
-        <% } else if (signupStep === 'step2') { %>
+        <% } else if (signupStep === 'regstep2') { %>
             <%- include('../../partials/header') %>
                 <span class="toplevel-header-link-text"><a href="">Sign Out</a></span>
             </header>
@@ -82,9 +82,9 @@
                     <button type="button" class="native-bg block-strech proceed-button" data-account-info="" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                 </div>
             </div>
-        <% } else if (signupStep === 'choose-plan') { %>
+        <% } else if (signupStep === 'chooseplan') { %>
             <%- include('../../partials/header') %>
-                <span class="toplevel-header-link-text"><a href="/auth/signin">Sign Out</a></span>
+                <span class="toplevel-header-link-text"><a href="/signin">Sign Out</a></span>
             </header>
             <div class="signup-main-container">
                 <div class="signup-main-wrapper signup-step-<%= signupStep %>">
@@ -166,9 +166,9 @@
                     <button class="native-bg block-strech proceed-button" data-account-info="subscription-plan" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                 </div>
             </div>
-        <% } else if (signupStep === 'step3') { %>
+        <% } else if (signupStep === 'regstep3') { %>
             <%- include('../../partials/header') %>
-                <span class="toplevel-header-link-text"><a href="/auth/signin">Sign Out</a></span>
+                <span class="toplevel-header-link-text"><a href="/signin">Sign Out</a></span>
             </header>
             <div class="signup-main-container">
                 <div class="signup-main-wrapper signup-step-<%= signupStep %>">
@@ -195,9 +195,9 @@
                     </div>
                 </div>
             </div>
-        <% } else if (signupStep === 'credit-option') { %>
+        <% } else if (signupStep === 'creditoption') { %>
             <%- include('../../partials/header') %>
-                <span class="toplevel-header-link-text"><a href="/auth/signin">Sign Out</a></span>
+                <span class="toplevel-header-link-text"><a href="/signin">Sign Out</a></span>
             </header>
             <div class="signup-main-container">
                 <div class="signup-main-wrapper signup-step-<%= signupStep %>">
@@ -208,7 +208,7 @@
                         <img src="/images/svg/mastercard.svg" class="signup-header-card-icon">
                         <img src="/images/verve.png" class="signup-header-card-icon">
                     </h2>
-                    <form class="signup-form" method="POST" action="/auth/complete-registration">
+                    <form class="signup-form" method="POST" action="/signup/creditoption">
                         <fieldset>
                             <ul class="signup-form-ul">
                                 <li>
