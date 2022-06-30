@@ -20,7 +20,8 @@ async function renderSignupView(req, res, next, steps){
     let signupStep = steps.signupStep;
     let nextSignupStep = steps.nextSignupStep;
     let regEmail = req.session.regEmail;
-    let regSubPlan = req.session.regSubPlan;
+    let regSubPlan = req.session.regSubPlan ? req.session.regSubPlan: 'premium';
+    let regAccountCreated = req.session.regAccountCreated;
 
     let authDataPath = 'data/auth.json';
     try {
@@ -40,6 +41,7 @@ async function renderSignupView(req, res, next, steps){
             subscriptionData: subscriptionData,
             regEmail: regEmail,
             regSubPlan: regSubPlan,
+            regAccountCreated: regAccountCreated,
         })
     } catch (error){
         next(error);
@@ -66,7 +68,7 @@ module.exports.postSignup = (req, res, next) => {
 
 module.exports.getSignupRegform = (req, res, next) => {
     let nextSignupStep = 'regform';
-    let upperSignupStep = 'regform';
+    let upperSignupStep = req.session.regAccountCreated ? 'regstep2': 'regform';
     let steps = { 
         signupStep: nextSignupStep,
         nextSignupStep: upperSignupStep
@@ -90,6 +92,7 @@ module.exports.postSignupRegform = (req, res, next) => {
     // connect to database
     let email = req.body.email;
     let password = req.body.password;
+    req.session.regAccountCreated = true;
 
     console.log('email:', email);
     console.log('password:', password);
@@ -105,7 +108,6 @@ module.exports.postSignupRegform = (req, res, next) => {
 };
 
 module.exports.getSignupStep2 = (req, res, next) => {
-    console.log('trying to get step 2');
     let nextSignupStep = 'regstep2';
     let upperSignupStep = 'chooseplan';
     let steps = { 
@@ -173,74 +175,21 @@ module.exports.postSignupCreditOption = (req, res, next) => {
     if (creditCardNo){
         // connect to database
     }
+    req.session.regEmail = null;
+    req.session.regSubPlan = null;
+    req.session.regAccountCreated = false;
 
     console.log('card-no:', creditCardNo);
 
     res.redirect('/signin');
 };
 
-// module.exports.signup = async (req, res, next) => {
-//     let steps = ['step1', 'add-password', 'step2', 'choose-plan', 'step3', 'credit-option'];
-//     let reqData = req.method === 'GET' ? req.query: req.body;
-//     let nextSignupStep = 'step1';
-//     if (steps.find(step => step === reqData.step)){
-//         nextSignupStep = reqData.step;
-//     }
+module.exports.postSignout = (req, res, next) => {
+    // reset authenticated value
 
-//     if (nextSignupStep === 'step2'){
-//         let validationErrors = validationResult(req);
-//         if (!validationErrors.isEmpty()){
-//             let errors = validationErrors.array();
-//             let message = errors[0].msg;
-//             let invalidFields = [];
-//             errors.forEach(err => {
-//                 invalidFields.push(err.param);
-//             })
-//             return res.status(422).json({ message: message, fields: invalidFields });
-//         }
-//     }
-//     let regEmail = req.session.regEmail;
-//     let regSubPlan = req.session.regSubPlan;
-//     let accountInfo = reqData.accountInfo;
-//     if (reqData.email && nextSignupStep === 'step1' && req.method === 'POST'){
-//         req.session.regEmail = reqData.email;
-//     }
+    req.session.regEmail = null;
+    req.session.regSubPlan = null;
+    req.session.regAccountCreated = false;
 
-//     if (accountInfo === 'credentials' && req.method === 'POST'){
-//         // reach out to database
-//         let email = reqData.email;
-//         let password = reqData.password;
-//         console.log('email:', email);
-//         console.log('password:', password);
-//     } else if (accountInfo === 'subscription-plan' && req.method === 'POST'){
-//         //  reach out to database
-//         req.session.regSubPlan = reqData.subPlan;
-//         console.log('selected plan:', reqData.subPlan);
-//     }
-
-//     let stepIndex = steps.findIndex(step => step === nextSignupStep);
-//     let upperSignupStep = steps[stepIndex + 1];
-
-//     let authDataPath = 'data/auth.json';
-//     try {
-//         let dataString = await fileUtil.loadFile(authDataPath);
-//         let authData = JSON.parse(dataString);
-//         let navList = authData.footerNavList;
-//         let subscriptionData;
-//         if (nextSignupStep === 'choose-plan' || nextSignupStep === 'credit-option'){
-//             subscriptionData = authData.subscriptionInfo;
-//         }
-//         res.render('pages/auth/sign-up', {
-//             pageTitle: 'Fleek | Sign up',
-//             navList: navList,
-//             leadName: 'signup',
-//             signupStep: nextSignupStep,
-//             nextSignupStep: upperSignupStep,
-//             subscriptionData: subscriptionData,
-//             regEmail: regEmail,
-//             regSubPlan: regSubPlan,
-//         })
-//     } catch (error){
-//         next(error);
-//     }
-// };
+    res.sendStatus(201);
+};

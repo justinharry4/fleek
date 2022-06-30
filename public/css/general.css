@@ -93,6 +93,9 @@ img {
 .page-error {
     text-align: center;
 }
+button.native-bg:hover, input[type="submit"].native-bg:hover {
+    background-color: #da2a2a;
+}
 
 /* header styles */
 .toplevel-header {

@@ -3,6 +3,7 @@ const fileUtil = require('../util/file');
 const ROOTDIR = fileUtil.ROOTDIR;
 
 module.exports.getIndex = async (req, res, next) => {
+    let regAccountCreated = req.session.regAccountCreated;
     let homePageDataPath = 'data/home.json';
     
     try {
@@ -16,6 +17,7 @@ module.exports.getIndex = async (req, res, next) => {
             faqList: faqList,
             navList: navList,
             leadName: 'home',
+            regAccountCreated: regAccountCreated,
         })
     } catch (error){
         next(error);

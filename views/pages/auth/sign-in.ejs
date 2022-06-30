@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="/css/components/checkbox.css">
     <link rel="stylesheet" href="/css/auth.css">
     <script src="/scripts/jquery.js"></script>
+    <script src="/scripts/auth/signin.js"></script>
 </head>
 <body>
     <div id="signin-container">
@@ -14,13 +15,13 @@
                 <form id="form-signin" action="" method="POST">
                     <fieldset id="form-signin-ul-wrapper">
                         <ul>
-                            <li>
-                                <label for="form-signin-email" class="off-screen">Email</label>
-                                <input type="email" class="block-strech" id="form-signin-email" name="email" placeholder="Email or phone number">
+                            <li class="overlay-wrapper">
+                                <label for="form-signin-email" class="overlay">Email or phone number</label>
+                                <input type="email" class="block-strech" id="form-signin-email" name="email" placeholder="">
                             </li>
-                            <li>
-                                <label for="form-signin-password" class="off-screen">Password</label>
-                                <input type="password" class="block-strech" id="form-signin-password" name="password" placeholder="Password">
+                            <li class="overlay-wrapper">
+                                <label for="form-signin-password" class="overlay">Password</label>
+                                <input type="password" class="block-strech" id="form-signin-password" name="password" placeholder="">
                             </li>
                         </ul>
                         <input type="submit" value="Sign In" class="native-bg block-strech">

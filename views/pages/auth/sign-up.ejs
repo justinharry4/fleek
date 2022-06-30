@@ -20,7 +20,7 @@
                     <h2 class="signup-stepno-heading">step <span class="small-num">1</span> of <span class="small-num">3</span></h2>
                     <h3 class="signup-step-heading">Finish setting up your account</h3>
                     <p class="signup-step-info-text">Fleek is personalized for you.<br>Create a password to watch on any device at any time</p>
-                    <button type="button" class="native-bg block-strech proceed-button" data-account-info="" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
+                    <button type="button" class="native-bg block-strech proceed-button" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                 </div>
             </div>
         <% } else if (signupStep === 'regform') { %>
@@ -30,33 +30,38 @@
             <div class="signup-main-container">
                 <div class="signup-main-wrapper signup-step-<%= signupStep %>">
                     <h2 class="signup-stepno-heading">step <span class="small-num">1</span> of <span class="small-num">3</span></h2>
-                    <h3 class="signup-step-heading">Create a password to start your membership</h3>
-                    <p class="signup-step-info-text">Just a few more steps and you're done!<br>We hate paperwork, too.</p>
-                    <form class="signup-form">
-                        <fieldset>
-                            <ul class="signup-form-ul">
-                                <li>
-                                    <label for="signup-form-email" class="off-screen">Email</label>
-                                    <input type="email" name="email" value="<%= regEmail %>" id="signup-form-email" class="block-strech" placeholder="Add an email address">
-                                </li>
-                                <li>
-                                    <label for="signup-form-password" class="off-screen">Password</label>
-                                    <input type="password" name="password" id="signup-form-password" class="block-strech" placeholder="Add a password">
-                                </li>
-                            </ul>
-                        </fieldset>
-                        <label class="signup-sub-main-text custom-checkbox-container">
-                            <%- include('../../components/checkbox', {checkboxName: 'fleek-special-offers', checkboxId: 'signup-form-offers-checkbox', checkboxValue: 'true'}) %>
-                            Please do not email me Fleek special offers.
-                        </label>
-                        <!-- <input type="button" class="native-bg block-strech" value="Next" data-account-info="credentials" data-signup-stepno="1-2"> -->
-                        <button type="button" class="native-bg block-strech proceed-button" data-account-info="credentials" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
-                    </form>
+                    <% if (regAccountCreated) { %>
+                        <h3 class="signup-step-heading">Account Created</h3>
+                        <p class="signup-step-info-text">Use this email to access your account:</p>
+                        <div id="signup-reg-email" class="text-bold"><%= regEmail %></div>
+                    <% } else { %>
+                        <h3 class="signup-step-heading">Create a password to start your membership</h3>
+                        <p class="signup-step-info-text">Just a few more steps and you're done!<br>We hate paperwork, too.</p>
+                        <form class="signup-form">
+                            <fieldset>
+                                <ul class="signup-form-ul">
+                                    <li class="overlay-wrapper">
+                                        <label for="signup-form-email" class="overlay focus-label">Add an email address</label>
+                                        <input type="email" name="email" value="<%= regEmail %>" id="signup-form-email" class="block-strech" placeholder="">
+                                    </li>
+                                    <li class="overlay-wrapper">
+                                        <label for="signup-form-password" class="overlay">Add a password</label>
+                                        <input type="password" name="password" id="signup-form-password" class="block-strech" placeholder="">
+                                    </li>
+                                </ul>
+                            </fieldset>
+                            <label class="signup-sub-main-text custom-checkbox-container">
+                                <%- include('../../components/checkbox', {checkboxName: 'fleek-special-offers', checkboxId: 'signup-form-offers-checkbox', checkboxValue: 'true'}) %>
+                                Please do not email me Fleek special offers.
+                            </label>
+                    <% } %>
+                            <button type="button" class="native-bg block-strech proceed-button" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
+                        </form>
                 </div>
             </div>
         <% } else if (signupStep === 'regstep2') { %>
             <%- include('../../partials/header') %>
-                <span class="toplevel-header-link-text"><a href="">Sign Out</a></span>
+                <span class="toplevel-header-link-text"><a href="/">Sign Out</a></span>
             </header>
             <div class="signup-main-container">
                 <div class="signup-main-wrapper signup-step-<%= signupStep %>">
@@ -79,12 +84,12 @@
                             <span class="signup-step-info-text">No ads and no extra fees. Ever.</span>
                         </li>
                     </ul>
-                    <button type="button" class="native-bg block-strech proceed-button" data-account-info="" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
+                    <button type="button" class="native-bg block-strech proceed-button" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                 </div>
             </div>
         <% } else if (signupStep === 'chooseplan') { %>
             <%- include('../../partials/header') %>
-                <span class="toplevel-header-link-text"><a href="/signin">Sign Out</a></span>
+                <span class="toplevel-header-link-text"><a href="/">Sign Out</a></span>
             </header>
             <div class="signup-main-container">
                 <div class="signup-main-wrapper signup-step-<%= signupStep %>">
@@ -109,9 +114,9 @@
                             <tr class="tr-plans flex-wrapper">
                                 <th class="lead-cell-th"></th>
                                 <% for (let plan in subscriptionData.plans) { %>
-                                    <th class="signup-<%= (plan==='premium') ? '' : 'inactive-' %>native-bg flex-wrapper sub-plan-button sub-plan-<%= plan %>" data-sub-plan="<%= plan %>">
+                                    <th class="signup-<%= (plan === regSubPlan) ? '' : 'inactive-' %>native-bg flex-wrapper sub-plan-button sub-plan-<%= plan %>" data-sub-plan="<%= plan %>">
                                         <label class="off-screen" for="signup-sub-plan-radio"><%= plan %> Plan</label>
-                                        <input type="radio" name="sub-plan" value="<%= plan %>" class="off-screen" id="signup-sub-plan-radio" <%= (plan==='premium') ? 'checked' : '' %>>
+                                        <input type="radio" name="sub-plan" value="<%= plan %>" class="off-screen" id="signup-sub-plan-radio" <%= (plan === regSubPlan) ? 'checked' : '' %>>
                                         <span><%= plan %></span>
                                     </th>
                                 <% } %>
@@ -121,25 +126,25 @@
                             <tr class="tr-price flex-wrapper">
                                 <th scope="row" class="lead-cell-th">Monthly Price</th>
                                 <% for (let plan in subscriptionData.plans) { %>
-                                    <td class="<%= (plan==='premium') ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>"><span>N<%= subscriptionData.plans[plan].price %></span></td>
+                                    <td class="<%= (plan===regSubPlan) ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>"><span>N<%= subscriptionData.plans[plan].price %></span></td>
                                 <% } %>
                             </tr>
                             <tr class="tr-vid-quality flex-wrapper">
                                 <th scope="row" class="lead-cell-th">Video Quality</th>
                                 <% for (let plan in subscriptionData.plans) { %>
-                                    <td class="<%= (plan==='premium') ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>"><span><%= subscriptionData.plans[plan].videoQuality %></span></td>
+                                    <td class="<%= (plan===regSubPlan) ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>"><span><%= subscriptionData.plans[plan].videoQuality %></span></td>
                                 <% } %>
                             </tr>
                             <tr class="tr-resolution flex-wrapper">
                                 <th scope="row" class="lead-cell-th">Resolution</th>
                                 <% for (let plan in subscriptionData.plans) { %>
-                                    <td class="<%= (plan==='premium') ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>"><span><%= subscriptionData.plans[plan].resolution %></span></td>
+                                    <td class="<%= (plan===regSubPlan) ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>"><span><%= subscriptionData.plans[plan].resolution %></span></td>
                                 <% } %>
                             </tr>
                             <tr class="tr-devices flex-wrapper">
                                 <th scope="row" class="lead-cell-th">Devices you can use to watch</th>
                                 <% for (let plan in subscriptionData.plans) { %>
-                                    <td class="<%= (plan==='premium') ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>">
+                                    <td class="<%= (plan===regSubPlan) ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>">
                                         <div class="flex-wrapper">
                                             <% for (let device of subscriptionData.plans[plan].devices) { %>
                                                 <span class="tr-svg-icon-container signup-sub-main-text">
@@ -163,12 +168,12 @@
                             Watch on 4 different devices at the same time with Premium, 2 with Standard, and 1 with Basic and Mobile.
                         </p>
                     </div>
-                    <button class="native-bg block-strech proceed-button" data-account-info="subscription-plan" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
+                    <button class="native-bg block-strech proceed-button" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
                 </div>
             </div>
         <% } else if (signupStep === 'regstep3') { %>
             <%- include('../../partials/header') %>
-                <span class="toplevel-header-link-text"><a href="/signin">Sign Out</a></span>
+                <span class="toplevel-header-link-text"><a href="/">Sign Out</a></span>
             </header>
             <div class="signup-main-container">
                 <div class="signup-main-wrapper signup-step-<%= signupStep %>">
@@ -185,7 +190,7 @@
                         <div class="flex-wrapper signup-secure-server-wrapper signup-sub-main-text">
                             <span>Secure Server</span><img src="/images/svg/secure.svg" id="signup-secure-server-icon" alt="padlock icon">
                         </div>
-                        <button type="button" class="proceed-button flex-wrapper" data-account-info="" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">
+                        <button type="button" class="proceed-button flex-wrapper" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">
                             <span>Credit or Debit Card</span>
                             <img class="signup-card-option-icon" src="/images/svg/visa.svg">
                             <img class="signup-card-option-icon" src="/images/svg/mastercard.svg">
@@ -197,7 +202,7 @@
             </div>
         <% } else if (signupStep === 'creditoption') { %>
             <%- include('../../partials/header') %>
-                <span class="toplevel-header-link-text"><a href="/signin">Sign Out</a></span>
+                <span class="toplevel-header-link-text"><a href="/">Sign Out</a></span>
             </header>
             <div class="signup-main-container">
                 <div class="signup-main-wrapper signup-step-<%= signupStep %>">
@@ -211,26 +216,26 @@
                     <form class="signup-form" method="POST" action="/signup/creditoption">
                         <fieldset>
                             <ul class="signup-form-ul">
-                                <li>
-                                    <label for="signup-form-first-name" class="off-screen">First Name</label>
-                                    <input type="text" name="first-name" id="signup-form-first-name" class="block-strech" placeholder="First name">
+                                <li class="overlay-wrapper">
+                                    <label for="signup-form-first-name" class="overlay">First name</label>
+                                    <input type="text" name="first-name" id="signup-form-first-name" class="block-strech" placeholder="">
                                 </li>
-                                <li>
-                                    <label for="signup-form-last-name" class="off-screen">Last Name</label>
-                                    <input type="text" name="last-name" id="signup-form-last-name" class="block-strech" placeholder="Last name">
+                                <li class="overlay-wrapper">
+                                    <label for="signup-form-last-name" class="overlay">Last name</label>
+                                    <input type="text" name="last-name" id="signup-form-last-name" class="block-strech" placeholder="">
                                 </li>
-                                <li>
-                                    <label for="signup-form-card-number" class="off-screen">Card Number</label>
-                                    <input type="number" name="card-number" id="signup-form-card-number" class="block-strech" placeholder="Card number">
+                                <li class="overlay-wrapper">
+                                    <label for="signup-form-card-number" class="overlay">Card number</label>
+                                    <input type="number" name="card-number" id="signup-form-card-number" class="block-strech" placeholder="">
                                 </li>
-                                <li>
-                                    <label for="signup-form-expiry-date" class="off-screen">Expiry Date</label>
-                                    <input type="number" name="expiry-date" id="signup-form-expiry-date" class="block-strech" placeholder="Expiry date (MM/YY)">
+                                <li class="overlay-wrapper">
+                                    <label for="signup-form-expiry-date" class="overlay">Expiry Date (MM/YY)</label>
+                                    <input type="number" name="expiry-date" id="signup-form-expiry-date" class="block-strech" placeholder="">
                                 </li>
-                                <li>
-                                    <label for="signup-form-cvv" class="off-screen">Security Code</label>
-                                    <div class="flex-wrapper">
-                                        <input type="number" name="cvv" id="signup-form-cvv" class="" placeholder="Security code (CVV)">
+                                <li class="overlay-wrapper">
+                                    <div class="flex-wrapper" id="signup-cvv-input-wrapper">
+                                        <label for="signup-form-cvv" class="overlay">Security Code (CVV)</label>
+                                        <input type="number" name="cvv" id="signup-form-cvv" class="" placeholder="">
                                         <img src="/images/svg/question-mark.svg" id="signup-form-moreinfo-icon">
                                     </div>
                                 </li>
@@ -248,7 +253,7 @@
                             <%- include('../../components/checkbox', {checkboxName: 'terms-of-use', checkboxId: 'signup-form-tou-checkbox', checkboxValue: 'true'}) %>
                             I agree
                         </label>
-                        <input type="submit" class="native-bg block-strech submit-button" value="Start Membership" data-account-info="" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">
+                        <input type="submit" class="native-bg block-strech submit-button" value="Start Membership" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">
                     </form>
                 </div>
             </div>

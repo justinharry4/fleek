@@ -57,7 +57,7 @@ a:hover, a:active {
     margin: 1.5em 0em 2.5em;
 }
 #form-signin-ul-wrapper input {
-    height: 3em;
+    height: 3.5em;
     margin-bottom: 1em;
     border-radius: 4px;
     padding: 0em 1em;
@@ -106,6 +106,24 @@ a:hover, a:active {
 .signin-text-small {
     font-size: .8em;
 }
+#form-signin li label {
+    display: flex;
+    color: #8a8989;
+    left: 4.5%;
+    top: 0%;
+    z-index: 100;
+    height: 100%;
+    align-items: center;
+    padding-top: 0em;
+    transition-property: align-items, font-size;
+    transition-duration: 100ms;
+}
+#form-signin li label.focus-label {
+    align-items: flex-start;
+    font-size: .8em;
+    padding-top: .2em;
+}
+
 
 /* SIGNUP PAGE STYLES */
 /* variables */
@@ -188,6 +206,10 @@ a:hover, a:active {
 }
 .signup-step-regform .signup-step-info-text {
     margin: .7em 0em;
+}
+#signup-reg-email {
+    margin: 2.5em 0em;
+    text-align: center;
 }
 .signup-main-wrapper input {
     border: 2px solid #c9c7c7;
@@ -274,13 +296,16 @@ a:hover, a:active {
 .signup-header-card-icon {
     margin-right: .3em;
 }
-.signup-step-creditoption .signup-form 
-.signup-form-ul li:last-of-type div {
-    /* border: 2px solid #c9c7c7; */
+/* .signup-step-creditoption .signup-form 
+.signup-form-ul #signup-cvv-input-wrapper { */
+#signup-cvv-input-wrapper {
     border: solid 2px #c9c7c7;
     width: 100%;
     align-items: center;
     border-radius: 4px;
+}
+.signup-main-wrapper #signup-cvv-input-wrapper.focus-input-wrapper {
+    border-color: #2181da;
 }
 #signup-form-moreinfo-icon {
     width: 40px;
@@ -378,6 +403,10 @@ a:hover, a:active {
 #sub-plan-table tbody td {
     color: #8d8c8c;
 }
+.tr-plans {
+    position: sticky;
+    top: 50px;
+}
 
 /* footer styles */
 .signup-footer {
@@ -405,7 +434,18 @@ a:hover, a:active {
     margin: .4em 0em;
 }
 .signup-main-wrapper .invalid-input {
-    border: 2px solid #e64e4e;
+    /* border: 2px solid #e64e4e; */
+    border-color: #e64e4e;
+}
+#signup-cvv-input-wrapper.invalid-input {
+    border-color: #e64e4e;
+}
+.required-field {
+    margin: -0.5em 0em 0.5em;
+}
+.signup-step-creditoption .signup-form 
+ul li:last-child .required-field {
+    margin: 0.2em 0em 0.5em;
 }
 
 /* misc styles */
@@ -435,4 +475,22 @@ a:hover, a:active {
 }
 .warning-text {
     color: #bb2924;
+}
+.signup-form li label {
+    /* display: flex; */
+    color: #8a8989;
+    left: 2.5%;
+    top: 1.5em;
+    z-index: 100;
+    height: 100%;
+    /* align-items: center; */
+    padding-top: 0em;
+    transition-property: align-items, font-size, top;
+    transition-duration: 150ms;
+}
+.signup-form li label.focus-label {
+    /* align-items: flex-start; */
+    font-size: .8em;
+    top: 0%;
+    padding-top: .5em;
 }

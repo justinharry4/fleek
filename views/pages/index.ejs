@@ -8,22 +8,34 @@
     <div id="home-container">
         <section class="home-section" id="home-section-1">
             <%- include('../partials/header') %>
-                <button type="button" class="native-bg" id="home-header-signin"><a href="/auth/signin">Sign In</a></button>
+                <button type="button" class="native-bg signout-button" id="home-header-signin">
+                <% if (regAccountCreated) { %> Sign Out <% } else { %>
+                    <a href="/signin">Sign In</a>
+                <% } %>
+                </button>
             </header>
             <div class="home-section-text-wrapper">
                 <h2 class="home-section-heading">Unlimited movies, TV<br> shows, and more.</h2>
                 <h3 class="home-section-subheading">Watch anywhere. Cancel anytime</h3>
                 <div class="form-signup-wrapper"> 
-                    <p class="home-text-small">Ready to watch? Enter your email to create or restart your membership.</p>
-                    <form method="POST" action="/signup" class="form-signup">
-                        <ul class="form-signup-ul">
-                            <li class="flex-wrapper">
-                                    <label class="off-screen" for="form-signup-top-email">Email</label>
-                                    <input type="email" name="email" placeholder="Email Address" id="form-signup-top-email">
-                                    <button type="submit" class="native-bg">Get Started ></button>
-                            </li>
-                        </ul>
-                    </form>
+                    <% if (regAccountCreated) { %>
+                        <div class="finish-signup-link-wrapper">
+                            <button class="native-bg finish-signup-button"><a class="finish-signup-link" href="/signup/regstep2">Finish Sign Up ></a></button>
+                        </div>
+                    <% } else { %>
+                        <p class="home-text-small">Ready to watch? Enter your email to create or restart your membership.</p>
+                        <form method="POST" action="/signup" class="form-signup">
+                            <ul class="form-signup-ul">
+                                <li class="">
+                                    <div class="flex-wrapper form-signup-input-wrapper overlay-wrapper">
+                                        <label class="overlay" for="form-signup-top-email">Email Address</label>
+                                        <input type="email" name="email" placeholder="" id="form-signup-top-email">
+                                        <button type="submit" class="native-bg">Get Started ></button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </form>
+                    <% } %>
                 </div>
             </div>
         </section>
@@ -43,7 +55,7 @@
             <div class="flex-wrapper">
                 <div id="img-wrapper-trending" class="img-wrapper overlay-wrapper">
                     <img src="/images/home-trending-movie-phone.jpg" alt="trending movie cover" id="home-trending-movie">
-                    <div class="overlay flex-wrapper" id="img-wrapper-downloading"><img src="images/home-trending-movie-cover.png" alt="trending movie cover"><span class="text-bold">Downloading...</span><span>>></span></div>
+                    <div class="overlay flex-wrapper" id="img-wrapper-downloading"><img src="images/home-trending-movie-cover.png" alt="trending movie cover"><span class="text-bold" id="downloading-text">Downloading...</span><span></span></div>
                 </div>
                 <div class="home-section-text-wrapper">
                     <h2 class="home-section-heading">Download your shows to watch offline.</h2>
@@ -85,16 +97,24 @@
                 </ul>
             </div>
             <div class="form-signup-wrapper"> 
-                <p class="home-text-small">Ready to watch? Enter your email to create or restart your membership.</p>
-                <form method="POST" action="/auth/signup" class="form-signup">
-                    <ul class="form-signup-ul">
-                        <li class="flex-wrapper">
-                            <label class="off-screen" for="form-signup-top-email">Email</label>
-                            <input type="email" name="email" placeholder="Email address" id="form-signup-top-email">
-                            <button type="submit" class="native-bg">Get Started ></button>
-                        </li>
-                    </ul>
-                </form>
+                <% if (regAccountCreated) { %>
+                    <div class="finish-signup-link-wrapper">
+                        <button class="native-bg finish-signup-button"><a class="finish-signup-link" href="/signup/regstep2">Finish Sign Up ></a></button>
+                    </div>
+                <% } else { %>
+                    <p class="home-text-small">Ready to watch? Enter your email to create or restart your membership.</p>
+                    <form method="POST" action="/auth/signup" class="form-signup">
+                        <ul class="form-signup-ul">
+                            <li class="">
+                                <div class="flex-wrapper form-signup-input-wrapper overlay-wrapper">
+                                    <label class="overlay" for="form-signup-top-email">Email Address</label>
+                                    <input type="email" name="email" placeholder="" id="form-signup-top-email">
+                                    <button type="submit" class="native-bg">Get Started ></button>
+                                </div>
+                            </li>
+                        </ul>
+                    </form>
+                <% } %>
             </div>
         </section>
         <footer id="home-footer">
