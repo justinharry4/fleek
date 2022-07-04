@@ -20,6 +20,13 @@ function makePath(filePath){
     return fullPath;
 }
 
+function writeFile(filePath, data){
+    let fullPath = makePath(filePath);
+    let promise = fs.promises.writeFile(fullPath, data);
+    return promise;
+}
+
 module.exports.ROOTDIR = ROOTDIR;
 module.exports.loadFile = loadFile;
 module.exports.makePath = makePath;
+module.exports.writeFile = writeFile;
