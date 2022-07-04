@@ -91,6 +91,16 @@ const tvShowSchema = Schema({
         {
             type: String,
         }
+    ],
+    isFullContent: {
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    categories: [
+        {
+            type: String
+        }
     ]
 }); 
 

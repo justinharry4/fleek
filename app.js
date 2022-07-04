@@ -11,6 +11,7 @@ const authRoutes = require('./routes/auth');
 const errorRoutes = require('./routes/error');
 // importing models
 const User = require('./models/user');
+const TheMovieDB = require('./database/tmdb');
 
 const fileUtil = require('./util/file');
 
@@ -24,7 +25,8 @@ const PORT = 15000;
 const publicPath = fileUtil.makePath('public');
 const faviconPath = fileUtil.makePath('public/images/favicon.ico');
 const MONGO_DB_URI = 'mongodb://127.0.0.1:27017/fleek';
-const sessionStore = new mongoDbSessionStore({uri: MONGO_DB_URI, collection: 'sessions'})
+const sessionStore = new mongoDbSessionStore({uri: MONGO_DB_URI, collection: 'sessions'});
+const TMDB_API_KEY = process.env.TMDB_API_KEY;
 
 // CATCH-ALL MIDDLEWARE
 app.use(bodyParser.urlencoded({extended: false}));
@@ -51,11 +53,16 @@ app.use((error, req, res, next) => {
 async function startApp(){
     try {
         await mongoose.connect(MONGO_DB_URI, { useNewUrlParser: true });
+
         console.log('mongoose connected')
         console.log(`server running on port ${PORT}`);
+
+        const TMDB = new TheMovieDB(TMDB_API_KEY);
+        // await TMDB.writeMostPopular();
+
         app.listen(PORT);
     } catch (err){
-        console.log('CONNECTION ERR', err)
+        console.log('startApp CONNECTION ERR', err)
     }
 }
 

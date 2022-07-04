@@ -2,8 +2,6 @@ const dotenv = require('dotenv');
 const axios = require('axios');
 
 const fileUtil = require('../util/file');
-const Movie = require('../models/movie');
-const TvShow = require('../models/tvshow');
 const Season = require('../models/season');
 const Episode = require('../models/episode');
 
@@ -15,7 +13,7 @@ const TMDB_API_BASE_URL = 'https://api.themoviedb.org/3';
 // function name suffixes FC and BC stand for
 // FullContent and BlankContent respectively
 
-function getMovieConfigFC(movieResData, tmdbConfig){
+function getMovieConfigFC(movieResData){
     let config = {};
 
     config.title = movieResData.title;
@@ -41,17 +39,15 @@ function getMovieConfigFC(movieResData, tmdbConfig){
     let networks = movieResData.networks;
     config.networks = networks ? networks.map(ntwk => ntwk.name): [];
 
-    let baseImageUrl = tmdbConfig.images['secure_base_url'];
-    let imageSize = 'original';
-    let imagePath = movieResData['poster_path'];
-    config.coverPath = baseImageUrl + imageSize + imagePath;
-
+    config.coverPath = movieResData['poster_path'];
     config.videoPath = '/somevideopath.mkv';
+
+    config.isFullContent = true;
 
     return config;
 }
 
-async function getTvShowConfigFC(tvResData, tmdbConfig){
+async function getTvShowConfigFC(tvResData){
     let config = {};
 
     config.title = tvResData.name;
@@ -80,15 +76,11 @@ async function getTvShowConfigFC(tvResData, tmdbConfig){
     let networks = movieResData.networks;
     config.networks = networks ? networks.map(ntwk => ntwk.name): [];
 
-    let baseImageUrl = tmdbConfig.images['secure_base_url'];
-    let imageSize = 'original';
-    let imagePath = tvResData['poster_path'];
-    config.coverPath = baseImageUrl + imageSize + imagePath;
+    config.coverPath = tvResData['poster_path'];
 
     let tvShowData = { 
         tvShowTitle: config.title,
         tvShowID: tvResData.id,
-        tmdbConfig: tmdbConfig
     }
     try {
         let seasons = [];
@@ -104,7 +96,8 @@ async function getTvShowConfigFC(tvResData, tmdbConfig){
         let latestSeason = await Season.findById(latestSeasonId);
         let latestEpisode = latestSeason.episodes[latestSeason.episodes.length - 1];
         config.latestEpisode = latestEpisode;
-        // config.latestEpisode = latestSeasonId;
+        // config.latestEpisode = latestSeasonId;  
+        config.isFullContent = true;
 
         return config;
     } catch(error){
@@ -122,10 +115,7 @@ async function getSeasonConfig(seasonData, tvShowData){
     config.episodeCount = seasonData['episode_count'];
     config.airDate = seasonData['air_date'];
 
-    let baseImageUrl = tvShowData.tmdbConfig.images['secure_base_url'];
-    let imageSize = 'original';
-    let imagePath = seasonData['poster_path'];
-    config.coverPath = baseImageUrl + imageSize + imagePath;
+    config.coverPath = seasonData['poster_path'];
 
     let tvShowID = tvShowData.tvShowID;
     let url = `${TMDB_API_BASE_URL}/tv/${tvShowID}/season/${config.seasonNo}`;
@@ -164,15 +154,60 @@ function getEpisodeConfig(episodeData, tvShowData){
     config.durationMins = episodeData.runtime;
     config.airDate = episodeData['air_date'];
 
-    let baseImageUrl = tvShowData.tmdbConfig.images['secure_base_url'];
-    let imageSize = 'original';
-    let imagePath = episodeData['still_path'];
-    config.stillImagePath = baseImageUrl + imageSize + imagePath;
+    config.stillImagePath = episodeData['still_path'];
 
     config.videoPath = '/somevideopath.m4v';
     
     return config;
 }
 
-module.exports.getMovieConfig = getMovieConfigFC;
-module.exports.getTvShowConfig = getTvShowConfigFC;
+function getMovieConfigBC(movieResData, tmdbGenres){
+    let config = {};
+
+    config.title = movieResData.title;
+    config.overview = movieResData.overview;
+
+    config.genres = movieResData['genre_ids'].map(genreId => {
+        let genreObj = tmdbGenres.genres.find(genre => (genre.id === genreId));
+        return genreObj.name;
+    });
+
+    config.releaseDate = movieResData['release_date'];
+    config.releaseYear = movieResData['release_date'].split('-')[0];
+
+    config.languages = movieResData['original_language'];
+
+    config.starRating = movieResData['vote_average'];
+    config.popularity = movieResData.popularity;
+
+    config.coverPath = movieResData['poster_path'];
+
+    return config;
+}
+
+function getTvShowConfigBC(tvResData, tmdbGenres){
+    let config = {};
+
+    config.title = tvResData.name;
+    config.overview = tvResData.overview;
+    
+    config.genres = movieResData['genre_ids'].map(genreId => {
+        let genreObj = tmdbGenres.genres.find(genre => (genre.id === genreId));
+        return genreObj.name;
+    });
+
+    config.firstAirDate = tvResData['first_air_date'];
+    config.firstAirYear = tvResData['first_air_date'].split('-')[0];
+
+    config.starRating = tvResData['vote_average'];
+    config.popularity = tvResData.popularity;
+    config.coverPath = tvResData['poster_path'];
+    
+    return config;
+}
+
+module.exports.getMovieConfigFC = getMovieConfigFC;
+module.exports.getTvShowConfigFC = getTvShowConfigFC;
+
+module.exports.getMovieConfigBC = getMovieConfigBC;
+module.exports.getTvShowConfigBC = getTvShowConfigBC;

@@ -26,20 +26,16 @@ const movieSchema = Schema({
     },
     durationMins: {
         type: Number,
-        required: true
     },
     country: {
         type: String,
-        required: true
     },
     countryCode: {
         type: String,
-        required: true
     },
     languages: [
         {
             type: String,
-            required: true
         }
     ],
     starRating: {
@@ -59,12 +55,10 @@ const movieSchema = Schema({
     },
     videoPath: {
         type: String,
-        required: true
     },
     productionCompanies: [
         {
             type: String,
-            required: true
         }
     ],
     networks: [
@@ -72,6 +66,16 @@ const movieSchema = Schema({
             type: String,
         }
     ],
+    isFullContent: {
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    categories: [
+        {
+            type: String
+        }
+    ]
 })
 
 const movieModel = mongoose.model('Movie', movieSchema);

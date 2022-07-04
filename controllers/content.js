@@ -1,7 +1,7 @@
 const Movie = require('../models/movie');
 const TvShow = require('../models/tvshow');
 const fileUtil = require('../util/file');
-const tmdbUtil = require('../util/tmdb');
+const tmdbUtil = require('../util/config');
 
 module.exports.getIndex = async (req, res, next) => {
     let regAccountCreated = req.session.regAccountCreated;
