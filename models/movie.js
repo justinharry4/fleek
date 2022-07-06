@@ -33,7 +33,10 @@ const movieSchema = Schema({
     countryCode: {
         type: String,
     },
-    languages: [
+    language: {
+        type: String,
+    },
+    spokenLanguages: [
         {
             type: String,
         }
@@ -68,12 +71,16 @@ const movieSchema = Schema({
     ],
     isFullContent: {
         type: Boolean,
-        default: false,
         required: true
     },
     categories: [
         {
-            type: String
+            name: { 
+                type: String
+            },
+            expiryDate: { 
+                type: Date
+            }
         }
     ]
 })

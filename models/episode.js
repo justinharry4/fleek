@@ -23,15 +23,17 @@ const episodeSchema = Schema({
     },
     durationMins: {
         type: Number,
-        required: true
     },
     airDate: {
         type: String,
         required: true
     },
-    stillImagePath: {
+    releaseStatus: {
         type: String,
         required: true
+    },
+    stillImagePath: {
+        type: String,
     },
     videoPath: {
         type: String,

@@ -12,11 +12,9 @@ const tvShowSchema = Schema({
     },
     seasonCount: {
         type: Number,
-        required: true,
     },
     episodeCount: {
         type: Number,
-        required: true,
     },
     genres: [
         {
@@ -28,13 +26,11 @@ const tvShowSchema = Schema({
         {
             type: Schema.Types.ObjectId,
             ref: 'Season',
-            required: true
         }
     ],
     latestEpisode: {
         type: Schema.Types.ObjectId,
         ref: 'Episode',
-        required: true
     },
     firstAirDate: {
         type: String,
@@ -54,16 +50,16 @@ const tvShowSchema = Schema({
     ],
     country: {
         type: String,
-        required: true,
     },
     countryCode: {
         type: String,
-        required: true,
     },
-    languages: [
+    language: {
+        type: String,
+    },
+    spokenLanguages: [
         {
             type: String,
-            required: true
         }
     ],
     starRating: {
@@ -76,7 +72,6 @@ const tvShowSchema = Schema({
     },
     tvShowStatus: {
         type: String,
-        required: true,
     },
     productionCompanies: [
         {
@@ -94,12 +89,16 @@ const tvShowSchema = Schema({
     ],
     isFullContent: {
         type: Boolean,
-        default: false,
         required: true
     },
     categories: [
         {
-            type: String
+            name: { 
+                type: String
+            },
+            expiryDate: { 
+                type: Date
+            }
         }
     ]
 }); 

@@ -20,26 +20,27 @@ function getMovieConfigFC(movieResData){
     config.overview = movieResData.overview;
     config.genres = movieResData.genres.map(genre => genre.name);
 
-    config.releaseDate = movieResData['release_date'];
-    config.releaseYear = movieResData['release_date'].split('-')[0];
+    config.releaseDate = movieResData.release_date;
+    config.releaseYear = movieResData.release_date.split('-')[0];
     config.durationMins = movieResData.runtime;
     
-    let productionCountry = movieResData['production_countries'][0];
+    let productionCountry = movieResData.production_countries[0];
     config.country = productionCountry.name;
-    config.countryCode = productionCountry['iso_3166_1'];
+    config.countryCode = productionCountry.iso_3166_1;
 
-    config.languages = movieResData['spoken_languages'].map(lang => lang['english_name']);
+    config.language = movieResData.original_language;
+    config.spokenLanguages = movieResData.spoken_languages.map(lang => lang.english_name);
 
-    config.starRating = movieResData['vote_average'];
+    config.starRating = movieResData.vote_average;
     config.popularity = movieResData.popularity;
 
     config.releaseStatus = movieResData.status;
-    config.productionCompanies = movieResData['production_companies'].map(comp => comp.name);
+    config.productionCompanies = movieResData.production_companies.map(comp => comp.name);
 
     let networks = movieResData.networks;
     config.networks = networks ? networks.map(ntwk => ntwk.name): [];
 
-    config.coverPath = movieResData['poster_path'];
+    config.coverPath = movieResData.poster_path;
     config.videoPath = '/somevideopath.mkv';
 
     config.isFullContent = true;
@@ -52,31 +53,32 @@ async function getTvShowConfigFC(tvResData){
 
     config.title = tvResData.name;
     config.overview = tvResData.overview;
-    config.seasonCount = tvResData['number_of_seasons'];
-    config.episodeCount = tvResData['number_of_episodes'];
+    config.seasonCount = tvResData.number_of_seasons;
+    config.episodeCount = tvResData.number_of_episodes;
     config.genres = tvResData.genres.map(genre => genre.name);
 
-    config.firstAirDate = tvResData['first_air_date'];
-    config.firstAirYear = tvResData['first_air_date'].split('-')[0];
-    config.lastAirDate = tvResData['last_air_date'];
-    config.avgDurationMins = tvResData['episode_run_time'];
+    config.firstAirDate = tvResData.first_air_date;
+    config.firstAirYear = tvResData.first_air_date.split('-')[0];
+    config.lastAirDate = tvResData.last_air_date;
+    config.avgDurationMins = tvResData.episode_run_time;
     
-    let productionCountry = tvResData['production_countries'][0];
+    let productionCountry = tvResData.production_countries[0];
     config.country = productionCountry.name;
-    config.countryCode = productionCountry['iso_3166_1'];
+    config.countryCode = productionCountry.iso_3166_1;
 
-    config.languages = tvResData['spoken_languages'].map(lang => lang['english_name']);
+    config.language = tvResData.original_language;
+    config.spokenLanguages = tvResData.spoken_languages.map(lang => lang.english_name);
 
-    config.starRating = tvResData['vote_average'];
-    config.popularity = tvResData.popularity;
+    config.starRating = tvResData.vote_average;
+    config.popularity = tvResData.popularity; 
 
     config.tvShowStatus = tvResData.status;
-    config.productionCompanies = tvResData['production_companies'].map(comp => comp.name);
+    config.productionCompanies = tvResData.production_companies.map(comp => comp.name);
 
-    let networks = movieResData.networks;
+    let networks = tvResData.networks;
     config.networks = networks ? networks.map(ntwk => ntwk.name): [];
 
-    config.coverPath = tvResData['poster_path'];
+    config.coverPath = tvResData.poster_path;
 
     let tvShowData = { 
         tvShowTitle: config.title,
@@ -85,6 +87,9 @@ async function getTvShowConfigFC(tvResData){
     try {
         let seasons = [];
         for (let seasonData of tvResData.seasons){
+            if (seasonData.season_number < 1){
+                continue;
+            }
             let seasonConfig = await getSeasonConfig(seasonData, tvShowData);
             let season = new Season(seasonConfig);
             await season.save();
@@ -92,11 +97,32 @@ async function getTvShowConfigFC(tvResData){
         }
         config.seasons = seasons;
 
-        let latestSeasonId = config.seasons[config.seasons.length - 1];
-        let latestSeason = await Season.findById(latestSeasonId);
-        let latestEpisode = latestSeason.episodes[latestSeason.episodes.length - 1];
+        let latestEpisode;
+        let reverseSeasons = seasons.slice(0).reverse();
+        let latestEpisodeFound = false;
+        for (let seasonId of reverseSeasons){
+            if (latestEpisodeFound){
+                break;
+            }
+            let season = await Season.findById(seasonId);
+            let reverseEpisodes = season.episodes.slice(0).reverse();
+            for (let episodeId of reverseEpisodes){
+                let episode = await Episode.findById(episodeId);
+                if (episode.releaseStatus === 'released'){
+                    latestEpisode = episode._id;
+                    latestEpisodeFound = true;
+                    break;
+                }
+            }
+        }
         config.latestEpisode = latestEpisode;
+
+        // let latestSeasonId = config.seasons[config.seasons.length - 1];
+        // let latestSeason = await Season.findById(latestSeasonId);
+        // let latestEpisode = latestSeason.episodes[latestSeason.episodes.length - 1];
+        // config.latestEpisode = latestEpisode;
         // config.latestEpisode = latestSeasonId;  
+
         config.isFullContent = true;
 
         return config;
@@ -110,12 +136,12 @@ async function getSeasonConfig(seasonData, tvShowData){
     let config = {};
 
     config.tvShowTitle = tvShowData.tvShowTitle;
-    config.seasonNo = seasonData['season_number'];
+    config.seasonNo = seasonData.season_number;
     config.overview = seasonData.overview;
-    config.episodeCount = seasonData['episode_count'];
-    config.airDate = seasonData['air_date'];
+    config.episodeCount = seasonData.episode_count;
+    config.airDate = seasonData.air_date;
 
-    config.coverPath = seasonData['poster_path'];
+    config.coverPath = seasonData.poster_path;
 
     let tvShowID = tvShowData.tvShowID;
     let url = `${TMDB_API_BASE_URL}/tv/${tvShowID}/season/${config.seasonNo}`;
@@ -148,14 +174,24 @@ function getEpisodeConfig(episodeData, tvShowData){
 
     config.title = episodeData.name;
     config.tvShowTitle = tvShowData.tvShowTitle;
-    config.episodeNo = episodeData['episode_number'];
-    config.seasonNo = episodeData['season_number'];
+    config.episodeNo = episodeData.episode_number;
+    config.seasonNo = episodeData.season_number;
     config.overview = episodeData.overview;
     config.durationMins = episodeData.runtime;
-    config.airDate = episodeData['air_date'];
+    config.airDate = episodeData.air_date;
 
-    config.stillImagePath = episodeData['still_path'];
+    let status;
+    let currentDate = new Date();
+    let [airYear, airMonth, airDay] = config.airDate.split('-').map(str => parseInt(str));
+    let airDate = new Date(Date.UTC(airYear, airMonth-1, airDay));
+    if (currentDate >= airDate){
+        status = 'released';
+    } else {
+        status = 'unreleased';
+    }
+    config.releaseStatus = status;
 
+    config.stillImagePath = episodeData.still_path;
     config.videoPath = '/somevideopath.m4v';
     
     return config;
@@ -167,20 +203,22 @@ function getMovieConfigBC(movieResData, tmdbGenres){
     config.title = movieResData.title;
     config.overview = movieResData.overview;
 
-    config.genres = movieResData['genre_ids'].map(genreId => {
+    config.genres = movieResData.genre_ids.map(genreId => {
         let genreObj = tmdbGenres.genres.find(genre => (genre.id === genreId));
         return genreObj.name;
     });
 
-    config.releaseDate = movieResData['release_date'];
-    config.releaseYear = movieResData['release_date'].split('-')[0];
+    config.releaseDate = movieResData.release_date;
+    config.releaseYear = movieResData.release_date.split('-')[0];
 
-    config.languages = movieResData['original_language'];
+    config.language = movieResData.original_language;
 
-    config.starRating = movieResData['vote_average'];
+    config.starRating = movieResData.vote_average;
     config.popularity = movieResData.popularity;
 
-    config.coverPath = movieResData['poster_path'];
+    config.coverPath = movieResData.poster_path;
+
+    config.isFullContent = false;
 
     return config;
 }
@@ -191,18 +229,23 @@ function getTvShowConfigBC(tvResData, tmdbGenres){
     config.title = tvResData.name;
     config.overview = tvResData.overview;
     
-    config.genres = movieResData['genre_ids'].map(genreId => {
+    config.genres = tvResData.genre_ids.map(genreId => {
         let genreObj = tmdbGenres.genres.find(genre => (genre.id === genreId));
         return genreObj.name;
     });
 
-    config.firstAirDate = tvResData['first_air_date'];
-    config.firstAirYear = tvResData['first_air_date'].split('-')[0];
+    config.firstAirDate = tvResData.first_air_date;
+    config.firstAirYear = tvResData.first_air_date.split('-')[0];
 
-    config.starRating = tvResData['vote_average'];
+    config.language = tvResData.original_language;
+
+    config.starRating = tvResData.vote_average;
     config.popularity = tvResData.popularity;
-    config.coverPath = tvResData['poster_path'];
+
+    config.coverPath = tvResData.poster_path;
     
+    config.isFullContent = false;
+
     return config;
 }
 

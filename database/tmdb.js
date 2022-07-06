@@ -6,8 +6,6 @@ const TvShow = require('../models/tvshow');
 const configUtil = require('../util/config');
 const fileUtil = require('../util/file');
 
-const TMDB_API_KEY = process.env.TMDB_API_KEY;
-
 class TheMovieDB {
     constructor(apiKey){
         this.key = apiKey;
@@ -15,15 +13,16 @@ class TheMovieDB {
     
         this.movieProps = {
             constructor: Movie,
-            configGenFC: configUtil.getMovieConfigFC,
-            configGenBC: configUtil.getMovieConfigBC,
+            getConfigFC: configUtil.getMovieConfigFC,
+            getConfigBC: configUtil.getMovieConfigBC,
         };
         this.tvProps = {
             constructor: TvShow,
-            configGenFC: configUtil.getTvShowConfigFC,
-            configGenBC: configUtil.getTvShowConfigBC,
+            getConfigFC: configUtil.getTvShowConfigFC,
+            getConfigBC: configUtil.getTvShowConfigBC,
         }
         this.mostPopular = [];    // [ {index: 0, type: 'tv', contentDoc: {_id: ...}}] maxlength = 2
+        this._addTimeProperty();
         this._loadGenres();
     }
     
@@ -45,6 +44,34 @@ class TheMovieDB {
         }
     }
 
+    _addTimeProperty(){
+        let time = {}
+
+        time.MILLI_SECOND = 1;
+        time.SECOND = 1000;
+        time.MINUTE = 60 * time.SECOND;
+        time.HOUR = 60 * time.MINUTE;
+        time.DAY = 24 * time.HOUR;
+        time.WEEK = 7 * time.DAY;
+        time.MONTH = 30 * time.DAY;
+        time.YEAR = 365 * time.DAY;
+
+        this.time = time;
+    }
+    async sendGetRequest(url){
+        try {
+            let response = await axios.get(url, {
+                params: {
+                    api_key: this.key
+                }
+            });
+            return response;
+        } catch (error){
+            console.log('REQUEST FAILED', error);
+            throw new Error(error);
+        }
+    }
+
     async writeMostPopular(){
         let mostPopular = this.mostPopular;
         let type;
@@ -60,7 +87,7 @@ class TheMovieDB {
         try {
             let response = await axios.get(url, {
                 params: {
-                    api_key: TMDB_API_KEY
+                    api_key: this.key
                 }
             });
             let fullResData = response.data
@@ -82,7 +109,13 @@ class TheMovieDB {
             let query = {};
             query.title = resTitle;
             query[docDate] = resDate;
-        
+            
+            let validDuration = 1 * this.time.DAY
+            let currentDate = new Date();
+            let expiryDateMs = currentDate.valueOf() + validDuration; 
+            let expiryDate = new Date(expiryDateMs);
+            let category = { name: 'most-popular', expiryDate: expiryDate }
+
             let newMostPopular;
             let newMpContentDoc;
             let contentDocs = await props.constructor.find(query);
@@ -90,14 +123,17 @@ class TheMovieDB {
                 while (!props.genres){
                     continue;
                 }
-                let config = props.configGenBC(resData, props.genres);
+                let config = props.getConfigBC(resData, props.genres);
                 newMpContentDoc = new props.constructor(config);
-                newMpContentDoc.categories.push = 'most-popular';
+                newMpContentDoc.categories.push(category)
                 await newMpContentDoc.save();
             } else {
                 newMpContentDoc = contentDocs[0];
-                if (!newMpContentDoc.categories.includes('most-popular')){
-                    newMpContentDoc.categories.push('most-popular');
+                let existingCategory = newMpContentDoc.categories.find(cat => {
+                    return cat.name === 'most-popular';
+                })
+                if (!existingCategory){
+                    newMpContentDoc.categories.push(category);
                     await newMpContentDoc.save();
                 }
             }
@@ -118,10 +154,120 @@ class TheMovieDB {
         }
     }
 
-    writeRecentlyAdded(){
-        let FCCount = 6;
-        let BCCount = 9;
+    async writeRecentlyAdded(){
+        let [movieFCCount, movieBCCount] = [3, 5];
+        let [tvFCCount, tvBCCount] = [3, 4];
+
+        let validDuration = 1 * this.time.HOUR
+        let currentDate = new Date();
+        let expiryDateMs = currentDate.valueOf() + validDuration; 
+        let expiryDate = new Date(expiryDateMs);
+        let category = { name: 'recently-added', expiryDate: expiryDate }
         
+        try {
+            let latestMovieUrl = this.baseUrl + '/movie/now_playing';
+            let movieResponse = await this.sendGetRequest(latestMovieUrl);
+            let fullResMovieData = movieResponse.data;
+            let movieCount = movieFCCount + movieBCCount;
+            let relevantMovieResults = fullResMovieData.results.slice(0, movieCount);
+
+            for (let [index, resData] of relevantMovieResults.entries()){
+                let getMovieConfig;
+                let fullContent;
+                if (index < movieFCCount){
+                    let movieDetailUrl = this.baseUrl + '/movie/' + resData.id;
+                    let response = await this.sendGetRequest(movieDetailUrl);
+                    resData = response.data;
+                    getMovieConfig = configUtil.getMovieConfigFC;
+                    fullContent = true;
+                } else {
+                    getMovieConfig = configUtil.getMovieConfigBC;
+                    fullContent = false;
+                }
+                console.log('movie iteration', index);
+                let movies = await Movie.find({
+                    title: resData.title,
+                    releaseDate: resData.release_date,
+                    isFullContent: fullContent
+                })
+                if (movies.length === 0){
+                    while (!this.movieProps.genres){
+                        continue;
+                    }
+                    let config = getMovieConfig(resData, this.movieProps.genres);
+                    let newMovie = new Movie(config);
+                    newMovie.categories.push(category);
+                    await newMovie.save();
+                } else {
+                    let movie = movies[0];
+                    let exisitingCategory = movie.categories.find(cat => {
+                        return cat.name === 'recently-added';
+                    })
+                    if (!exisitingCategory){
+                        movie.categories.push(category);
+                        await movie.save();
+                    }
+                }
+            }
+        } catch (error){
+            console.log('ERR! writing recent movies failed.', error);
+            throw new Error(error);
+        }
+
+        try {
+            let latestTvUrl = this.baseUrl + '/tv/on_the_air';
+            let tvResponse = await this.sendGetRequest(latestTvUrl);
+            let fullResTvData = tvResponse.data;
+            let tvCount = tvFCCount + tvBCCount;
+            let relevantTvResults = fullResTvData.results.slice(0, tvCount);
+
+            for (let [index, resData] of relevantTvResults.entries()){
+                let getTvConfig;
+                let fullContent;
+                if (index < tvFCCount){
+                    let tvDetailUrl = this.baseUrl + '/tv/' + resData.id;
+                    let response = await this.sendGetRequest(tvDetailUrl);
+                    resData = response.data;
+                    getTvConfig = configUtil.getTvShowConfigFC;
+                    fullContent = true;
+                } else {
+                    getTvConfig = configUtil.getTvShowConfigBC;
+                    fullContent = false;
+                }
+                console.log('tv iteration', index);
+                let tvShows = await TvShow.find({
+                    title: resData.name,
+                    firstAirDate: resData.first_air_date,
+                    isFullContent: fullContent
+                })
+                if (tvShows.length === 0){
+                    while (!this.tvProps.genres){
+                        continue;
+                    }
+                    let config;
+                    if (fullContent){
+                        config = await getTvConfig(resData);
+                    } else {
+                        config = getTvConfig(resData, this.tvProps.genres);
+                    }
+                    let newTvShow = new TvShow(config);
+                    newTvShow.categories.push(category);
+                    await newTvShow.save();
+                } else {
+                    let tvShow = tvShows[0];
+                    let existingCategory = tvShow.categories.find(cat => {
+                        return cat.name === 'recently-added';
+                    })
+                    if (!existingCategory){
+                        tvShow.categories.push(category);
+                        await tvShow.save();
+                    }
+                }
+            }
+        } catch (error){
+            console.log('ERR! writing recent tvshows failed.', error);
+            throw new Error(error);
+        }
     }
 
     _isEqual(resData, contentDoc){

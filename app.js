@@ -53,15 +53,14 @@ app.use((error, req, res, next) => {
 async function startApp(){
     try {
         await mongoose.connect(MONGO_DB_URI, { useNewUrlParser: true });
-
         console.log('mongoose connected')
-        console.log(`server running on port ${PORT}`);
 
         const TMDB = new TheMovieDB(TMDB_API_KEY);
-        // await TMDB.writeMostPopular();
-
+        await TMDB.writeRecentlyAdded();
+    
+        console.log(`server running on port ${PORT}`);
         app.listen(PORT);
-    } catch (err){
+    } catch (err) {
         console.log('startApp CONNECTION ERR', err)
     }
 }
