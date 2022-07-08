@@ -31,6 +31,9 @@ const seasonSchema = Schema({
     },
     coverPath: {
         type: String,
+    },
+    releaseStatus: {
+        type: String,
         required: true
     }
 });

@@ -63,8 +63,8 @@ async function getTvShowConfigFC(tvResData){
     config.avgDurationMins = tvResData.episode_run_time;
     
     let productionCountry = tvResData.production_countries[0];
-    config.country = productionCountry.name;
-    config.countryCode = productionCountry.iso_3166_1;
+    config.country = (productionCountry) ? productionCountry.name : null;
+    config.countryCode = (productionCountry) ? productionCountry.iso_3166_1 : null;
 
     config.language = tvResData.original_language;
     config.spokenLanguages = tvResData.spoken_languages.map(lang => lang.english_name);
@@ -90,10 +90,22 @@ async function getTvShowConfigFC(tvResData){
             if (seasonData.season_number < 1){
                 continue;
             }
-            let seasonConfig = await getSeasonConfig(seasonData, tvShowData);
-            let season = new Season(seasonConfig);
-            await season.save();
-            seasons.push(season._id);
+            let query = { 
+                tvShowTitle: tvShowData.tvShowTitle,
+                seasonNo: seasonData.season_number,
+                episodeCount: seasonData.episode_count,
+                airDate: seasonData.air_date
+            }
+            let existingSeasons = await Season.find(query);
+            if (existingSeasons.length === 0){
+                let seasonConfig = await getSeasonConfig(seasonData, tvShowData);
+                let season = new Season(seasonConfig);
+                await season.save();
+                seasons.push(season._id);
+            } else {
+                let season = existingSeasons[0];
+                seasons.push(season._id);
+            }
         }
         config.seasons = seasons;
 
@@ -117,16 +129,10 @@ async function getTvShowConfigFC(tvResData){
         }
         config.latestEpisode = latestEpisode;
 
-        // let latestSeasonId = config.seasons[config.seasons.length - 1];
-        // let latestSeason = await Season.findById(latestSeasonId);
-        // let latestEpisode = latestSeason.episodes[latestSeason.episodes.length - 1];
-        // config.latestEpisode = latestEpisode;
-        // config.latestEpisode = latestSeasonId;  
-
         config.isFullContent = true;
 
         return config;
-    } catch(error){
+    } catch(error) {
         console.log('An error occured in getTvShowConfig', error);
         throw new Error(error);
     }
@@ -145,22 +151,51 @@ async function getSeasonConfig(seasonData, tvShowData){
 
     let tvShowID = tvShowData.tvShowID;
     let url = `${TMDB_API_BASE_URL}/tv/${tvShowID}/season/${config.seasonNo}`;
+    let queryParams = { api_key: TMDB_API_KEY };
     try {
-        let response = await axios.get(url, {
-            params: {
-                api_key: TMDB_API_KEY
-            }
-        })
+        let response = await axios.get(url, { params: queryParams });
 
         let seasonDetail = response.data;
         let episodes = [];
         for (let episodeData of seasonDetail.episodes){
-            let episodeConfig = getEpisodeConfig(episodeData, tvShowData)
-            let episode = new Episode(episodeConfig);
-            await episode.save();
-            episodes.push(episode._id);
+            let query = {
+                tvshowTitle: tvShowData.tvShowTitle,
+                title: episodeData.name,
+                episodeNo: episodeData.episode_number,
+                seasonNo: episodeData.season_number,
+                airDate: episodeData.air_date
+            };
+            let existingEpisodes = await Episode.find(query);
+            if (existingEpisodes.length === 0){
+                let episodeConfig = getEpisodeConfig(episodeData, tvShowData)
+                let episode = new Episode(episodeConfig);
+                await episode.save();
+                episodes.push(episode._id);
+            } else {
+                let episode = existingEpisodes[0];
+                episodes.push(episode._id)
+            }
         }
         config.episodes = episodes;
+
+        let currentDate = new Date();
+        let [sAirYear, sAirMonth, sAirDay] = config.airDate.split('-').map(str => parseInt(str));
+        let sAirDate = new Date(Date.UTC(sAirYear, sAirMonth-1, sAirDay));
+
+        let lastEpisodeId = config.episodes.slice(-1)[0];
+        let lastEpisode = await Episode.findById(lastEpisodeId);
+        let [eAirYear, eAirMonth, eAirDay] = lastEpisode.airDate.split('-').map(str => parseInt(str));
+        let eAirDate = new Date(Date.UTC(eAirYear, eAirMonth-1, eAirDay));
+
+        let status;
+        if (currentDate < sAirDate){
+            status = 'unreleased';
+        } else if (currentDate < eAirDate){
+            status = 'on-air';
+        } else {
+            status = 'released';
+        }
+        config.releaseStatus = status;
 
         return config;
     } catch (error){
@@ -204,7 +239,7 @@ function getMovieConfigBC(movieResData, tmdbGenres){
     config.overview = movieResData.overview;
 
     config.genres = movieResData.genre_ids.map(genreId => {
-        let genreObj = tmdbGenres.genres.find(genre => (genre.id === genreId));
+        let genreObj = tmdbGenres.find(genre => (genre.id === genreId));
         return genreObj.name;
     });
 
@@ -230,7 +265,7 @@ function getTvShowConfigBC(tvResData, tmdbGenres){
     config.overview = tvResData.overview;
     
     config.genres = tvResData.genre_ids.map(genreId => {
-        let genreObj = tmdbGenres.genres.find(genre => (genre.id === genreId));
+        let genreObj = tmdbGenres.find(genre => (genre.id === genreId));
         return genreObj.name;
     });
 

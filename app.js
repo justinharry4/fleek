@@ -11,6 +11,7 @@ const authRoutes = require('./routes/auth');
 const errorRoutes = require('./routes/error');
 // importing models
 const User = require('./models/user');
+const Movie = require('./models/movie');
 const TheMovieDB = require('./database/tmdb');
 
 const fileUtil = require('./util/file');
@@ -55,11 +56,16 @@ async function startApp(){
         await mongoose.connect(MONGO_DB_URI, { useNewUrlParser: true });
         console.log('mongoose connected')
 
+        // mongoose.connection.dropCollection('movies');
+        // mongoose.connection.dropCollection('tvshows');
+        // mongoose.connection.dropCollection('seasons');
+        // mongoose.connection.dropCollection('episodes');
         const TMDB = new TheMovieDB(TMDB_API_KEY);
-        await TMDB.writeRecentlyAdded();
-    
+        await TMDB.writeCrimeMovies();
+
         console.log(`server running on port ${PORT}`);
-        app.listen(PORT);
+        // app.listen(PORT);
+        return
     } catch (err) {
         console.log('startApp CONNECTION ERR', err)
     }
