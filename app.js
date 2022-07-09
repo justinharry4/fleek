@@ -61,13 +61,13 @@ async function startApp(){
         // mongoose.connection.dropCollection('seasons');
         // mongoose.connection.dropCollection('episodes');
         const TMDB = new TheMovieDB(TMDB_API_KEY);
-        await TMDB.writeCrimeMovies();
-
+        await TMDB.writeRecentlyAdded();
+        
         console.log(`server running on port ${PORT}`);
         // app.listen(PORT);
         return
     } catch (err) {
-        console.log('startApp CONNECTION ERR', err)
+        console.log('STARTAPP ERROR', err)
     }
 }
 

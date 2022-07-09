@@ -25,8 +25,8 @@ function getMovieConfigFC(movieResData){
     config.durationMins = movieResData.runtime;
     
     let productionCountry = movieResData.production_countries[0];
-    config.country = productionCountry.name;
-    config.countryCode = productionCountry.iso_3166_1;
+    config.country = (productionCountry) ? productionCountry.name : undefined;
+    config.countryCode = (productionCountry) ? productionCountry.iso_3166_1 : undefined;
 
     config.language = movieResData.original_language;
     config.spokenLanguages = movieResData.spoken_languages.map(lang => lang.english_name);
@@ -63,8 +63,8 @@ async function getTvShowConfigFC(tvResData){
     config.avgDurationMins = tvResData.episode_run_time;
     
     let productionCountry = tvResData.production_countries[0];
-    config.country = (productionCountry) ? productionCountry.name : null;
-    config.countryCode = (productionCountry) ? productionCountry.iso_3166_1 : null;
+    config.country = (productionCountry) ? productionCountry.name : undefined;
+    config.countryCode = (productionCountry) ? productionCountry.iso_3166_1 : undefined;
 
     config.language = tvResData.original_language;
     config.spokenLanguages = tvResData.spoken_languages.map(lang => lang.english_name);
