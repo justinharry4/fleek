@@ -16,26 +16,35 @@ class TheMovieDB {
     
         this.movieProps = {};
         this.tvProps = {};
-        this.mostPopular = [];
-        this.availableCategories = [
-            'recently-added',
-            'trending',
-            'most-popular',
-            'popular',
-            'tv-drama',
-            'tv-brtish',
-            'tv-comedy',
-            'movie-comedy',
-            'movie-crime',
-        ]
 
-        this._addTimeProperty();
+        this.mostPopular = [];
+
+        this.generalValidDuration = '23-hr';
+        this.generalWriteInterval = '24-hr';
+
+        this.forceGeneralDuration = true;
+        this.forceGeneralInterval = true;
+        // this.validDurations = {};
+
+        this.categories = {
+            'recently-added': { method: this.writeRecentlyAdded },
+            'trending': { method: this.writeTrendingNow },
+            'most-popular': { method: this.writeMostPopular },
+            'popular': { method: this.writePopular },
+            'tv-drama': { method: this.writeTvDramas },
+            'tv-brtish': { method: this.writeBritishTvShows },
+            'tv-comedy': { method: this.writeTvComedies },
+            'movie-comedy': { method: this.writeMovieComedies },
+            'movie-crime': { method: this.writeCrimeMovies },
+        }
+
+        this._setTimeProperties();
     }
     
-    _addTimeProperty(){
+    _setTimeProperties(){
         let time = {}
 
-        time.MILLI_SECOND = 1;
+        time.MILLISECOND = 1;
         time.SECOND = 1000;
         time.MINUTE = 60 * time.SECOND;
         time.HOUR = 60 * time.MINUTE;
@@ -44,7 +53,19 @@ class TheMovieDB {
         time.MONTH = 30 * time.DAY;
         time.YEAR = 365 * time.DAY;
 
+        let timeMap = new Map([
+            [['ms', 'msec', 'millisecond'], 'MILLISECOND'],
+            [['s','sec', 'second'], 'SECOND'], 
+            [['m', 'min', 'minute'], 'MINUTE'], 
+            [['h', 'hr', 'hour'], 'HOUR'],
+            [['d', 'day'], 'DAY'],
+            [['w', 'wk', 'week'], 'WEEK'],
+            [['mo', 'month'], 'MONTH'],
+            [['y', 'yr', 'year'], 'YEAR']
+        ]);
+
         this.time = time;
+        this.timeMap = timeMap;
     }
 
     async _loadGenres(){
@@ -115,6 +136,30 @@ class TheMovieDB {
         return [incGenresStr, excGenresStr];
     }
 
+    getTime(durationStr){
+        let durationParts = durationStr.split('-');
+        if (durationParts.length !== 2){
+            throw new Error('Invalid Duration String');
+        }
+
+        let [value, unit] = durationParts;
+        value = parseFloat(value);
+        unit = unit.toLowerCase();
+
+        let UNIT;
+        for (let unitList of this.timeMap.keys()){
+            if (unitList.includes(unit)){
+                UNIT = this.timeMap.get(unitList);
+                break;
+            }
+        }
+
+        let durationMs = value * this.time[UNIT];
+        if (!durationMs){
+            return 0;
+        } 
+        return durationMs;
+    }
 
     async sendGetRequest(url, queryParams){
         let qParams = { api_key: this.key, ...queryParams }
@@ -133,10 +178,23 @@ class TheMovieDB {
         let gp = generalParams;
         let mp = movieParams;
 
+        let validDuration;
+        if (this.forceGeneralDuration){
+            let validDurationStr = this.generalValidDuration;
+            validDuration = this.getTime(validDurationStr);
+        } else {
+            // let validDurationStr = this.validDurations[gp.categoryName];
+            let validDurationStr = this.categories[gp.categoryName].validDuration;
+            if (!validDurationStr){
+                validDurationStr = this.generalValidDuration;
+            }
+            validDuration = this.getTime(validDurationStr)
+        }
+
         let currentDate = new Date();
-        let expiryDateMs = currentDate.valueOf() + gp.validDuration; 
+        let expiryDateMs = currentDate.valueOf() + validDuration; 
         let expiryDate = new Date(expiryDateMs);
-        let category = { name: gp.categoryName, expiryDate: expiryDate }
+        let category = { name: gp.categoryName, expiryDate: expiryDate };
 
         let prefMinEnPercent = 0.6;
         
@@ -188,7 +246,7 @@ class TheMovieDB {
                     getMovieConfig = configUtil.getMovieConfigBC;
                     fullContent = false;
                 }
-                console.log('movie iteration', index);
+                console.log('movie iteration', index, gp.categoryName);
 
                 let movies = await Movie.find({
                     title: resData.title,
@@ -207,13 +265,15 @@ class TheMovieDB {
                     await movie.save();
                 } else {
                     movie = movies[0];
-                    let exisitingCategory = movie.categories.find(cat => {
+                    let existingCatIndex = movie.categories.findIndex(cat => {
                         return cat.name === gp.categoryName;
                     })
-                    if (!exisitingCategory){
+                    if (existingCatIndex === -1){
                         movie.categories.push(category);
-                        await movie.save();
+                    } else {
+                        movie.categories[existingCatIndex] = category;
                     }
+                    await movie.save();
                 }
                 if (category.name === 'most-popular'){
                     return { content: movie, index: mostPopularIndex }
@@ -229,8 +289,20 @@ class TheMovieDB {
         let gp = generalParams;
         let tp = tvParams;
 
+        let validDuration;
+        if (this.forceGeneralDuration){
+            let validDurationStr = this.generalValidDuration;
+            validDuration = this.getTime(validDurationStr);
+        } else {
+            let validDurationStr = this.categories[gp.categoryName].validDurations;
+            if (!validDurationStr){
+                validDurationStr = this.generalValidDuration;
+            }
+            validDuration = this.getTime(validDurationStr)
+        }
+
         let currentDate = new Date();
-        let expiryDateMs = currentDate.valueOf() + gp.validDuration; 
+        let expiryDateMs = currentDate.valueOf() + validDuration; 
         let expiryDate = new Date(expiryDateMs);
         let category = { name: gp.categoryName, expiryDate: expiryDate }
 
@@ -308,7 +380,7 @@ class TheMovieDB {
                 if (!resData){
                     console.log('invalid resData at index', index);
                 }
-                console.log('tv iteration', index);
+                console.log('tv iteration', index, gp.categoryName);
 
                 let tvShows = await TvShow.find({
                     title: resData.name,
@@ -329,13 +401,15 @@ class TheMovieDB {
                     await tvShow.save();
                 } else {
                     tvShow = tvShows[0];
-                    let existingCategory = tvShow.categories.find(cat => {
+                    let existingCatIndex = tvShow.categories.findIndex(cat => {
                         return cat.name === gp.categoryName;
                     })
-                    if (!existingCategory){
+                    if (existingCatIndex === -1){
                         tvShow.categories.push(category);
-                        await tvShow.save();
+                    } else {
+                        tvShow.categories[existingCatIndex] = category;
                     }
+                    await tvShow.save();
                 }
                 if (category.name === 'most-popular'){
                     return { content: tvShow, index: mostPopularIndex}
@@ -350,7 +424,7 @@ class TheMovieDB {
     async writeRecentlyAdded(){
         let generalParams = {
             categoryName: 'recently-added',
-            validDuration: 1 * this.time.DAY
+            // validDuration: 1 * this.time.DAY
         }
 
         let currentDate = new Date();
@@ -388,7 +462,7 @@ class TheMovieDB {
     async writeTrendingNow(){
         let generalParams = {
             categoryName: 'trending',
-            validDuration: 1 * this.time.DAY
+            // validDuration: 1 * this.time.DAY
         }
 
         let movieParams = {
@@ -410,7 +484,7 @@ class TheMovieDB {
     async writeTvDramas(){
         let generalParams = {
             categoryName: 'tv-drama',
-            validDuration: 1 * this.time.DAY
+            // validDuration: 1 * this.time.DAY
         };
 
         let includedGenNames = ['Drama'];
@@ -434,7 +508,7 @@ class TheMovieDB {
     async writeMovieComedies(){
         let generalParams = {
             categoryName: 'movie-comedy',
-            validDuration: 1 * this.time.DAY,
+            // validDuration: 1 * this.time.DAY,
         }
 
         let includedGenNames = ['Comedy'];
@@ -459,7 +533,7 @@ class TheMovieDB {
     async writeBritishTvShows(){
         let generalParams = {
             categoryName: 'tv-british',
-            validDuration: 1 * this.time.DAY,
+            // validDuration: 1 * this.time.DAY,
         };
 
         let tvParams = {
@@ -512,7 +586,7 @@ class TheMovieDB {
     async writePopular(){
         let generalParams = {
             categoryName: 'popular',
-            validDuration: 1 * this.time.DAY
+            // validDuration: 1 * this.time.DAY
         }
 
         let movieParams = {
@@ -534,7 +608,7 @@ class TheMovieDB {
     async writeTvComedies(){
         let generalParams = {
             categoryName: 'tv-comedy',
-            validDuration: 1 * this.time.DAY,
+            // validDuration: 1 * this.time.DAY,
         }
 
         let includedGenNames = ['Comedy'];
@@ -559,7 +633,7 @@ class TheMovieDB {
     async writeCrimeMovies(){
         let generalParams = {
             categoryName: 'movie-crime',
-            validDuration: 1 * this.time.DAY,
+            // validDuration: 1 * this.time.DAY,
         }
 
         let includedGenNames = ['Crime', 'Drama'];
@@ -590,7 +664,7 @@ class TheMovieDB {
     async writeMostPopular(){
         let generalParams = {
             categoryName: 'most-popular',
-            validDuration: 1 * this.time.DAY
+            // validDuration: 1 * this.time.DAY
         };
 
         let type;
@@ -693,7 +767,149 @@ class TheMovieDB {
             return newMostPopular;
         }
     }
+
+    async clearExpiredContentCategories(){
+        let currentDate = new Date();
+        try {
+            let expiredCatMovies = await Movie.find({
+                'categories.expiryDate': {$lte: currentDate}
+            });
+            let expiredCatTvShows = await TvShow.find({
+                'categories.expiryDate': {$lte: currentDate}
+            });
+            let expiredCatContent = expiredCatMovies.concat(expiredCatTvShows);
+
+            for (let expiredCatContentDoc of expiredCatContent){
+                let isUpdated = false;
+                let categories = expiredCatContentDoc.categories;
+                for (let [index, cat] of categories.entries()){
+                    if (cat.expiryDate <= currentDate){
+                        categories.splice(index, 1);
+                        if (!isUpdated){
+                            isUpdated = true;
+                        }
+                    }
+                }
+                if (isUpdated){
+                    await expiredCatContentDoc.save();
+                }
+            }
+        } catch (error){
+            console.log('ERR! clearing expired categories failed.', error);
+            throw new Error(error);
+        }
+    }
+
+    async clearUncategorizedMovies(){
+        try {
+            await Movie.deleteMany({ categories: {$size: 0} });
+
+            console.log('cleared uncategorized movies');
+        } catch (error){
+            console.log('ERR! clearing uncategorized movies failed.', error);
+            throw new Error(error);
+        }
+    }
+
+    async clearUncategorizedTvShows(){
+        try {
+            await TvShow.deleteMany({ 
+                categories: {$size: 0},
+                isFullContent: false
+            });
+            let uncategorizedFCTvShows = await TvShow.find({ 
+                categories: {$size: 0},
+                isFullContent: true
+            });
+
+            for (let tvShow of uncategorizedFCTvShows){
+                await tvShow.clearSeasons();
+                tvShow.delete();
+            }
+
+            console.log('cleared uncategorized tvshows');
+        } catch (error){
+            console.log('ERR! clearing uncategorized movies failed.', error);
+            throw new Error(error);
+        }
+    }
+
+    async initializeDatabase(){
+        try {
+        for (let categoryName in this.categories){
+            let interval = this.getTime(this.generalWriteInterval);
+            let writeMethod = this.categories[categoryName].method;
+
+            await writeMethod.call(this);
+
+            let intervalID = setInterval(() => {
+                writeMethod.call(this);
+            }, interval);
+
+            this.categories[categoryName].intervalID = intervalID;
+            this.categories[categoryName].isIntervalGeneral = true;
+        }
+
+        let cleanInterval = this.getTime(this.generalWriteInterval) + (2 * this.time.MINUTE);
+        let cleanIntervalID = setInterval(async () => {
+            await this.clearExpiredContentCategories();
+
+            this.clearUncategorizedMovies();
+            this.clearUncategorizedTvShows();
+        }, cleanInterval);
+
+        this.cleanIntervalID = cleanIntervalID;
+        } catch (error){
+            console.log('An Error occured during initialization.', error);
+        }
+    }
+
+    setWriteInterval(categoryName, writeInterval, forceNewInterval=false){
+        let category = this.categories[categoryName];
+        let currentIntervalID = category.intervalID;
+        let newInterval = this.getTime(writeInterval);
+
+        clearInterval(currentIntervalID);
+        let newIntervalID = setInterval(() => {
+            // category.method();
+
+            if (!forceNewInterval){
+                let generalInterval = this.getTime(this.generalWriteInterval);
+                clearInterval(category.intervalID);
+                let intervalID = setInterval(() => {
+                    // category.method();
+                }, generalInterval);
+                this.categories[categoryName].intervalID = intervalID;
+                this.categories[categoryName].isIntervalGeneral = true;
+            }
+        }, newInterval);
+
+        category.intervalID = newIntervalID;
+        category.isIntervalGeneral = false;
+    }
+
+    setGeneralWriteInterval(writeInterval){
+        let interval = this.getTime(writeInterval);
+
+        for (let categoryName in this.categories){
+            let category = this.categories[categoryName];
+            let currentIntervalID = category.intervalID;
+            let isGeneral = category.isIntervalGeneral;
+
+            if (this.forceGeneralInterval || isGeneral){
+                clearInterval(currentIntervalID);
+                let intervalID = setInterval(() => {
+                    // category.method();
+                }, interval);
+
+                category.intervalID = intervalID;
+                category.isIntervalGeneral = true;
+            }
+        }
+    }
 }
 
-module.exports = TheMovieDB;
+const TMDB = new TheMovieDB(process.env.TMDB_API_KEY);
+
+module.exports = TMDB;
 

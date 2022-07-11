@@ -1,0 +1,20 @@
+<%- include('../../partials/head') %>
+</head>
+<body>
+    <h1>FLEEK ADMIN</h1>
+    <% if (interval === 'general') { %>
+        <form action="/admin/general" method="POST">
+            <legend>Set General Interval</legend>
+            <label>Duration String: <input type="text" name="durationStr" placeholder="1-min"></label>
+            <input type="submit">
+        </form>
+    <% } else { %>
+        <form action="/admin/category" method="POST">
+            <legend>Set Specific Category Interval</legend>
+            <label>Duration String: <input type="text" name="category" placeholder="tv-drama"></label>
+            <label>Duration String: <input type="text" name="durationStr" placeholder="1-min"></label>
+            <label>Force?: <input type="checkbox" name="force" value="true"></label>
+            <input type="submit">
+        </form>
+    <% } %>
+<%- include('../../partials/end') %>

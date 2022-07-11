@@ -83,7 +83,7 @@ const movieSchema = Schema({
             }
         }
     ]
-})
+});
 
 const movieModel = mongoose.model('Movie', movieSchema);
 

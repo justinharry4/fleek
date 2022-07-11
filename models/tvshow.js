@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const Season = require('./season');
+
 const Schema = mongoose.Schema;
 
 const tvShowSchema = Schema({
@@ -102,6 +104,17 @@ const tvShowSchema = Schema({
         }
     ]
 }); 
+
+async function clearSeasons(){
+    let seasonIds = this.seasons;
+    for (let seasonId of seasonIds){
+        let season = await Season.findById(seasonId);
+        await season.clearEpisodes();
+        season.delete();
+    }
+}
+
+tvShowSchema.methods.clearSeasons = clearSeasons;
 
 const tvShowModel = mongoose.model('TvShow', tvShowSchema);
 
