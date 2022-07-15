@@ -4,6 +4,7 @@ const favicon = require('serve-favicon');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const mongoDbSessionStore = require('connect-mongodb-session')(session);
+const flash = require('connect-flash');
 
 // importing routes
 const contentRoutes = require('./routes/content');
@@ -12,7 +13,6 @@ const errorRoutes = require('./routes/error');
 const adminRoutes = require('./routes/admin');
 // importing models
 const User = require('./models/user');
-const Movie = require('./models/movie');
 const TMDB = require('./database/tmdb');
 
 const fileUtil = require('./util/file');
@@ -40,6 +40,7 @@ app.use(session({
     resave: false,
     store: sessionStore
 }));
+app.use(flash());
 
 // // END POINTS
 app.use(contentRoutes);
@@ -58,16 +59,7 @@ async function startApp(){
         await mongoose.connect(MONGO_DB_URI, { useNewUrlParser: true });
         console.log('mongoose connected')
 
-        TMDB.initializeDatabase();
-        // mongoose.connection.dropCollection('movies');
-        // mongoose.connection.dropCollection('tvshows');
-        // mongoose.connection.dropCollection('seasons');
-        // mongoose.connection.dropCollection('episodes');
-        // const TMDB = new TheMovieDB(TMDB_API_KEY);
-        // console.log(TMDB.categories);
-        // await TMDB.initializeDatabase(); 
-        // console.log(TMDB.categories);
-
+        // TMDB.initializeDatabase();
         
         console.log(`server running on port ${PORT}`);
         app.listen(PORT);

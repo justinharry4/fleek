@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
+const ObjectId = Schema.Types.ObjectId;
 
 const userSchema = Schema({
     email: {
@@ -15,16 +16,21 @@ const userSchema = Schema({
         type: String,
         default: 'New Fleek User'
     },
-    profilePhoto: {
+    subscriptionPlan: {
         type: String,
-        default: '**default path**'
     },
     activeDevices: [
         { type: String }
     ],
-    kids: {
-        type: Object,
-        ref: '**some ref**'
+    profiles: [
+        {
+            type: ObjectId,
+            ref: 'Profile'
+        }
+    ],
+    member: {
+        type: Boolean,
+        default: false
     }
 });
 

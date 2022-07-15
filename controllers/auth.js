@@ -1,27 +1,78 @@
 const { validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
 
+const User = require('../models/user');
 const fileUtil = require('../util/file');
+const flashUtil = require('../util/flash');
 
 module.exports.getSignin = async (req, res, next) => {
-    let authDataPath = 'data/auth.json';
+    let { errorCode, formData } = flashUtil.getFlashMsg(req);
 
-    let dataString = await fileUtil.loadFile(authDataPath);
-    let authData = JSON.parse(dataString);
-    let navList = authData.footerNavList;
+    try {
+        let authDataPath = 'data/auth.json';
 
-    res.render('pages/auth/sign-in', {
-        pageTitle: 'Fleek | Sign in',
-        navList: navList,
-        leadName: 'signin',
-    })
+        let dataString = await fileUtil.loadFile(authDataPath);
+        let authData = JSON.parse(dataString);
+        let navList = authData.footerNavList;
+
+        res.render('pages/auth/sign-in', {
+            pageTitle: 'Fleek | Sign in',
+            navList: navList,
+            leadName: 'signin',
+            errorCode: errorCode,
+            formData: formData
+        })
+    } catch(error){
+        next(error);
+    }
 };
+
+module.exports.postSignin = async (req, res, next) => {
+    let email = req.body.email;
+    let password = req.body.password;
+    let rememberUser = req.body['remember-user'];
+
+    let formData = { email: email, password: password, remeberUser: rememberUser };
+
+    try {
+        let user = await User.find({email: email});
+        if (!user || user.length === 0){
+            req.flash('errorCode', '404');
+            req.flash('formData', JSON.stringify(formData));
+            return res.redirect('/signin');
+        }
+
+        let hashedPassword = user.password;
+        let passwordMatch = await bcrypt.compare(password, hashedPassword);
+
+        if (!passwordMatch){
+            req.flash('errorCode', '401');
+            req.flash('formData', JSON.stringify(formData));
+            return res.redirect('/signin');
+        }
+
+        req.session.userId = user._id;
+        req.session.authenticated = true;
+        if (rememberUser === 'true'){
+            // remember user
+        }
+        if (!user.member){
+            return res.redirect('/signup/regstep3');
+        }
+
+        res.redirect('/browse');
+    } catch(error){
+        next(error);
+    }
+}
 
 async function renderSignupView(req, res, next, steps){
     let signupStep = steps.signupStep;
     let nextSignupStep = steps.nextSignupStep;
-    let regEmail = req.session.regEmail;
     let regSubPlan = req.session.regSubPlan ? req.session.regSubPlan: 'premium';
     let regAccountCreated = req.session.regAccountCreated;
+    let regUser = await User.findById(req.session.regUser);
+    let regEmail = (regUser) ? regUser.email : req.session.regEmail;
 
     let authDataPath = 'data/auth.json';
     try {
@@ -77,7 +128,7 @@ module.exports.getSignupRegform = (req, res, next) => {
     renderSignupView(req, res, next, steps);
 };
 
-module.exports.postSignupRegform = (req, res, next) => {
+module.exports.postSignupRegform = async (req, res, next) => {
     let validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()){
         let errors = validationErrors.array();
@@ -86,28 +137,51 @@ module.exports.postSignupRegform = (req, res, next) => {
         errors.forEach(err => {
             invalidFields.push(err.param);
         })
+
         return res.status(422).json({ message: message, fields: invalidFields });
     }
 
     // connect to database
     let email = req.body.email;
     let password = req.body.password;
-    req.session.regAccountCreated = true;
 
-    console.log('email:', email);
-    console.log('password:', password);
+    try {
+        let existingUser = await User.findOne({email: email});
+        if (existingUser){
+            let message = 'A user with this email already exists.';
+            let invalidFields = [];
 
-    let nextSignupStep = 'regstep2';
-    let upperSignupStep = 'chooseplan';
-    let steps = { 
-        signupStep: nextSignupStep,
-        nextSignupStep: upperSignupStep
-    };
+            return res.status(422).json({ message: message, fields: invalidFields });
+        }
 
-    renderSignupView(req, res, next, steps)
+        let hashedPassword = await bcrypt.hash(password, 12);
+        let user = new User({
+            email: email,
+            password: hashedPassword
+        });
+
+        await user.save();
+        req.session.regUser = user._id;
+        req.session.regAccountCreated = true;
+
+        let nextSignupStep = 'regstep2';
+        let upperSignupStep = 'chooseplan';
+        let steps = { 
+            signupStep: nextSignupStep,
+            nextSignupStep: upperSignupStep
+        };
+
+        renderSignupView(req, res, next, steps)
+    } catch (error){
+        next(error);
+    }
 };
 
 module.exports.getSignupStep2 = (req, res, next) => {
+    if (!req.session.regAccountCreated){
+        return res.redirect('/signup');
+    }
+
     let nextSignupStep = 'regstep2';
     let upperSignupStep = 'chooseplan';
     let steps = { 
@@ -119,6 +193,10 @@ module.exports.getSignupStep2 = (req, res, next) => {
 };
 
 module.exports.getSignupChoosePlan = (req, res, next) => {
+    if (!req.session.regAccountCreated){
+        return res.redirect('/signup');
+    }
+
     let nextSignupStep = 'chooseplan';
     let upperSignupStep = 'chooseplan';
     let steps = { 
@@ -129,26 +207,47 @@ module.exports.getSignupChoosePlan = (req, res, next) => {
     renderSignupView(req, res, next, steps);
 };
 
-module.exports.postSignupChoosePlan = (req, res, next) => {
-    if (req.body.subPlan){
-        req.session.regSubPlan = req.body.subPlan;
+module.exports.postSignupChoosePlan = async (req, res, next) => {
+    if (!req.session.regAccountCreated){
+        return res.redirect('/signup');
     }
-    // connect to database
-    let subPlan = req.body.subPlan;
 
-    console.log('selected subplan: ', subPlan);
+    let validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()){
+        let errors = validationErrors.array();
+        let message = errors[0].msg;
+        let invalidFields = [];
 
-    let nextSignupStep = 'regstep3';
-    let upperSignupStep = 'creditoption';
-    let steps = { 
-        signupStep: nextSignupStep,
-        nextSignupStep: upperSignupStep
-    };
+        return res.status(422).json({ message: message, fields: invalidFields });
+    }
 
-    renderSignupView(req, res, next, steps);
+    try {
+        let subPlan = req.body.subPlan;
+        let userId = req.session.regUser;
+        let user = await User.findById(userId);
+
+        user.subscriptionPlan = subPlan;
+        req.session.regSubPlan = subPlan;
+        await user.save();
+
+        let nextSignupStep = 'regstep3';
+        let upperSignupStep = 'creditoption';
+        let steps = { 
+            signupStep: nextSignupStep,
+            nextSignupStep: upperSignupStep
+        };
+
+        renderSignupView(req, res, next, steps);
+    } catch(error){
+        next(error);
+    }
 };
 
 module.exports.getSignupStep3 = (req, res, next) => {
+    if (!req.session.regAccountCreated){
+        return res.redirect('/signup');
+    }
+
     let nextSignupStep = 'regstep3';
     let upperSignupStep = 'creditoption';
     let steps = { 
@@ -160,6 +259,10 @@ module.exports.getSignupStep3 = (req, res, next) => {
 };
 
 module.exports.getSignupCreditOption = (req, res, next) => {
+    if (!req.session.regAccountCreated){
+        return res.redirect('/signup');
+    }
+
     let nextSignupStep = 'creditoption';
     let upperSignupStep = '';
     let steps = { 
@@ -170,13 +273,23 @@ module.exports.getSignupCreditOption = (req, res, next) => {
     renderSignupView(req, res, next, steps);
 };
 
-module.exports.postSignupCreditOption = (req, res, next) => {
+module.exports.postSignupCreditOption = async (req, res, next) => {
+    if (!req.session.regAccountCreated){
+        return res.redirect('/signup');
+    }
+
     let creditCardNo = req.body['card-number'];
     if (creditCardNo){
         // connect to database
     }
+
+    let user = await User.find(req.session.regUser);
+    user.member = true;
+    await user.save();
+
     req.session.regEmail = null;
     req.session.regSubPlan = null;
+    req.session.regUser = null;
     req.session.regAccountCreated = false;
 
     console.log('card-no:', creditCardNo);
@@ -189,7 +302,11 @@ module.exports.postSignout = (req, res, next) => {
 
     req.session.regEmail = null;
     req.session.regSubPlan = null;
+    req.session.regUser = null;
     req.session.regAccountCreated = false;
+
+    req.session.userId = null;
+    req.session.authenticated = false;
 
     res.sendStatus(201);
 };

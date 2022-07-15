@@ -6,20 +6,20 @@ const validator = require('../util/validator');
 const router = express.Router();
 
 // DEFINING ROUTES
-// signin
 router.get('/signin', authController.getSignin);
-// signup
+router.post('/signin', authController.postSignin);
+
 router.get('/signup', authController.getSignupStep1);
 router.post('/signup', authController.postSignup);
 router.get('/signup/regstep1', authController.getSignupStep1);
 
 router.get('/signup/regform', authController.getSignupRegform);
-router.post('/signup/regform', validator.signup, authController.postSignupRegform)
+router.post('/signup/regform', validator.signupRegform, authController.postSignupRegform)
 
 router.get('/signup/regstep2', authController.getSignupStep2);
 
 router.get('/signup/chooseplan', authController.getSignupChoosePlan);
-router.post('/signup/chooseplan', authController.postSignupChoosePlan);
+router.post('/signup/chooseplan', validator.signupPlanform, authController.postSignupChoosePlan);
 
 router.get('/signup/regstep3', authController.getSignupStep3);
 

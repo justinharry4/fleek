@@ -12,7 +12,11 @@
         <div id="signin-main-container">
             <div id="signin-main-wrapper"> 
                 <h2 id="signin-main-header">Sign In</h2>
-                <form id="form-signin" action="" method="POST">
+                <% if (errorCode === '404') { %>
+                <% } %>
+                <% if (errorCode === '401') { %>
+                <% } %>
+                <form id="form-signin" action="/signin" method="POST">
                     <fieldset id="form-signin-ul-wrapper">
                         <ul>
                             <li class="overlay-wrapper">
@@ -28,7 +32,7 @@
                     </fieldset>
                     <fieldset id="form-signin-remember-wrapper" class="flex-wrapper">
                         <label for="form-signin-checkbox" class="custom-checkbox-container">
-                            <%- include('../../components/checkbox', {checkboxName: 'remember-name', checkboxId: 'form-signin-checkbox', checkboxValue: 'true'}) %>
+                            <%- include('../../components/checkbox', {checkboxName: 'remember-user', checkboxId: 'form-signin-checkbox', checkboxValue: 'true'}) %>
                             <!-- <input type="checkbox" name="remember-user" value="true" id="form-signin-checkbox"> -->
                             Remember me
                         </label>
