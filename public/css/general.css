@@ -24,6 +24,10 @@ button, input, fieldset {
     border-radius: 0px;
     font-size: inherit;
 }
+button {
+    background-color: transparent;
+    color: inherit;
+}
 input:focus {
     outline: none;
 }

@@ -11,9 +11,8 @@ const contentRoutes = require('./routes/content');
 const authRoutes = require('./routes/auth');
 const errorRoutes = require('./routes/error');
 const adminRoutes = require('./routes/admin');
-// importing models
-const User = require('./models/user');
-const TMDB = require('./database/tmdb');
+
+const generalController = require('./controllers/general');
 
 const fileUtil = require('./util/file');
 
@@ -30,7 +29,7 @@ const MONGO_DB_URI = 'mongodb://127.0.0.1:27017/fleek';
 const sessionStore = new mongoDbSessionStore({uri: MONGO_DB_URI, collection: 'sessions'});
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 
-// CATCH-ALL MIDDLEWARE
+// CATCH-ALL MIDDLEWARE (third-party)
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(favicon(faviconPath));
 app.use(express.static(publicPath));
@@ -42,7 +41,10 @@ app.use(session({
 }));
 app.use(flash());
 
-// // END POINTS
+// CATCH-ALL MIDDLEWARE
+app.use(generalController.getUser);
+
+// END POINTS
 app.use(contentRoutes);
 app.use(authRoutes);
 app.use(adminRoutes);

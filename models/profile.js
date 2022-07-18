@@ -10,10 +10,14 @@ const profileSchema = Schema({
     },
     profilePhotoUrl: {
         type: String,
-        default: '**default path**'
+        default: '/images/def-profile-photo.png'
     },
     kid: {
         type: Boolean,
+        required: true
+    },
+    user: {
+        type: ObjectId,
         required: true
     },
     recentlyWatchedMovies: [

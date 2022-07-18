@@ -1,0 +1,45 @@
+<%- include('../../partials/head') %>
+    <link rel="stylesheet" href="/css/content/profiles.css">
+    <script src="/scripts/modules/jquery.js"></script>
+    <script src="/scripts/content/profiles.js"></script>
+</head>
+<body>
+    <div id="toplevel-container" class="zoom">
+        <%- include('../../partials/header') %>
+        </header>
+        <div id="lowlevel-container" class="zoom" data-fragment-name="profiles">
+            <div class="main-wrapper">
+                <h2 class="profiles-heading">
+                    <% if (profiles.length === 0) { %>
+                        Create a profile
+                    <% } else if (profiles.length > 1) { %>
+                        Who's watching?
+                    <% } %>
+                </h2>
+                <div class="profiles-wrapper flex-wrapper">
+                    <% if (profiles.length > 0) { %>
+                        <ul class="profiles-list flex-wrapper">
+                            <% for (let profile of profiles) { %>
+                                <li class="profile-wrapper">
+                                    <div>
+                                        <img class="profile-photo" src="<%= profile.profilePhotoUrl %>" alt="profile photo">
+                                    </div>
+                                    <span class="profile-name"><%= profile.name %></span>
+                                </li>
+                            <% } %>
+                        </ul>
+                    <% } %>
+                    <div class="add-profile-wrapper profile-wrapper">
+                        <div class="profile-photo add-profile-svg-wrapper flex-wrapper">
+                            <%- include('../../../public/images/svg/plus-circle.svg') %>
+                        </div>
+                        <span id="add-profile-label" class="profile-name">Add Profile</span>
+                    </div>
+                </div>
+                <div class="manage-link-wrapper">
+                    <a class="manage-link <%= (profiles.length === 0) ? 'disabled': '' %>" <%= (profiles.length > 0) ? 'href=""' : '' %>>Manage Profiles</a>
+                </div>
+            </div>
+        </div>
+    </div>
+<%- include('../../partials/end') %>

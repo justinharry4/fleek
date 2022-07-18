@@ -1,0 +1,108 @@
+@charset "utf-8";
+
+@import url('/css/content/content.css');
+
+/* main styles */
+.main-wrapper {
+    margin-top: 5.5em;
+    text-align: center;
+}
+.profiles-heading {
+    font-weight: normal;
+    font-size: 3.3em;
+}
+.profiles-wrapper {
+    margin: 1.5em 0em;
+    justify-content: center;
+}
+.profile-wrapper {
+    margin: 0em .7em;
+    cursor: pointer;
+}
+.profile-photo {
+    border-radius: 4px;
+    /* border: 3px solid transparent; */
+}
+.profile-photo:hover, .profile-photo:active {
+    border-radius: 0px;
+}
+.profile-wrapper div, .add-profile-svg-wrapper {
+    height: 8em;
+    border-radius: 4px;
+    margin-bottom: .7em;
+    border: 3px solid transparent;
+}
+.profile-wrapper div:hover, .profile-wrapper div:active,
+.profile-wrapper div.highlight {
+    border-color: var(--profile-highlight-color);
+}
+.profile-name {
+    display: block;
+    color: var(--main-text-color);
+}
+.profile-name:hover, .profile-name:active,
+.profile-name.highlight {
+    color: var(--profile-highlight-color);
+}
+div.add-profile-svg-wrapper:hover,
+div.add-profile-svg-wrapper:active {
+    border-color: transparent;
+}
+.add-profile-svg-wrapper {
+    width: 8em;
+    justify-content: center;
+    align-items: center;
+}
+div.add-profile-svg-wrapper:hover,
+div.add-profile-svg-wrapper:active {
+    border-radius: 4px;
+}
+.add-profile-svg-wrapper.highlight {
+    background-color: var(--profile-highlight-color);
+}
+.add-profile-svg-wrapper svg {
+    width: 4em;
+    height: 4em;
+}
+.add-profile-svg-wrapper svg path {
+    fill: var(--main-text-color);
+}
+.add-profile-svg-wrapper svg path.highlight {
+    fill: var(--main-text-color);
+}
+.manage-link-wrapper {
+    margin: 5em 0em;
+}
+.manage-link {
+    color: var(--main-text-color);
+    border: 1px solid;
+    font-size: .95em;
+    padding: .5em 1.5em;
+}
+.manage-link:hover, .manage-link:active {
+    color: #fff;
+}
+.manage-link.disabled:hover, .manage-link.disabled:active {
+    color: var(--main-text-color);
+}
+
+/* misc styles */
+svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+.disabled {
+    opacity: .5;
+}
+#lowlevel-container {
+    transition: transform .5s ease;
+}
+#lowlevel-container.zoom {
+    transform: scale(1.2);
+}
+#toplevel-header {
+    transition: transform .4s ease;
+}
+#toplevel-header.zoom {
+    transform: scale(1.2);
+}

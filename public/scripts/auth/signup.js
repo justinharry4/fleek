@@ -109,6 +109,20 @@ function getNextSignupPage(e){
         })
 }
 
+function putNewSlide(htmlData){
+    let $currentBody = $('body');
+    let $currentPageDivContainer = $('#signup-toplevel-container');
+    let $nextPage = $(htmlData);
+    let $nextPageDivContainer = $nextPage.filter('#signup-toplevel-container');
+    $nextPageDivContainer.addClass('off-screen-left');
+    $currentBody.html($nextPageDivContainer);
+    setTimeout(() => {
+        $nextPageDivContainer.addClass('on-screen-to-right');
+    }, 1);
+    $currentPageDivContainer.addClass('off-screen-left');
+    $currentPageDivContainer.removeClass('on-screen-to-right');
+}
+
 function selectSubPlan(e){
     let selectedSubPlan = $(this).data('sub-plan');
     let selectedClass = 'sub-plan-' + selectedSubPlan;
@@ -200,20 +214,6 @@ function getChoosePlanPage(e){
             setHistoryState();
             setEventHandlers();
         })
-}
-
-function putNewSlide(htmlData){
-    let $currentBody = $('body');
-    let $currentPageDivContainer = $('#signup-toplevel-container');
-    let $nextPage = $(htmlData);
-    let $nextPageDivContainer = $nextPage.filter('#signup-toplevel-container');
-    $nextPageDivContainer.addClass('off-screen-left');
-    $currentBody.html($nextPageDivContainer);
-    setTimeout(() => {
-        $nextPageDivContainer.addClass('on-screen-to-right');
-    }, 1);
-    $currentPageDivContainer.addClass('off-screen-left');
-    $currentPageDivContainer.removeClass('on-screen-to-right');
 }
 
 function toggleRequiredInputMessage(e){

@@ -1,8 +1,7 @@
 <%- include('../../partials/head') %>
-    <link rel="stylesheet" href="/css/general.css">
     <link rel="stylesheet" href="/css/components/checkbox.css">
-    <link rel="stylesheet" href="/css/auth.css">
-    <script src="/scripts/jquery.js"></script>
+    <link rel="stylesheet" href="/css/auth/auth.css">
+    <script src="/scripts/modules/jquery.js"></script>
     <script src="/scripts/auth/signin.js"></script>
 </head>
 <body>
@@ -33,7 +32,6 @@
                     <fieldset id="form-signin-remember-wrapper" class="flex-wrapper">
                         <label for="form-signin-checkbox" class="custom-checkbox-container">
                             <%- include('../../components/checkbox', {checkboxName: 'remember-user', checkboxId: 'form-signin-checkbox', checkboxValue: 'true'}) %>
-                            <!-- <input type="checkbox" name="remember-user" value="true" id="form-signin-checkbox"> -->
                             Remember me
                         </label>
                         <span><a href="">Need help?</a></span>
