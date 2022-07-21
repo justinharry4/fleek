@@ -2,9 +2,12 @@
 
 /* CUSTOM CHECKBOX STYLES */
 /* variables */
-.custom-checkbox-wrapper {
+:root {
     --custom-checkbox-wrapper-width: 20px;
-    --checkmark-width: 3px
+    --custom-checkbox-wrapper-border-color: #0c0b0b;
+    --custom-checkbox-wrapper-bg: transparent;
+    --checkmark-width: 3px;
+    --checkmark-color: #1662d4;
 }
 
 .custom-checkbox-wrapper .native-checkbox {
@@ -12,11 +15,12 @@
 }
 .custom-checkbox-wrapper {
     display: inline-block;
-    border: 1px solid #0c0b0b;
+    border: 1px solid var(--custom-checkbox-wrapper-border-color);
     width: var(--custom-checkbox-wrapper-width);
     height: var(--custom-checkbox-wrapper-width);
     position: relative;
     margin-right: .5em;
+    background-color: var(--custom-checkbox-wrapper-bg);
 }
 .custom-checkmark {
     width: calc(0.6 * var(--custom-checkbox-wrapper-width));
@@ -34,6 +38,17 @@
     display: flex;
 }
 .checked-custom {
-    border-left-color: #1662d4;
-    border-bottom-color: #1662d4;
+    border-left-color: var(--checkmark-color);
+    border-bottom-color: var(--checkmark-color);
 }
+
+/* USAGE NOTES
+To override the default styles here, use the declaration block:
+
+.custom-checkbox-wrapper {
+    --custom-checkbox-wrapper-width: `checkbox width`;
+    --checkmark-width: `checkmark thickness`;
+    --checkmark-color: `checkmark color`;
+    --custom-checkbox-wrapper-border-color: `checkbox border color`;
+    --custom-checkbox-wrapper-bg: `checkbox background color`;
+} */

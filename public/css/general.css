@@ -45,6 +45,10 @@ tfoot, tr, th, td {
 th, td {
     padding: 0px;
 }
+hr {
+    margin: 0em;
+    border: 1px solid #fff;
+}
 
 /* general styles */
 body {

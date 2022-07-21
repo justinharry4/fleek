@@ -1,4 +1,93 @@
 @charset "utf-8";
 
+/* background & header styles */
 @import url('/css/content/content.css');
 
+/* variables */
+:root {
+    --main-text-color: #9e9a9a;
+}
+.custom-checkbox-wrapper {
+    --custom-checkbox-wrapper-width: 28px;
+    --custom-checkbox-wrapper-border-color: #666565;
+    --checkmark-width: 2px;
+    --checkmark-color: #e7e4e4;;
+}
+
+/* main styles */
+.main-wrapper {
+    width: 33em;
+    margin: 5.5em auto 0em;
+    text-align: left;
+}
+.addProfile-heading {
+    font-weight: normal;
+    font-size: 3.3em;
+    margin-bottom: .3em;
+}
+.addProfile-subheading {
+    color: #9e9a9a;
+    font-weight: normal;
+    font-size: .99em;
+}
+.line-div {
+    margin: .5em 0em;
+}
+.input-section-hr {
+    margin: 1em 0em;
+    opacity: .2;
+}
+.profile-photo {
+    height: 7em;
+    border-radius: 4px;
+}
+.input-section-div img {
+    margin-right: 1.2em;
+}
+.profile-form {
+    align-items: center;
+    flex: 1 1 auto;
+}
+.profile-form input {
+    margin-right: .8em;
+    height: 2em;
+    flex: 1 1 auto;
+    color: #fff;
+    background-color: #949191;
+    padding: 0em 1em;
+    /* cursor: pointer; */
+}
+.profile-form input::placeholder {
+    color: #e7e4e4;
+}
+.options-div {
+    margin-top: 2em;
+}
+.option-button {
+    margin-right: 1em;
+    padding: .5em 1.5em;
+    font-size: .95em;
+}
+.continue-button {
+    color: #000;
+    background-color: #fff;
+}
+.continue-button:hover, .continue-button:active {
+    color: #fff;
+    background-color: var(--native-color);
+}
+.cancel-button {
+    color: var(--main-text-color);
+    border: 1px solid;
+}
+.cancel-button:hover, .cancel-button:active {
+    color: #fff;
+}
+
+/* misc styles */
+#lowlevel-container {
+    transition: transform .5s ease;
+}
+#lowlevel-container.zoom {
+    transform: scale(1.2);
+}

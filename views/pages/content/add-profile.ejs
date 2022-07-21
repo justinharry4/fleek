@@ -1,9 +1,9 @@
 <%- include('../../partials/head') %>
-    <link rel="stylesheet" href="/css/components/checkbox.css">
+    <link rel="stylesheet" href="/css/components/checkbox.css" data-sheetType="custom">
     <link rel="stylesheet" href="/css/content/add-profile.css">
-    <script>
-        console.log('security!')
-    </script>
+    <script src="/scripts/modules/jquery.js"></script>
+    <script src="/scripts/components/checkbox.js"></script>
+    <script src="/scripts/content/add-profile.js" type="module"></script>
 </head>
 <body>
     <div id="toplevel-container">
@@ -14,24 +14,26 @@
                 <h2 class="addProfile-heading">Add Profile</h2>
                 <h3 class="addProfile-subheading">
                     <% if (profiles.length > 0) { %>
-                        Add a profile for another person watching watching Fleek
+                        Add a profile for another person watching watching Fleek.
                     <% } else { %>
-                        Add a profile to start watching Fleek
+                        Add a profile to start watching Fleek.
                     <% } %>
                 </h3>
                 <hr class="input-section-hr">
-                <div class="flex-wrapper">
-                    <img src="/images/def-profile-photo.png" alt="profile photo">
+                <div class="flex-wrapper input-section-div">
+                    <img class="profile-photo" src="/images/def-profile-photo.png" alt="profile photo">
                     <form action="/profile/create" method="POST" class="profile-form flex-wrapper">
                         <input type="text" name="profileName" placeholder="Name">
-                        <%- include('../../components/checkbox', { checkboxName: 'kid', checkboxId: 'kid-checkbox', checkboxValue: 'true' }) %>
-                        Kid?
+                        <label for="kid-checkbox" class="custom-checkbox-container kidCheckbox-label">
+                            <%- include('../../components/checkbox', { checkboxName: 'kid', checkboxId: 'kid-checkbox', checkboxValue: 'true' }) %>
+                            Kid?
+                        </label>
                     </form>
                 </div>
                 <hr class="input-section-hr">
                 <div class="options-div flex-wrapper">
-                    <button class="cancel-button">Continue</button>
-                    <button class="cancel">Cancel</button>
+                    <button type="button" class="continue-button option-button">Continue</button>
+                    <button type="button" class="cancel-button option-button">Cancel</button>
                 </div>
             </div>
         </div>

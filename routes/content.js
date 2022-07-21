@@ -17,7 +17,7 @@ router.get('/profile',
     contentController.getProfile,
 );
 
-router.get('/addprofile', 
+router.get('/profile/addprofile', 
     authUtil.checkAuth,
     contentController.getAddProfile,
 )

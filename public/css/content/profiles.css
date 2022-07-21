@@ -1,6 +1,13 @@
 @charset "utf-8";
 
+/* background & header styles */
 @import url('/css/content/content.css');
+
+/* variables */
+:root {
+    --main-text-color: #9e9a9a;
+    --profile-highlight-color: #dfd9d9;
+}
 
 /* main styles */
 .main-wrapper {

@@ -1,5 +1,5 @@
 initializeCheckbox()
-
+console.log('checkbox script loaded!')
 function initializeCheckbox(){
     let $nativeCheckbox = $('.custom-checkbox-wrapper .native-checkbox');
     let $customCheckmark = $('.custom-checkbox-wrapper .custom-checkmark');
@@ -12,6 +12,7 @@ function initializeCheckbox(){
 function setCheckBoxHandlers(){
     let $checkboxLabel = $('.custom-checkbox-wrapper').closest('label.custom-checkbox-container');
     $checkboxLabel.on('click', toggleCheckbox);
+
     let $nativeCheckbox = $('.custom-checkbox-wrapper .native-checkbox');
     $nativeCheckbox.on('click', preventNativeClick);
 }
