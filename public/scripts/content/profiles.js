@@ -1,184 +1,46 @@
+import { PageManager } from '../modules/page.js';
+
+let source = '/scripts/content/profiles.js';
+let mainFragmentName = 'profiles';
+
 $(initializePage);
 
-// INITIALIZATION 
+// INITIALIZATION
 function initializePage(){
-    $(window).on('popstate', showPageInHistory);
-    window.stateData = {};
+    let $currentScript = $('script').filter(`[src="${source}"]`);
+    let fetchMethod = $currentScript.data('fetchmethod');
 
-    let $lowDiv = $('#lowlevel-container');
-    let $styleSheetLinks = $('link[rel="stylesheet"]');
-    let $scripts = $('script');
+    console.log('FMETHOD', fetchMethod);
 
-    let stateElements = { 
-        containerDiv: $lowDiv,
-        styleSheetLinks: $styleSheetLinks,
-        scripts: $scripts
-    };
-
-    let fragmentName = $lowDiv.data('fragment-name');
-    let stateObject = { ref: fragmentName };
-    window.stateData[fragmentName] = stateElements;
-    history.replaceState(stateObject, '');
-
-    setTimeout(() => $lowDiv.removeClass('zoom'), 1);
+    let page = new PageManager();
+    if (fetchMethod === 'native'){
+        PageManager.setWindowEventListeners();
+        page.saveState('#lowlevel-container');
+        setTimeout(() => $('#lowlevel-container').removeClass('zoom'), 1);
+    }
 
     setEventHandlers();
+
+    PageManager.triggerInitWindowEvents(
+        mainFragmentName,
+        page,
+        showPageInHistory,
+        setEventHandlers,
+    );
+}
+
+// POPSTATE EVENT HANDLER
+async function showPageInHistory(page){
+    console.log('profiles history')
+
+    try {
+        await PageManager.showHistory(page, '#lowlevel-container');
+    } catch(error){
+        throw error;
+    }
 }
 
 // UTILITY FUNCTIONS
-function setHistoryState(){
-    let $lowDiv = $('#lowlevel-container');
-    let $styleSheetLinks = $('link[rel="stylesheet"]');
-    let $scripts = $('script');
-
-    let stateElements = { 
-        containerDiv: $lowDiv,
-        styleSheetLinks: $styleSheetLinks,
-        scripts: $scripts
-    };
-
-    let fragmentName = $lowDiv.data('fragment-name');
-    let stateObject = { ref: fragmentName };
-    window.stateData[fragmentName] = stateElements;
-    history.pushState(stateObject, '');
-}
-
-function startPageLoad(stateElements, levelSelector, setHistory){
-    let $newStyleSheetLinks = stateElements.styleSheetLinks;
-    let $newScripts = stateElements.scripts;
-    let $newContainerDiv = stateElements.containerDiv;
-
-    let $styleSheetLinks = $('link[rel="stylesheet"]');
-    let $scripts = $('script');
-    let $containerDiv = $(levelSelector);
-    
-    let newResources = [$newStyleSheetLinks, $newScripts];
-    let nonRepeatedLinks = [];
-    let existingLinks = [];
-    let nonRepeatedScripts = [];
-    let existingScripts = [];
-    for (let [i, $newResourceElements] of newResources.entries()){
-        let $resources, attr, nonRepeated, existing;
-        if (i === 0){
-            attr = 'href'
-            $resources = $styleSheetLinks;
-            nonRepeated = nonRepeatedLinks;
-            existing = existingLinks;
-        } else {
-            attr = 'src'
-            $resources = $scripts;
-            nonRepeated = nonRepeatedScripts;
-            existing = existingScripts;
-        }
-
-        $newResourceElements.each((index, element) => {
-            let present = false;
-            let newResourceURL = $(element).attr(attr);
-
-            for (let resource of $resources.get()){
-                let resourceURL = $(resource).attr(attr)
-                if (newResourceURL === resourceURL){
-                    present = true;
-                    break;
-                }
-            }
-            if (present){
-                existing.push(element);
-            } else {
-                nonRepeated.push(element);
-            }
-        })
-    }
-
-    let completePageLoadArgs = {
-        $styleSheetLinks,
-        $scripts,
-        $newContainerDiv, 
-        $containerDiv, 
-        nonRepeatedScripts,
-        existingLinks,
-        existingScripts,
-    };
-
-    let linkLoadCount = 0;
-    if (nonRepeatedLinks.length > 0){
-        let fired = false;
-        let timeoutID = setTimeout(() => {
-            if (!fired){
-                completePageLoad(completePageLoadArgs, setHistory);
-            }
-        }, 200);
-
-        $(nonRepeatedLinks).on('load', function() {
-            linkLoadCount++;
-            if (linkLoadCount === nonRepeatedLinks.length && !fired){
-                clearTimeout(timeoutID);
-                fired = true;
-                completePageLoad(completePageLoadArgs, setHistory);
-            }
-        });
-    }
-    nonRepeatedLinks.forEach(element => {
-        $('head').append(element);
-    });
-    $containerDiv.remove();
-
-    if (!(nonRepeatedLinks.length > 0)){
-        completePageLoad(completePageLoadArgs, setHistory);
-    }
-}
-
-function completePageLoad(args, setHistory){
-    let { $styleSheetLinks, $scripts, $newContainerDiv } = args;
-    let { $containerDiv, nonRepeatedScripts, existingLinks } = args;
-    let { existingScripts } = args;
-
-    $('#toplevel-container').append($newContainerDiv);
-    setTimeout(() => $newContainerDiv.removeClass('zoom'), 10);
-    $containerDiv.addClass('zoom');
-
-    nonRepeatedScripts.forEach(element => {
-        let $element = $(element);
-        let src = $(element).attr('src');
-        let $script = $('<script>').attr('src', src);
-    
-        $('head').append($script);
-        $element.remove();
-    });
-
-    let nonRequiredLinks = $styleSheetLinks.get().filter(element => {
-        let required = false;
-        for (let e of existingLinks){
-            if ($(element).attr('href') === $(e).attr('href')){
-                required = true;
-                break;
-            }
-        }
-        return !required;
-    })
-    let jqueryUrl = '/scripts/modules/jquery.js';
-    let mainScriptUrl = '/scripts/content/profiles.js';
-    let nonRequiredScripts = $scripts.get().filter(element => {
-        let required = false;
-        let src = $(element).attr('src');
-        for (let e of existingScripts){
-            if (src === $(e).attr('src') || src === jqueryUrl || src === mainScriptUrl){
-                required = true;
-                break;
-            }
-        }
-        return !required;
-    })
-
-    $(nonRequiredLinks).remove();
-    $(nonRequiredScripts).remove();
-
-    if (setHistory){
-        setHistoryState();
-    }
-    setEventHandlers();
-}
-
 function adjustAddProfileHoverState(){
     let $addProfileWrapper = $('.add-profile-wrapper');
     let $addProfileWrapperHover = $('.add-profile-wrapper:hover');
@@ -187,32 +49,26 @@ function adjustAddProfileHoverState(){
     let isHighlighted = $profileElement.hasClass('highlight');
     if ($addProfileWrapperHover.length === 0 && isHighlighted){
         $addProfileWrapper.trigger('mouseleave');
-        console.log('mouseleave triggered')
     }
 }
 
 // SET EVENT HANDLERS
 function setEventHandlers(){
     let $profileWrappers = $('.profile-wrapper');
+    $profileWrappers.off('mouseenter mouseleave');
     $profileWrappers.on('mouseenter', highlightProfile);
     $profileWrappers.on('mouseleave', unhighlightProfile);
 
     let $addProfileWrapper = $('.add-profile-wrapper');
+    $addProfileWrapper.off('click');
     $addProfileWrapper.on('click', showAddProfile);
 
     adjustAddProfileHoverState();
+
+    console.log('profiles handlers set')
 }
 
 // EVENT HANDLERS
-// window event handlers
-function showPageInHistory(e){
-    let fragmentName = history.state.ref;
-    let stateElements = window.stateData[fragmentName];
-
-    startPageLoad(stateElements, '#lowlevel-container');
-}
-
-// document event handlers
 function highlightProfile(e){
     let $profileElements = $(this).find('> *, svg path');
     let $profileImg = $(this).find('img');
@@ -244,9 +100,33 @@ async function showAddProfile(e){
             styleSheetLinks: $styleSheetLinks,
             scripts: $scripts
         };
-        let setHistory = true
-        startPageLoad(stateElements, '#lowlevel-container', setHistory);
+
+        let $eventGateElement = $('<div>');
+
+        $eventGateElement.on('customSendPage:', async (e) => {
+            let page = e.eventData.page;
+            try {
+                await page.loadPage(
+                    stateElements,
+                    '#lowlevel-container',
+                    'ajax',
+                    true
+                );
+            } catch(error){
+                console.log(error.message);
+                PageManager.showPageLoadError(error.message);
+            }
+        });
+
+        let requestPageEvent = $.Event('customRequestPage:');
+        requestPageEvent.eventData = {
+            element: $eventGateElement,
+            fragmentName: mainFragmentName
+        };
+
+        $(window).trigger(requestPageEvent);
     } catch (jqXHR){
         console.log('FAIL', jqXHR);
     }
 }
+

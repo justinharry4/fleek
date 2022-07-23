@@ -1,12 +1,12 @@
-initializeCheckbox()
-console.log('checkbox script loaded!')
 function initializeCheckbox(){
     let $nativeCheckbox = $('.custom-checkbox-wrapper .native-checkbox');
-    let $customCheckmark = $('.custom-checkbox-wrapper .custom-checkmark');
+    // let $customCheckmark = $('.custom-checkbox-wrapper .custom-checkmark');
     $nativeCheckbox.get().forEach(checkbox => {
         checkbox.checked = false;
     })
     setCheckBoxHandlers();
+
+    console.log('checkbox init ran');
 }
 
 function setCheckBoxHandlers(){
@@ -39,3 +39,5 @@ function preventNativeClick(e){
     e.stopPropagation();
     e.preventDefault();
 }
+
+export const checkboxInit = initializeCheckbox;
