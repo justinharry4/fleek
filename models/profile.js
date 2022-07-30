@@ -20,6 +20,23 @@ const profileSchema = Schema({
         type: ObjectId,
         required: true
     },
+    setupComplete: {
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    settings: {
+        languages: [
+            {
+                type: String,
+            }
+        ]
+    },
+    list: [
+        {
+            type: ObjectId
+        }
+    ],
     recentlyWatchedMovies: [
         {
             type: ObjectId,

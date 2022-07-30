@@ -2,13 +2,13 @@
 
 /* variables */
 :root {
-    --bakground-color: #201f1f;
+    --background-color: #201f1f;
 }
 
 /* background styles */
 body {
     color: #fff;
-    background-color: var(--bakground-color);
+    background-color: var(--background-color);
 }
 
 /* header styles */

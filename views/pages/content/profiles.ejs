@@ -4,10 +4,10 @@
     <script src="/scripts/content/profiles.js" type="module" data-fetchmethod="native"></script>
 </head>
 <body>
-    <div id="toplevel-container">
+    <div id="toplevel-container" data-fragment-name="profiles">
         <%- include('../../partials/header') %>
         </header>
-        <div id="lowlevel-container" class="zoom" data-fragment-name="profiles">
+        <div id="lowlevel-container" class="transZero zoom" data-fragment-name="profiles" data-transition-class="zoom">
             <div class="main-wrapper">
                 <h2 class="profiles-heading">
                     <% if (profiles.length === 0) { %>
@@ -20,7 +20,7 @@
                     <% if (profiles.length > 0) { %>
                         <ul class="profiles-list flex-wrapper">
                             <% for (let profile of profiles) { %>
-                                <li class="profile-wrapper">
+                                <li class="profile-wrapper" data-profile-id="<%= profile._id %>">
                                     <div>
                                         <img class="profile-photo" src="<%= profile.profilePhotoUrl %>" alt="profile photo">
                                     </div>
@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="manage-link-wrapper">
-                    <a class="manage-link <%= (profiles.length === 0) ? 'disabled': '' %>" <%= (profiles.length > 0) ? 'href=""' : '' %>>Manage Profiles</a>
+                    <a class="manage-link <%= (profiles.length === 0) ? 'disabled': '' %>" <%= (profiles.length > 0) ? 'href=clocks' : '' %>>Manage Profiles</a>
                 </div>
             </div>
         </div>

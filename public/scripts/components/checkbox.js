@@ -1,20 +1,29 @@
 function initializeCheckbox(){
-    let $nativeCheckbox = $('.custom-checkbox-wrapper .native-checkbox');
-    // let $customCheckmark = $('.custom-checkbox-wrapper .custom-checkmark');
-    $nativeCheckbox.get().forEach(checkbox => {
-        checkbox.checked = false;
+    let $nativeCheckboxes = $('.custom-checkbox-wrapper .native-checkbox');
+    $nativeCheckboxes.each((i, nativeCheckbox) => {
+        let $customCheckmark = $(nativeCheckbox).siblings('.custom-checkmark');
+        if (nativeCheckbox.checked){
+            $customCheckmark.addClass('checked-custom');
+        } else {
+            $customCheckmark.removeClass('checked-custom');
+        }
     })
     setCheckBoxHandlers();
-
-    console.log('checkbox init ran');
 }
 
 function setCheckBoxHandlers(){
-    let $checkboxLabel = $('.custom-checkbox-wrapper').closest('label.custom-checkbox-container');
-    $checkboxLabel.on('click', toggleCheckbox);
+    let $checkboxLabels = $('.custom-checkbox-wrapper')
+        .closest('label.custom-checkbox-container')
+        .filter((i, label) => {
+            let $nativeCheckbox = $(label).find('.native-checkbox');
+            let isDisabled = $nativeCheckbox.attr('disabled') === 'disabled';
+            return !isDisabled;
+        });
+    $checkboxLabels.on('click', toggleCheckbox);
 
-    let $nativeCheckbox = $('.custom-checkbox-wrapper .native-checkbox');
-    $nativeCheckbox.on('click', preventNativeClick);
+    let $nativeCheckboxes = $('.custom-checkbox-wrapper .native-checkbox')
+        .filter(':not([disabled])');
+    $nativeCheckboxes.on('click', preventNativeClick);
 }
 
 function toggleCheckbox(e){

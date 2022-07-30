@@ -17,14 +17,34 @@ router.get('/profile',
     contentController.getProfile,
 );
 
-router.get('/profile/addprofile', 
-    authUtil.checkAuth,
-    contentController.getAddProfile,
-)
-
 router.get('/profiles',
     authUtil.checkAuth,
     contentController.getProfiles
-)
+);
+
+router.get('/profiles/addprofile', 
+    authUtil.checkAuth,
+    contentController.getAddProfile,
+);
+
+router.post('/profiles/create',
+    authUtil.checkAuth,
+    contentController.postCreateProfile,
+);
+
+router.get('/profiles/languagesetup',
+    authUtil.checkAuth,
+    contentController.getLanguageSetup,
+);
+
+router.post('/profiles/languagesetup',
+    authUtil.checkAuth,
+    contentController.postLanguageSetup,
+);
+
+router.get('/profiles/setup',
+    authUtil.checkAuth,
+    contentController.getProfileSetup,
+);
 
 module.exports = router;

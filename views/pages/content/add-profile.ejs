@@ -1,15 +1,14 @@
 <%- include('../../partials/head') %>
-    <link rel="stylesheet" href="/css/components/checkbox.css">
+    <!-- <link rel="stylesheet" href="/css/components/checkbox.css"> -->
     <link rel="stylesheet" href="/css/content/add-profile.css">
     <script src="/scripts/modules/jquery.js"></script>
-    <script src="/scripts/components/checkbox.js" type="module"></script>
     <script src="/scripts/content/add-profile.js" type="module" data-fetchmethod="native"></script>
 </head>
 <body>
-    <div id="toplevel-container">
+    <div id="toplevel-container" data-fragment-name="addProfile">
         <%- include('../../partials/header') %>
         </header>
-        <div id="lowlevel-container" class="zoom" data-fragment-name="addProfile">
+        <div id="lowlevel-container" class="transZero zoom" data-fragment-name="addProfile" data-transition-class="zoom">
             <div class="main-wrapper">
                 <h2 class="addProfile-heading">Add Profile</h2>
                 <h3 class="addProfile-subheading">
@@ -22,11 +21,12 @@
                 <hr class="input-section-hr">
                 <div class="flex-wrapper input-section-div">
                     <img class="profile-photo" src="/images/def-profile-photo.png" alt="profile photo">
-                    <form action="/profile/create" method="POST" class="profile-form flex-wrapper">
+                    <form action="/profiles/create" method="POST" class="profile-form flex-wrapper">
                         <input type="text" name="profileName" placeholder="Name">
-                        <label for="kid-checkbox" class="custom-checkbox-container kidCheckbox-label">
-                            <%- include('../../components/checkbox', { checkboxName: 'kid', checkboxId: 'kid-checkbox', checkboxValue: 'true' }) %>
+                        <label for="kid-checkbox" class="custom-checkbox-container kidCheckbox-label overlay-wrapper">
+                            <%- include('../../components/checkbox', { checkboxName: 'kid', checkboxId: 'kid-checkbox', checkboxValue: 'kid' }) %>
                             Kid?
+                            <span class="kidLabelHint overlay">If selected, this profile will only see TV shows and movies rated for ages 12 and under.</span>
                         </label>
                     </form>
                 </div>

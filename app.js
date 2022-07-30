@@ -52,7 +52,7 @@ app.use(errorRoutes);
 
 // ERROR HANDLING MIDDLEWARE
 app.use((error, req, res, next) => {
-    console.log('INSIDE ERROR HANDLER', error);
+    console.log('INSIDE ERROR HANDLER\n', error);
     res.redirect('/server-error');
 })
 

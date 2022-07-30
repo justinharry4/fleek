@@ -1,0 +1,57 @@
+<%- include('../../partials/head') %>
+    <link rel="stylesheet" href="/css/content/language-setup.css">
+    <script src="/scripts/modules/jquery.js"></script>
+    <script src="/scripts/content/language-setup.js" fetchMethod="native" type="module"></script>
+</head>
+<body>
+    <div id="toplevel-container" data-fragment-name="languageSetup">
+        <%- include('../../partials/header') %>
+        <a class="help-link" href="">Help</a>
+        </header>
+        <div id="lowlevel-container" data-fragment-name="languageSetup">
+            <div class="main-wrapper flex-wrapper" data-prodileId="<%= profile._id %>">
+                <div class="heading-wrapper">
+                    <h2 class="step-no">Step <span class="text-bold">4</span> of <span class="text-bold">5</span></h2>
+                    <h3 class="step-heading">Which languages do you like to watch shows and movies in?</h3>
+                    <p>Letting us know helps setup your audio and subtitles.<br><span class="text-bold">You can always change these.</span></p>
+                </div>
+                <div class="languages-wrapper">
+                    <div class="default-language-wrapper flex-wrapper">
+                        <label class="custom-checkbox-container" for="defaultLang-checkbox">
+                            <%- include('../../components/checkbox', {
+                                checkboxName: 'defaultLang',
+                                checkboxId: 'defaultLang-checkbox',
+                                checkboxValue: 'english',
+                                checked: true,
+                                disabled: true,
+                            }) %>
+                            English
+                        </label>
+                    </div>
+                    <div class="other-languages-container flex-wrapper">
+                        <% for (let [i1, column] of langData.entries()) { %>
+                            <ul class="languages-column-div flex-wrapper">
+                                <% for (let [i2, lang] of column.entries()) { %>
+                                    <li class="language-wrapper flex-wrapper">
+                                        <label for="lang<%= i1+1 %>-<%= i2+1 %>-checkbox" class="custom-checkbox-container">
+                                            <%- include('../../components/checkbox', {
+                                                checkboxName: 'otherLang',
+                                                checkboxId: 'lang'+(i1+1)+'-'+(i2+1)+'-checkbox',
+                                                checkboxValue: lang,
+                                                checked: false,
+                                                disabled: false,
+                                            }) %>
+                                            <%= lang %>
+                                        </label>
+                                    </li>
+                                <% } %> 
+                            </ul>
+                        <% } %>
+                    </div>
+                    <input type="submit" value="Next" class="next-button native-bg">
+                </div>
+            </div>
+            <%- include('../../partials/auth/footer') %>
+        </div>
+    </div>
+<%- include('../../partials/end') %>

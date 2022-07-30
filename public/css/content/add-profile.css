@@ -1,5 +1,8 @@
 @charset "utf-8";
 
+/* checkbox component styles */
+@import url('/css/components/checkbox.css');
+
 /* background & header styles */
 @import url('/css/content/content.css');
 
@@ -11,7 +14,7 @@
     --custom-checkbox-wrapper-width: 28px;
     --custom-checkbox-wrapper-border-color: #666565;
     --checkmark-width: 2px;
-    --checkmark-color: #e7e4e4;;
+    --checkmark-color: #949191;
 }
 
 /* main styles */
@@ -72,9 +75,12 @@
     color: #000;
     background-color: #fff;
 }
-.continue-button:hover, .continue-button:active {
+.continue-button:hover, .continue-button.ready {
     color: #fff;
     background-color: var(--native-color);
+}
+.continue-button.ready:active {
+    background-color: #f83a3a;
 }
 .cancel-button {
     color: var(--main-text-color);
@@ -82,6 +88,37 @@
 }
 .cancel-button:hover, .cancel-button:active {
     color: #fff;
+}
+.kidLabelHint {
+    background-color: #fff;
+    color: #000;
+    padding: 1em;
+    width: 20em;
+    bottom: 130%;
+    font-size: .8em;
+    text-align: center;
+    opacity: 0;
+    transition: opacity .5s ease;
+    transition-delay: .2s;
+    transform: translateX(-50%);
+    margin-left: 4em;
+}
+.kidLabelHint.visible {
+    opacity: 1;
+    transition-delay: 1.3s;
+}
+.kidLabelHint::after {
+    content: 't';
+    width: 20px;
+    height: 20px;
+    color: #fff;
+    background-color: inherit;
+    position: absolute;
+    left: 50%;
+    bottom: -13%;
+    transform-origin: 0% 100%;
+    transform: rotate(-45deg);
+    z-index: -1;
 }
 
 /* misc styles */

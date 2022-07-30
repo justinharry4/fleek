@@ -41,14 +41,3 @@
     border-left-color: var(--checkmark-color);
     border-bottom-color: var(--checkmark-color);
 }
-
-/* USAGE NOTES
-To override the default styles here, use the declaration block:
-
-.custom-checkbox-wrapper {
-    --custom-checkbox-wrapper-width: `checkbox width`;
-    --checkmark-width: `checkmark thickness`;
-    --checkmark-color: `checkmark color`;
-    --custom-checkbox-wrapper-border-color: `checkbox border color`;
-    --custom-checkbox-wrapper-bg: `checkbox background color`;
-} */
