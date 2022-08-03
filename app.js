@@ -13,13 +13,12 @@ const errorRoutes = require('./routes/error');
 const adminRoutes = require('./routes/admin');
 
 const generalController = require('./controllers/general');
-
 const fileUtil = require('./util/file');
 
 const app = express();
 
 app.set('view engine', 'ejs');
-app.set('views', 'views');
+app.set('views', 'views'); 
 
 // configurations
 const PORT = 15000;

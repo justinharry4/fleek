@@ -1,23 +1,23 @@
 <%- include('../../partials/head') %>
     <link rel="stylesheet" href="/css/content/language-setup.css">
-    <script src="/scripts/modules/jquery.js"></script>
-    <script src="/scripts/content/language-setup.js" fetchMethod="native" type="module"></script>
+    <script src="/scripts/content/language-setup.js" data-fetchmethod="native" type="module"></script>
 </head>
 <body>
     <div id="toplevel-container" data-fragment-name="languageSetup">
         <%- include('../../partials/header') %>
         <a class="help-link" href="">Help</a>
         </header>
-        <div id="lowlevel-container" data-fragment-name="languageSetup">
-            <div class="main-wrapper flex-wrapper" data-prodileId="<%= profile._id %>">
+        <div id="lowlevel-container" class="transZero offScreenRight" data-transition-class="offScreenRight">
+            <div class="main-wrapper flex-wrapper">
                 <div class="heading-wrapper">
                     <h2 class="step-no">Step <span class="text-bold">4</span> of <span class="text-bold">5</span></h2>
                     <h3 class="step-heading">Which languages do you like to watch shows and movies in?</h3>
                     <p>Letting us know helps setup your audio and subtitles.<br><span class="text-bold">You can always change these.</span></p>
                 </div>
-                <div class="languages-wrapper">
+                <form class="languages-wrapper languages-form" action="/profiles/languagesetup", method="POST">
                     <div class="default-language-wrapper flex-wrapper">
                         <label class="custom-checkbox-container" for="defaultLang-checkbox">
+                            <input type="hidden" name="defaultLang" value="english">
                             <%- include('../../components/checkbox', {
                                 checkboxName: 'defaultLang',
                                 checkboxId: 'defaultLang-checkbox',
@@ -49,9 +49,10 @@
                         <% } %>
                     </div>
                     <input type="submit" value="Next" class="next-button native-bg">
-                </div>
+                    <input type="hidden" name="profileId" value="<%- profileId %>">
+                </form>
             </div>
-            <%- include('../../partials/auth/footer') %>
+            <%- include('../../partials/footer') %>
         </div>
     </div>
 <%- include('../../partials/end') %>

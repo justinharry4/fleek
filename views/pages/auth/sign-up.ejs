@@ -1,9 +1,8 @@
 <%- include('../../partials/head') %>
     <link rel="stylesheet" href="/css/auth/auth.css">
     <link rel="stylesheet" href="/css/components/checkbox.css">
-    <script src="/scripts/modules/jquery.js"></script>
     <script src="/scripts/auth/signup.js"></script>
-    <!-- <script src="/scripts/components/checkbox.js"></script> -->
+    <script src="/scripts/components/checkbox.js"></script>
 </head>
 <body>
     <div id="signup-toplevel-container">
@@ -50,7 +49,13 @@
                                 </ul>
                             </fieldset>
                             <label class="signup-sub-main-text custom-checkbox-container">
-                                <%- include('../../components/checkbox', {checkboxName: 'fleek-special-offers', checkboxId: 'signup-form-offers-checkbox', checkboxValue: 'true'}) %>
+                                <%- include('../../components/checkbox', {
+                                    checkboxName: 'fleek-special-offers', 
+                                    checkboxId: 'signup-form-offers-checkbox', 
+                                    checkboxValue: 'true',
+                                    checked: false,
+                                    disabled: false,
+                                }) %>
                                 Please do not email me Fleek special offers.
                             </label>
                     <% } %>
@@ -257,6 +262,6 @@
                 </div>
             </div>
         <% } %>
-        <%- include('../../partials/auth/footer') %>
+        <%- include('../../partials/footer') %>
     </div>
 <%- include('../../partials/end') %>

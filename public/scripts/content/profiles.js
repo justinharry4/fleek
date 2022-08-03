@@ -10,10 +10,10 @@ function initializePage(){
     let $currentScript = $('script').filter(`[src="${source}"]`);
     let fetchMethod = $currentScript.data('fetchmethod');
 
-    let page = new PageManager();
+    let page = new PageManager(mainFragmentName);
     if (fetchMethod === 'native'){
         PageManager.setWindowEventListeners();
-        page.saveState('#toplevel-container');
+        page.saveState('#toplevel-container', null, '/profiles');
         setTimeout(() => $('#lowlevel-container').removeClass('zoom'), 1);
     }
 
@@ -38,14 +38,6 @@ async function showPageInHistory(page){
 
 // UTILITY FUNCTIONS
 function adjustAddProfileHoverState(){
-    // let $addProfileWrapper = $('.add-profile-wrapper');
-    // let $addProfileWrapperHover = $('.add-profile-wrapper:hover');
-
-    // let $profileElement = $($addProfileWrapper.find('> *').get(0));
-    // let isHighlighted = $profileElement.hasClass('highlight');
-    // if ($addProfileWrapperHover.length === 0 && isHighlighted){
-    //     $addProfileWrapper.trigger('mouseleave');
-    // }
 
     let $profileWrappers = $('.profile-wrapper');
 
@@ -99,7 +91,10 @@ async function getAddProfile(e){
         PageManager.loadPageFromHTML(
             HTMLStr,
             '#toplevel-container',
-            mainFragmentName
+            mainFragmentName,
+            true,
+            '/profiles/addprofile',
+            '/profiles/addprofile',
         );
     } catch (jqXHR){
         console.log('FAIL', jqXHR);
@@ -114,8 +109,10 @@ async function getBrowse(e){
         PageManager.loadPageFromHTML(
             HTMLStr,
             '#toplevel-container',
-            '/profiles/languagesetup',
             mainFragmentName,
+            true,
+            '/profiles/languagesetup',
+            '/profiles/languagesetup',
         );
     } catch(jqXHR){
         console.log('FAIL', jqXHR);

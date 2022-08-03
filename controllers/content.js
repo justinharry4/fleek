@@ -1,9 +1,15 @@
+// THIRD-PARTY MODULES
+
+// USER-DEFINED MODULES
 const Movie = require('../models/movie');
 const TvShow = require('../models/tvshow');
 const User = require('../models/user');
 const Profile = require('../models/profile');
+const TMDB = require('../database/tmdb');
 const fileUtil = require('../util/file');
+const modelUtil = require('../util/model');
 
+// CONTROLLER FUNCTIONS
 module.exports.getIndex = async (req, res, next) => {
     let regAccountCreated = req.session.regAccountCreated;
     let homePageDataPath = 'data/home.json';
@@ -26,47 +32,40 @@ module.exports.getIndex = async (req, res, next) => {
     }
 };
 
-async function getContent (profileId, req, res, next){
-    try {
-        let profile = await Profile.findById(profileId);
-        if (!profile){
-            return res.redirect('/browse');
-        }
-        if (!profile.setupComplete){
-            req.session.regProfileId = profile._id;
-            return exports.getLanguageSetup(req, res, next);
-        }
-
-        res.render('pages/content/browse', {
-            pageTitle: 'Fleek',
-            leadName: 'browse',
-        });
-    } catch(error){
-        next(err);
-    }
-}
-
 module.exports.getBrowse = async (req, res, next) => {
     let user = req.data.user;
-    let sProfileId = req.session.userProfileId;
-    let qProfileId = req.query.profileId;
+    let profileId = req.query.profileId || req.session.userProfileId;
 
     try {
-        if (qProfileId){
-            return getContent(qProfileId, req, res, next);
-        }
-
+        let profile = await Profile.findById(profileId);
         let isUserProfile;
-        let userProfilesStr = user.profiles.map(pid => pid.toString());
-        if (sProfileId){
-            isUserProfile = userProfilesStr.includes(sProfileId.toString());
+        if (profile){
+            isUserProfile = profile.user.toString() === user._id.toString();
         }
-        
-        if (!sProfileId || !isUserProfile){
+        if (!isUserProfile){
             return exports.getProfiles(req, res, next);
         }
 
-        getContent(sProfileId, req, res, next)
+        // getContent(sProfileId, req, res, next)
+        if (profile.setupStage === 0){
+            req.session.regProfileId = profile._id;
+
+            return res.redirect('/profiles/languagesetup');
+        }
+        if (profile.setupStage === 1){
+            req.session.regProfileId = profile._id;
+
+            return res.redirect('/profiles/setup');
+        }
+        if (profile.setupStage === 2){
+            req.session.userProfileId = profile._id;
+
+            return res.render('pages/content/browse', {
+                pageTitle: 'Fleek',
+                leadName: 'browse',
+                profile: profile,
+            });
+        }
     } catch (error){
         next(error);
     }
@@ -126,13 +125,13 @@ module.exports.postCreateProfile = async (req, res, next) => {
 
 module.exports.getLanguageSetup = async (req, res, next) => {
     let profileId = req.query.profileId || req.session.regProfileId;
-    
+
     try {
-        let validProfile = await Profile.findById(profileId);
-        if (!validProfile){
+        let profile = await Profile.findById(profileId);
+        if (!profile){
             return res.redirect('/browse');
         }
-
+        
         let languagesDataPath = 'data/languages.json';
         let languagesDataStr = await fileUtil.loadFile(languagesDataPath);
         let languagesData = JSON.parse(languagesDataStr);
@@ -160,24 +159,95 @@ module.exports.getLanguageSetup = async (req, res, next) => {
 };
 
 module.exports.postLanguageSetup = async (req, res, next) => {
-    
+    let user = req.data.user;
+    let profileId = req.body.profileId;
+    let defaultLang = req.body.defaultLang;
+    let otherLangs = [].concat(req.body.otherLang);
+
+    try {
+        let profile = await Profile.findById(profileId);
+        let isUserProfile;
+        if (profile){
+            isUserProfile = profile.user.toString() === user._id.toString();
+        }
+        if (!isUserProfile){
+            return res.redirect('/browse');
+        }
+        
+
+        profile.settings.defaultLanguage = defaultLang;
+        profile.settings.otherLanguages = otherLangs[0] ? otherLangs : [];
+        profile.setupStage = 1;
+        await profile.save();
+
+        req.session.regProfileId = profile._id;
+
+        res.redirect('/profiles/setup');
+    } catch(error){
+        next(error);
+    }
 };
 
-module.exports.getProfileSetup = async (req, res, next) => {
+module.exports.getProfileListSetup = async (req, res, next) => {
     let profileId = req.query.profileId || req.session.regProfileId;
     
     try {
-        let validProfile = await Profile.findById(profileId);
-        if (!validProfile){
+        let profile = await Profile.findById(profileId);
+        if (!profile){
             return res.redirect('/browse');
         }
+
+        let tvShowCount = 13;
+        let movieCount = 12;
+        let tvShows = await TvShow.find().limit(tvShowCount);
+        let movies = await Movie.find().limit(movieCount);
+        let relPathContent = tvShows.concat(movies);
+        let fullPathContent = relPathContent.map(doc => {
+            doc.coverPath = TMDB.imageBaseUrl + '/w92' + doc.coverPath;
+            return doc;
+        });
+
+        let authDataPath = 'data/auth.json';
+        let authDataString = await fileUtil.loadFile(authDataPath);
+        let authData = JSON.parse(authDataString);
+        let navList = authData.footerNavList;
 
         res.render('pages/content/setup', {
             pageTitle: 'Fleek',
             leadName: 'setup',
-            profileId: profileId
-        });
+            navList: navList,
+            profile: profile,
+            contentList: fullPathContent,
+        })
     } catch (error){
+        next(error);
+    }
+};
+
+module.exports.postProfileListSetup = async (req, res, next) => {
+    let user = req.data.user;
+    let profileId = req.body.profileId;
+    let selectedContentIds = req.body.contentId;
+
+    try {
+        let profile = await Profile.findById(profileId);
+        let isUserProfile;
+        if (profile){
+            isUserProfile = profile.user.toString() === user._id.toString();
+        }
+        if (!isUserProfile){
+            return res.redirect('/browse');
+        }
+
+        profile.list = [].concat(selectedContentIds);
+        profile.setupStage = 2;
+        await profile.save();
+
+        req.session.userProfileId = profile._id;
+        req.session.regProfileId = null;
+
+        res.redirect('/profiles/setup');
+    } catch(error){
         next(error);
     }
 };

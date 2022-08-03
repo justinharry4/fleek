@@ -107,9 +107,3 @@ svg {
 #lowlevel-container.zoom {
     transform: scale(1.2);
 }
-/* #toplevel-container {
-    transition: transform .5s ease;
-}
-#toplevel-container.zoom {
-    transform: scale(1.2);
-} */

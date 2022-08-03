@@ -44,7 +44,12 @@ router.post('/profiles/languagesetup',
 
 router.get('/profiles/setup',
     authUtil.checkAuth,
-    contentController.getProfileSetup,
+    contentController.getProfileListSetup,
+);
+
+router.post('/profiles/setup',
+    authUtil.checkAuth,
+    contentController.postProfileListSetup,
 );
 
 module.exports = router;

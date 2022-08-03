@@ -60,6 +60,9 @@ body {
 .flex-wrap {
     flex-wrap: wrap;
 }
+.grid-wrapper {
+    display: grid;
+}
 .native-bg {
     background-color: var(--native-color)
 }

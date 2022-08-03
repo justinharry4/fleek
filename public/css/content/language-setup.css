@@ -1,7 +1,10 @@
 @charset "UTF-8";
 
-/* imports */
+/* header, main, footer & misc styles */
+@import url('/css/content/setup-general.css');
+/* checkbox styles */
 @import url('/css/components/checkbox.css');
+/* footer styles */
 @import url('/css/general/footer1.css');
 
 /* variables */
@@ -14,42 +17,7 @@
     --custom-checkbox-wrapper-border-color: transparent;
 }
 
-/* header styles */
-.toplevel-header {
-    padding-left: 0%;
-    margin: 0% 15%;
-    border-bottom: 2px solid #eceaea;
-}
-.help-link {
-    font-weight: bold;
-    margin-left: auto;
-    align-self: center;
-}
-.help-link:hover, .help-link:active {
-    text-decoration: underline;
-}
-
 /* main styles */
-.main-wrapper {
-    margin: 1em 15% 8em;
-}
-.heading-wrapper {
-    flex: 0 0 43%;
-    margin-right: 7%;
-}
-.step-no {
-    font-weight: normal;
-    font-size: .85em;
-}
-.step-heading {
-    font-size: 2.5em;
-    font-weight: 800;
-}
-.heading-wrapper p {
-    font-size: .95em;
-    margin-top: 1em;
-    line-height: 1.5em;
-}
 .languages-wrapper {
     font-size: .96em;
     flex: 1 1 auto;
@@ -80,16 +48,3 @@
     display: block;
 }
 
-/* footer styles */
-footer {
-    background-color: #eceaea;
-    color: #776f6f;
-}
-footer nav ul {
-    font-size: .8em;
-}
-
-/* misc styles */
-a:hover {
-    text-decoration: underline;
-}

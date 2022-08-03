@@ -20,13 +20,18 @@ const profileSchema = Schema({
         type: ObjectId,
         required: true
     },
-    setupComplete: {
-        type: Boolean,
-        default: false,
+    setupStage: {
+        type: Number,
+        default: 0,
         required: true
     },
     settings: {
-        languages: [
+        defaultLanguage: {
+            type: String,
+            default: 'english',
+            required: true
+        },
+        otherLanguages: [
             {
                 type: String,
             }

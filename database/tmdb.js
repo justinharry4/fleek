@@ -7,12 +7,14 @@ const configUtil = require('../util/config');
 const fileUtil = require('../util/file');
 
 class TheMovieDB {
-    constructor(apiKey){
+    constructor(apiKey, contentSource){
         if (!apiKey){
             throw new Error('API Key is required to initialize TMDB');
         }
         this.key = apiKey;
         this.baseUrl = 'https://api.themoviedb.org/3';
+        this.imageBaseUrl = 'https://image.tmdb.org/t/p';
+        // poster_sizes = ["w92","w154","w185","w342","w500","w780","original"]
     
         this.movieProps = {};
         this.tvProps = {};
@@ -39,6 +41,10 @@ class TheMovieDB {
         }
 
         this._setTimeProperties();
+
+        if (contentSource === 'REMOTE'){
+            this.initializeDatabase();
+        }
     }
     
     _setTimeProperties(){
@@ -836,29 +842,29 @@ class TheMovieDB {
 
     async initializeDatabase(){
         try {
-        for (let categoryName in this.categories){
-            let interval = this.getTime(this.generalWriteInterval);
-            let writeMethod = this.categories[categoryName].method;
+            for (let categoryName in this.categories){
+                let interval = this.getTime(this.generalWriteInterval);
+                let writeMethod = this.categories[categoryName].method;
 
-            await writeMethod.call(this);
+                await writeMethod.call(this);
 
-            let intervalID = setInterval(() => {
-                writeMethod.call(this);
-            }, interval);
+                let intervalID = setInterval(() => {
+                    writeMethod.call(this);
+                }, interval);
 
-            this.categories[categoryName].intervalID = intervalID;
-            this.categories[categoryName].isIntervalGeneral = true;
-        }
+                this.categories[categoryName].intervalID = intervalID;
+                this.categories[categoryName].isIntervalGeneral = true;
+            }
 
-        let cleanInterval = this.getTime(this.generalWriteInterval) + (2 * this.time.MINUTE);
-        let cleanIntervalID = setInterval(async () => {
-            await this.clearExpiredContentCategories();
+            let cleanInterval = this.getTime(this.generalWriteInterval) + (2 * this.time.MINUTE);
+            let cleanIntervalID = setInterval(async () => {
+                await this.clearExpiredContentCategories();
 
-            this.clearUncategorizedMovies();
-            this.clearUncategorizedTvShows();
-        }, cleanInterval);
+                this.clearUncategorizedMovies();
+                this.clearUncategorizedTvShows();
+            }, cleanInterval);
 
-        this.cleanIntervalID = cleanIntervalID;
+            this.cleanIntervalID = cleanIntervalID;
         } catch (error){
             console.log('An Error occured during initialization.', error);
         }
@@ -909,7 +915,8 @@ class TheMovieDB {
     }
 }
 
-const TMDB = new TheMovieDB(process.env.TMDB_API_KEY);
+const CONTENT_SOURCE = 'LOCAL';
+const TMDB = new TheMovieDB(process.env.TMDB_API_KEY, CONTENT_SOURCE);
 
 module.exports = TMDB;
 

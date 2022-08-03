@@ -2,13 +2,14 @@
 // the `history.state` reference in the page sript.
 
 class PageManager {
-    constructor(pageLoadTimeout=20000){
+    constructor(originFragmentName, pageLoadTimeout=20000){
+        this.originFragmentName = originFragmentName;
         this.pageLoadTimeout = pageLoadTimeout;
         this.jquerySource = '/scripts/modules/jquery.js';
         this.state = {};
     }
 
-    saveState(levelSelector, url, setPageState=true){
+    saveState(levelSelector, url, trueUrl, setPageState=true){
         let $containerDiv = $(levelSelector);
         let $styleSheetLinks = $('link[rel="stylesheet"]');
         let $scripts = $('script');
@@ -20,7 +21,7 @@ class PageManager {
         };
 
         let fragmentName = $containerDiv.data('fragment-name');
-        let stateObject = { ref: fragmentName };
+        let stateObject = { ref: fragmentName, url: trueUrl };
 
         if (setPageState){
             this.state[fragmentName] = stateElements;
@@ -29,7 +30,7 @@ class PageManager {
         history.replaceState(stateObject, '', url);
     }
 
-    saveNewState(levelSelector, url, setPageState=true){
+    saveNewState(levelSelector, url, trueUrl, setPageState=true){
         let $containerDiv = $(levelSelector);
         let $styleSheetLinks = $('link[rel="stylesheet"]');
         let $scripts = $('script');
@@ -41,7 +42,7 @@ class PageManager {
         };
 
         let fragmentName = $containerDiv.data('fragment-name');
-        let stateObject = { ref: fragmentName };
+        let stateObject = { ref: fragmentName, url: trueUrl };
 
         if (setPageState){
             this.state[fragmentName] = stateElements;
@@ -50,7 +51,7 @@ class PageManager {
         history.pushState(stateObject, '', url);
     }
 
-    loadPage(stateElements, levelSelector, fetchType, setHistory, stateUrl){
+    loadPage(stateElements, levelSelector, fetchType, setHistory, stateUrl, trueUrl){
         let $newStyleSheetLinks = stateElements.styleSheetLinks;
         let $newScripts = stateElements.scripts;
         let $newContainerDiv = stateElements.containerDiv;
@@ -103,7 +104,6 @@ class PageManager {
             $styleSheetLinks,
             $scripts,
             $newContainerDiv,
-            // $newTransitionElements,
             $containerDiv, 
             $containerDivParent,
             nonRepeatedScripts,
@@ -111,6 +111,7 @@ class PageManager {
             existingScripts,
             levelSelector,
             stateUrl,
+            trueUrl,
         };
         
         let promise = new Promise((resolve, reject) => {
@@ -155,9 +156,9 @@ class PageManager {
     _completePageLoad(args, setHistory, promiseArgs){
         let { $styleSheetLinks, $scripts, $newContainerDiv } = args;
         let { $containerDivParent, nonRepeatedScripts, existingLinks } = args;
-        let { existingScripts, levelSelector, stateUrl } = args;
+        let { existingScripts, levelSelector, stateUrl, trueUrl } = args;
         let { resolve, promiseTimeoutID } = promiseArgs;
-    
+        
         $containerDivParent.append($newContainerDiv);
         setTimeout(() => {
             // $newTransitionElement.removeClass('zoom')
@@ -207,14 +208,15 @@ class PageManager {
     
         $(nonRequiredLinks).remove();
         $(nonRequiredScripts).remove();
-    
+
         if (setHistory){
-            this.saveNewState(levelSelector, stateUrl);
+            this.saveNewState(levelSelector, stateUrl, trueUrl);
         }
         
         let $eventGateElement = $('<div>');
 
         $eventGateElement.on('customSendSetHandlersFn:', (e) => {
+
             let setHandlersFn = e.eventData.setHandlersFn;
             if (setHandlersFn){
                 setHandlersFn();
@@ -225,6 +227,7 @@ class PageManager {
         })
 
         let fragmentName = $(levelSelector).data('fragment-name');
+
         let requestSetHandlersEvent = $.Event('customRequestSetHandlersFn:');
         requestSetHandlersEvent.eventData = { 
             fragmentName: fragmentName,
@@ -236,10 +239,12 @@ class PageManager {
 
     static setWindowEventListeners(){
         let mainPopstateListener = async (e) => {
+            let fragmentLoaded = false;
             for (let pageEntry of pageList){
                 try {
                     if (pageEntry.listener){
                         await pageEntry.listener(pageEntry.page);
+                        fragmentLoaded = true;
                         break;
                     }
                 } catch(error) {
@@ -248,7 +253,27 @@ class PageManager {
                         continue;
                     } else if (error.code === 1){
                         PageManager.showError(error.message);
+                        console.log(error);
                     }
+                }
+            }
+
+            if (!fragmentLoaded){
+                let url = history.state.url;
+                let fragmentName = $('#toplevel-container').data('fragment-name');
+                console.log(url, 'fname =>', fragmentName);
+                try {
+                    let HTMLStr = await $.get(url);
+
+                    PageManager.loadPageFromHTML(
+                        HTMLStr,
+                        '#toplevel-container',
+                        fragmentName,
+                        false
+                    );
+                } catch(error){
+                    console.log(error.message);
+                    PageManager.showError(error.message);
                 }
             }
         }
@@ -347,7 +372,7 @@ class PageManager {
         }
     }
 
-    static loadPageFromHTML(HTMLStr, levelSelector, stateUrl, mainFragmentName){
+    static loadPageFromHTML(HTMLStr, levelSelector, mainFragmentName, setHistory, stateUrl, trueUrl){
         let parser = new DOMParser();
         let htmlDoc = parser.parseFromString(HTMLStr, 'text/html');
 
@@ -370,8 +395,9 @@ class PageManager {
                     stateElements,
                     levelSelector,
                     'ajax',
-                    true,
-                    stateUrl
+                    setHistory,
+                    stateUrl,
+                    trueUrl,
                 );
             } catch(error){
                 console.log(error.message);
@@ -384,7 +410,7 @@ class PageManager {
             element: $eventGateElement,
             fragmentName: mainFragmentName
         };
-
+        
         $(window).trigger(requestPageEvent);
     }
 

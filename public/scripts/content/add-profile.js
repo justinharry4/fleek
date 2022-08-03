@@ -10,11 +10,11 @@ function initializePage(){
     let $currentScript = $('script').filter(`[src="${source}"]`);
     let fetchMethod = $currentScript.data('fetchmethod');
 
-    let page = new PageManager();
+    let page = new PageManager(mainFragmentName);
 
     if (fetchMethod === 'native'){
         PageManager.setWindowEventListeners();
-        page.saveState('#toplevel-container');
+        page.saveState('#toplevel-container', null, '/profiles/addprofile');
         setTimeout(() => $('#lowlevel-container').removeClass('zoom'), 1);
     }
 
@@ -74,17 +74,18 @@ function highlightContinueButton(e){
 async function submitProfileForm(e){
     let $profileForm = $('.profile-form');
     let $textInput = $profileForm.find('input[type="text"]');
-    let $checkbox = $profileForm.find('input[type="checkbox"]');
+    // let $checkbox = $profileForm.find('input[type="checkbox"]');
 
     if ($textInput.val().length > 0){
         let url = $profileForm.attr('action');
-        let requestData = {};
-        let textInputName = $textInput.attr('name');
-        let checkboxName = $checkbox.attr('name');
-        let checkValue = ($checkbox.get(0).checked) ? $checkbox.val(): 'no-kid';
+        let requestData = $profileForm.serialize();
+        // let requestData = {};
+        // let textInputName = $textInput.attr('name');
+        // let checkboxName = $checkbox.attr('name');
+        // let checkValue = ($checkbox.get(0).checked) ? $checkbox.val(): 'no-kid';
 
-        requestData[textInputName] = $textInput.val();
-        requestData[checkboxName] = checkValue;
+        // requestData[textInputName] = $textInput.val();
+        // requestData[checkboxName] = checkValue;
 
         try {
             let HTMLStr = await $.post(url, requestData);
@@ -92,10 +93,12 @@ async function submitProfileForm(e){
             PageManager.loadPageFromHTML(
                 HTMLStr,
                 '#toplevel-container',
-                mainFragmentName
+                mainFragmentName,
+                true,
+                '/browse',
+                '/browse',
             );
         } catch(jqXHR){
-            console.log(jqXHR);
             let message = 'The requested action could not be completed.'
             PageManager.showError(message);
         }
