@@ -5,10 +5,78 @@
 <body>
     <div id="toplevel-container" data-fragment-name="browse">
         <%- include('../../partials/header') %>
+            <nav class="header-nav flex-wrapper">
+                <ul class="header-nav-list flex-wrapper">
+                    <li><a href="" class="header-nav-link selected">Home</a></li>
+                    <li><a href="" class="header-nav-link">TV Shows</a></li>
+                    <li><a href="" class="header-nav-link">Movies</a></li>
+                    <li><a href="" class="header-nav-link">New &amp; Popular</a></li>
+                    <li><a href="" class="header-nav-link">My List</a></li>
+                </ul>
+                <div class="options-container flex-wrapper">
+                    <div class="option-wrapper search-option">
+                        <%- include('../../../public/images/svg/search-browse.svg') %>
+                    </div>
+                    <div class="option-wrapper dvd-option">
+                        <span>DVD</span>
+                    </div>
+                    <div class="option-wrapper notification-option">
+                        <%- include('../../../public/images/svg/notification.svg') %>
+                    </div>
+                    <div class="option-wrapper settings-option">    
+                        <img class="profile-photo" src="<%= profile.profilePhotoUrl %>">
+                        <span class="pointer-base"></span>
+                    </div>
+                </div>
+            </nav>
         </header>
         <div id="lowlevel-container">
             <div class="main-wrapper">
-                <h1><%= profile.name %>'s BROWSE PAGE</h1>
+                <section id="topContent-section" class="overlay-wrapper">
+                    <!-- <img class="topContent-poster" src=" content.topContent.coverPath " alt="poster"> -->
+                    <img class="topContent-poster" src="/images/stranger-things-original.jpg" alt="poster">
+                    <div class="topContentInfo-wrapper overlay">
+                        <img class="topcontent-logo" src="" alt="logo">
+                        <h2><img class="topTen-icon" alt="top ten">#1 in TV Shows Today</h2>
+                        <p class="topContent-overview">
+                            <%= content.topContent.overview %>
+                        </p>
+                        <div class="actions-wrapper flex-wrapper">
+                            <button type="button" class="play-button flex-wrapper">
+                                <%- include('../../../public/images/svg/play.svg') %>
+                                <span>Play</span>
+                            </button>
+                            <button type="button" class="moreInfo-button flex-wrapper">
+                                <%- include('../../../public/images/svg/info.svg') %>
+                                <span>More Info</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="topContent-ageRating-wrapper flex-wrapper overlay">
+                        <div class="refreshIcon-wrapper">
+                            <%- include('../../../public/images/svg/info.svg') %>
+                        </div>
+                        <span class="topContent-ageRating">16+</span>
+                    </div>
+                </section>
+                <section id="contentCategories-section">
+                    <% for (let [i, category] of content.categories.entries()) { %>
+                        <div class="category-wrapper">
+                            <h2 class="category-heading"><%= category.name %></h2>
+                            <div class="categoryPosters-wrapper flex-wrapper">
+                                <% for (let [j, contentDoc] of category.contentDocs.entries()) { %>
+                                    <div class="poster-wrapper flex-wrapper" data-contentid="<%= contentDoc._id %>">
+                                        <img
+                                            <% if (i >= 0 && j >= 0) { %> src="/images/stranger-things-185.jpg" <% } %>
+                                            alt="poster" 
+                                            data-src="/images/def-profile-photo.png">
+                                        <span class="content-title"><%= contentDoc.title %></span>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% } %>
+                </section>
             </div>
         </div>
     </div>

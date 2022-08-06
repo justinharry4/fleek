@@ -44,7 +44,7 @@ class TheMovieDB {
 
         if (contentSource === 'REMOTE'){
             this.initializeDatabase();
-        }
+        } 
     }
     
     _setTimeProperties(){

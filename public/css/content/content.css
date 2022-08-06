@@ -12,8 +12,18 @@ body {
 }
 
 /* header styles */
+header {
+    --header-padding-top-bottom: 16px;
+    --header-height: 70px;
+}
 .toplevel-header {
-    padding: .7rem 3%;
+    padding: var(--header-padding-top-bottom) 3%;
+    /* padding: 0rem 3%; */
+    height: var(--header-height);
+    align-items: center;
+}
+header * {
+    max-height: 100%;
 }
 .fleek-logo {
     width: 150px;

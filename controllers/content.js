@@ -46,7 +46,6 @@ module.exports.getBrowse = async (req, res, next) => {
             return exports.getProfiles(req, res, next);
         }
 
-        // getContent(sProfileId, req, res, next)
         if (profile.setupStage === 0){
             req.session.regProfileId = profile._id;
 
@@ -59,11 +58,65 @@ module.exports.getBrowse = async (req, res, next) => {
         }
         if (profile.setupStage === 2){
             req.session.userProfileId = profile._id;
+            
+            let content = {};
+
+            let topContent;
+            if (TMDB.mostPopular.length > 0){
+                let mostPopularObj = TMDB.mostPopular.slice(-1)[0];
+                topContent = mostPopularObj.content;
+            } else {
+                topContent = await TvShow.findOne({'category.name': 'most-popular'});
+                modelUtil.setCoverImageSize(topContent, 500);
+            }
+            content.topContent = topContent;
+
+            let browseDataPath = 'data/browse.json';
+            let dataString = await fileUtil.loadFile(browseDataPath);
+            let browseData = JSON.parse(dataString);
+            let categoriesList = browseData.categories;
+
+            let categories = [];
+            let imgSize = 185;
+            for (let cat of categoriesList){
+                let category = {};
+                category.name = cat.categoryName;
+
+                let model, queryFn, blockImgSize;
+                let setCoverImageSize = true;
+                if (cat.modelName === 'Movie'){
+                    model = Movie;
+                    queryFn = Movie.find;
+                } else if (cat.modelName === 'TvShow'){
+                    model = TvShow;
+                    queryFn = TvShow.find;
+                } else {
+                    queryFn = modelUtil.findContent;
+                    setCoverImageSize = false;
+                    blockImgSize = imgSize;
+                }
+
+                let contentDocs = await queryFn.call(model, {
+                    'categories.name': cat.TMDBCategory
+                }, blockImgSize);
+                if (setCoverImageSize){
+                    contentDocs.forEach(contentDoc => {
+                        modelUtil.setCoverImageSize(contentDoc, imgSize)
+                    })
+                }
+
+                category.contentDocs = contentDocs;
+                categories.push(category);
+                console.log(category.name, '=>', category.contentDocs.length);
+            }
+
+            content.categories = categories;
 
             return res.render('pages/content/browse', {
                 pageTitle: 'Fleek',
                 leadName: 'browse',
                 profile: profile,
+                content: content,
             });
         }
     } catch (error){
