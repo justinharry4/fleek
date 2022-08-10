@@ -33,10 +33,10 @@ module.exports.getIndex = async (req, res, next) => {
 };
 
 module.exports.getBrowse = async (req, res, next) => {
-    let user = req.data.user;
     let profileId = req.query.profileId || req.session.userProfileId;
 
     try {
+        let user = await req.data.user.populate('profiles');
         let profile = await Profile.findById(profileId);
         let isUserProfile;
         if (profile){
@@ -58,6 +58,18 @@ module.exports.getBrowse = async (req, res, next) => {
         }
         if (profile.setupStage === 2){
             req.session.userProfileId = profile._id;
+
+            let imgSize = 185;
+
+            let myList = [];
+            for (let contentId of profile.list){
+                let contentDoc = await modelUtil.findContentById(contentId, imgSize);
+                myList.push(contentDoc);
+            }
+
+            let otherProfiles = user.profiles.filter(p => {
+                return p._id.toString() !== profile._id.toString();
+            });
             
             let content = {};
 
@@ -67,17 +79,17 @@ module.exports.getBrowse = async (req, res, next) => {
                 topContent = mostPopularObj.content;
             } else {
                 topContent = await TvShow.findOne({'category.name': 'most-popular'});
-                modelUtil.setCoverImageSize(topContent, 500);
             }
+            modelUtil.setCoverImageSize(topContent, 'original');
             content.topContent = topContent;
 
             let browseDataPath = 'data/browse.json';
             let dataString = await fileUtil.loadFile(browseDataPath);
             let browseData = JSON.parse(dataString);
             let categoriesList = browseData.categories;
+            let footerNavList = browseData.footerNavList;
 
             let categories = [];
-            let imgSize = 185;
             for (let cat of categoriesList){
                 let category = {};
                 category.name = cat.categoryName;
@@ -107,16 +119,21 @@ module.exports.getBrowse = async (req, res, next) => {
 
                 category.contentDocs = contentDocs;
                 categories.push(category);
-                console.log(category.name, '=>', category.contentDocs.length);
+                // console.log(category.name, '=>', category.contentDocs.length);
             }
 
+            // content.categories1 = categories.slice(0, 2);
+            // content.categories2 = categories.slice(2);
             content.categories = categories;
 
             return res.render('pages/content/browse', {
                 pageTitle: 'Fleek',
                 leadName: 'browse',
                 profile: profile,
+                otherProfiles: otherProfiles,
                 content: content,
+                myList: myList,
+                navList: footerNavList,
             });
         }
     } catch (error){

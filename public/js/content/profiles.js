@@ -1,6 +1,6 @@
 import { PageManager, addListener } from '../modules/page.js';
 
-let source = '/scripts/content/profiles.js';
+let source = '/js/content/profiles.js';
 let mainFragmentName = 'profiles';
 
 $(initializePage);

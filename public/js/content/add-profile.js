@@ -1,7 +1,7 @@
 import { PageManager, addListener } from '../modules/page.js';
 import { checkboxInit } from '../components/checkbox.js';
 
-let source = '/scripts/content/add-profile.js';
+let source = '/js/content/add-profile.js';
 let mainFragmentName = 'addProfile';
 
 $(initializePage);

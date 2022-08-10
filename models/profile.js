@@ -39,7 +39,7 @@ const profileSchema = Schema({
     },
     list: [
         {
-            type: ObjectId
+            type: ObjectId,
         }
     ],
     recentlyWatchedMovies: [

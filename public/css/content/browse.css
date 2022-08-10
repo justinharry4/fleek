@@ -3,16 +3,29 @@
 /* background & header-logo styles */
 @import url('/css/content/content.css');
 
+/* pointer component */
+@import url('/css/components/pointer.css');
+
+/* variables */
+:root {
+    --category-section-offset: 8rem;
+}
+
 /* header styles */
 header {
-    position: absolute;
+    position: fixed;
     top: 0%;
     left: 0%;
     width: 100%;
-    z-index: 10;
+    z-index: 200;
+    background-image: linear-gradient(180deg, var(--background-color), transparent);
+}
+header.scrolled {
+    background-color: var(--background-color);
 }
 header nav {
     flex: 1 1 auto;
+    height: 100%;
 }
 header nav > * {
     align-items: center;
@@ -24,20 +37,125 @@ header nav > * {
     font-size: .9em;
     margin-left: 1.4em;
 }
+.header-nav-link:hover:not(.selected){
+    color: #999797;
+}
 .header-nav-link.selected {
     font-weight: bold;
 }
+
 .options-container {
     margin-left: auto;
 }
 .options-container > div {
     margin-right: 1.3em;
+    height: 100%;
+    display: flex;
+    align-items: center;
 }
+.dvd-option {
+    font-size: .9em;
+}
+
 .profile-photo {
     border-radius: 4px;
     height: calc(var(--header-height) - 
     (2 * var(--header-padding-top-bottom)));
 }
+.options-container .settings-option {
+    position: relative;
+    width: 50px;
+}
+.settings-option::after {
+    --pointer-width: 7px;
+    top: 40%;
+    left: 100%;
+    transition: transform .25s ease;
+}
+.settings-option:hover::after {
+    transform: rotate(135deg);
+}
+
+/* HEADER POPUPS STYLES */
+.notifications-wrapper, .settings-wrapper {
+    position: absolute;
+    /* top: 50%; */
+    top: 103%;
+    right: 0%;
+    /* margin-top: calc((0.5 * var(--header-height))); */
+    background-color: #00000080;
+    opacity: 0;
+    transition: opacity .1s ease;
+}
+.notifications-wrapper.visible,
+.settings-wrapper.visible {
+    opacity: 1;
+}
+.notifications-wrapper {
+    width: 15em;
+    max-width: 90vw;
+    min-height: 7em;
+    border-top: 2px solid #fff;
+    padding: .9em .7em;
+    font-size: .9em;
+}
+.notifications-wrapper::after {
+    top: -9px;
+    right: 5%;
+}
+.notifications-wrapper::after,
+.settings-wrapper::after  {
+    --pointer-width: 8px;
+    transform: rotate(135deg);
+}
+.settings-wrapper {
+    max-height: none;
+    width: 14em;
+    font-size: .8em;
+}
+.settings-wrapper::after {
+    right: 15%;
+    top: -7px;
+}
+.settings-wrapper ul {
+    padding: 1.1em .7em 0em;
+}
+.settings-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.settings-item:hover {
+    text-decoration: underline;
+}
+.settings-wrapper ul li:not(:last-child) {
+    margin-bottom: .5em;
+}
+.settings-wrapper ul img {
+    width: 38px;
+    border-radius: 4px;
+    margin-right: .5em;
+}
+.settings-item svg {
+    margin-right: 1em;
+}
+.manageProfiles-wrapper,
+.otherSettings-wrapper, #signout-div {
+    padding: 1em;
+}
+.account-wrapper {
+    margin-bottom: .5em;
+}
+.settings-wrapper hr {
+    border-style: solid none none;
+    border-color: #9c9999;
+}
+#signout-div {
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+
 
 /* main styles */
 #topContent-section {
@@ -59,20 +177,35 @@ header nav > * {
 .topContentInfo-wrapper img ~ * {
     margin-top: 1em;
 }
-.actions-wrapper button {
+.topContentInfo-wrapper .actions-wrapper button {
     margin-right: .5em;
     padding: .5em 1.5em;
     border-radius: 3px;
-    background-color: #7c7a7a;
     align-items: center;
     font-weight: bold;
 }
-.actions-wrapper button:hover {
+.topContentInfo-wrapper
+.actions-wrapper button span:last-child {
+    margin-left: .5em;
+}
+.topContentInfo-wrapper
+.actions-wrapper .play-button {
     background-color: #fff;
     color: #000;
 }
-.actions-wrapper button span:last-child {
-    margin-left: .5em;
+.topContentInfo-wrapper
+.actions-wrapper .play-button:hover {
+    opacity: .8;
+}
+.topContentInfo-wrapper
+.actions-wrapper .moreInfo-button {
+    background-color: #7c7a7a;
+    color: #fff;
+    opacity: .8;
+}
+.topContentInfo-wrapper
+.actions-wrapper .moreInfo-button:hover {
+    opacity: .5;
 }
 .topContent-ageRating-wrapper {
     bottom: 30%;
@@ -87,15 +220,18 @@ header nav > * {
     padding: .6em 1.1em;
     width: 7em;
 }
-/* .refreshIcon-wrapper {
-    border: 1px solid #fff;
+#topContent-section::after {
+    content: '';
+    position: absolute;
+    left: 0%;
+    bottom: 0%;
+    width: 100%;
+    height: calc(var(--category-section-offset) + 3rem);
+    background-image: linear-gradient(180deg, transparent, var(--background-color));
 }
-.refreshIcon-wrapper svg {
-    display: block;
-    width: 1em;
-} */
+
 #contentCategories-section {
-    margin: -3em 0em 0em 3%;
+    margin: calc(var(--category-section-offset) * -1) 0em 0em 4%;
     position: relative;
     z-index: 10;
     font-size: .8em;
@@ -110,7 +246,7 @@ header nav > * {
     overflow-x: hidden;
 }
 .poster-wrapper {
-    width: 220px;
+    width: 245px;
     overflow: hidden;
     margin-right: .4em;
     flex: 0 0 auto;
@@ -127,9 +263,69 @@ header nav > * {
     left: 0%;
 }
 
-
 /* footer styles */
-
+footer {
+    margin-top: 8em;
+    font-size: .82em;
+    color: #868282;
+    padding: 1em;
+}
+.footer-nav-wrapper {
+    margin: 0em 15%;
+}
+.socialIcon-wrapper svg {
+    width: 27px;
+    margin-right: 2em;
+}
+svg#facebook-icon path:first-of-type {
+    fill: transparent;
+}
+svg#facebook-icon path:last-of-type,
+svg#instagram-icon path, svg#youtube-icon path {
+    fill: #fff;
+}
+.footer-nav-list {
+    margin-top: 1em;
+    flex-wrap: wrap;
+}
+.footer-nav-list li {
+    flex: 1 1 25%;
+    margin-bottom: 1.3em;
+}
+#service-code {
+    border-style: solid;
+    border-width: 1px;
+    padding: .7em;
+    width: max-content;
+    margin-top: 1em;
+}
+#copyright {
+    font-size: .9em;
+    margin-top: 2em;
+}
+footer a:hover {
+    text-decoration: underline;
+}
 
 /* misc styles */
-
+#toplevel-container.loading {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+#toplevel-container #onload-cover {
+    display: none;
+}
+#toplevel-container.loading #onload-cover {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0%;
+    left: 0%;
+    background-color: var(--background-color);
+    z-index: 300;
+    font-size: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

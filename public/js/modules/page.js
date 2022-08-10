@@ -422,9 +422,10 @@ class PageManager {
     }
 }
 
-function addListener(jqObject, eventName, eventListener){
+function addListener(element, eventName, eventListener, eventData){
+    let jqObject = element.jquery ? element : $(element);
     jqObject.off(eventName);
-    jqObject.on(eventName, eventListener);
+    jqObject.on(eventName, eventData, eventListener);
 }
 
 export { PageManager, addListener };

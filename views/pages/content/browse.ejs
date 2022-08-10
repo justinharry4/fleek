@@ -1,9 +1,10 @@
 <%- include('../../partials/head') %>
     <link rel="stylesheet" href="/css/content/browse.css">
-    <script src="/scripts/content/browse.js" type="module" data-fetchmethod="native"></script>
+    <script src="/js/content/browse.js" type="module" data-fetchmethod="native"></script>
 </head>
 <body>
-    <div id="toplevel-container" data-fragment-name="browse">
+    <div id="toplevel-container" class="loading" data-fragment-name="browse">
+        <div id="onload-cover">Loading...</div>
         <%- include('../../partials/header') %>
             <nav class="header-nav flex-wrapper">
                 <ul class="header-nav-list flex-wrapper">
@@ -20,12 +21,41 @@
                     <div class="option-wrapper dvd-option">
                         <span>DVD</span>
                     </div>
-                    <div class="option-wrapper notification-option">
+                    <div class="option-wrapper notifications-option overlay-wrapper">
                         <%- include('../../../public/images/svg/notification.svg') %>
+                        <div class="notifications-wrapper off-screen pointer-base">No recent notifications</div>
                     </div>
-                    <div class="option-wrapper settings-option">    
+                    <div class="option-wrapper settings-option overlay-wrapper pointer-base">
                         <img class="profile-photo" src="<%= profile.profilePhotoUrl %>">
-                        <span class="pointer-base"></span>
+                        <div class="settings-wrapper off-screen pointer-base">
+                            <div class="otherProfiles-wrapper">
+                                <ul class="otherProfiles-list">
+                                    <% for (let profile of otherProfiles) { %>
+                                        <li class="settings-item" data-profileid="<%= profile._id %>">
+                                            <img src="<%= profile.profilePhotoUrl %>" alt="profile photo">
+                                            <span><%= profile.name %></span>
+                                        </li>
+                                    <% } %>
+                                </ul>
+                                <div class="settings-item manageProfiles-wrapper flex-wrapper">
+                                    <%- include('../../../public/images/svg/info.svg') %>
+                                    <span>Manage Profiles</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="otherSettings-wrapper">
+                                <div class="settings-item account-wrapper flex-wrapper">
+                                    <%- include('../../../public/images/svg/info.svg') %>
+                                    <span>Account</span>
+                                </div>
+                                <div class="settings-item helpCenter-wrapper flex-wrapper">
+                                    <%- include('../../../public/images/svg/info.svg') %>
+                                    <span>Help Center</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div id="signout-div">Sign out of Fleek</div>
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -53,9 +83,6 @@
                         </div>
                     </div>
                     <div class="topContent-ageRating-wrapper flex-wrapper overlay">
-                        <div class="refreshIcon-wrapper">
-                            <%- include('../../../public/images/svg/info.svg') %>
-                        </div>
                         <span class="topContent-ageRating">16+</span>
                     </div>
                 </section>
@@ -65,7 +92,12 @@
                             <h2 class="category-heading"><%= category.name %></h2>
                             <div class="categoryPosters-wrapper flex-wrapper">
                                 <% for (let [j, contentDoc] of category.contentDocs.entries()) { %>
-                                    <div class="poster-wrapper flex-wrapper" data-contentid="<%= contentDoc._id %>">
+                                    <div 
+                                        class="poster-wrapper flex-wrapper" 
+                                        data-contentid="<%= contentDoc._id %>"
+                                        data-genres="<%= contentDoc.genres.join(' ') %>"
+                                        data-totalseasons="<%= contentDoc.seasonCount %>"
+                                        data-length="<%= contentDoc.durationMins %>">
                                         <img
                                             <% if (i >= 0 && j >= 0) { %> src="/images/stranger-things-185.jpg" <% } %>
                                             alt="poster" 
@@ -75,9 +107,46 @@
                                 <% } %>
                             </div>
                         </div>
+                        <% if (i === 1) { %>
+                            <div class="category-wrapper myList-wrapper">
+                                <h2 class="category-heading">My List</h2>
+                                <div class="categoryPosters-wrapper flex-wrapper">
+                                    <% for (let contentDoc of myList) { %>
+                                        <div 
+                                            class="poster-wrapper flex-wrapper" 
+                                            data-contentid="<%= contentDoc._id %>"
+                                            data-genres="<%= contentDoc.genres.join(' ') %>"
+                                            data-totalseasons="<%= contentDoc.seasonCount %>"
+                                            data-length="<%= contentDoc.durationMins %>">
+                                            <img
+                                                src="/images/stranger-things-185.jpg"
+                                                alt="poster" 
+                                                data-src="/images/stranger-things-185.jpg">
+                                            <span class="content-title"><%= contentDoc.title %></span>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        <% } %>
                     <% } %>
                 </section>
             </div>
+            <footer>
+                <nav class="footer-nav-wrapper">
+                    <p class="footer-heading">
+                        <a href="" class="socialIcon-wrapper"><%- include('../../../public/images/svg/facebook.svg') %></a>
+                        <a href="" class="socialIcon-wrapper"><%- include('../../../public/images/svg/instagram.svg') %></a>
+                        <a href="" class="socialIcon-wrapper"><%- include('../../../public/images/svg/youtube.svg') %></a>
+                    </p>
+                    <ul class="flex-wrapper footer-nav-list">
+                        <% for (let navItem of navList) { %>
+                            <li class="footer-nav-item"><a href=""><%= navItem %></a></li>
+                        <% } %>
+                    </ul>
+                <nav>
+                <div id="service-code">Service Code</div>
+                <div id="copyright">&copy; 2022 Fleek, Inc.</div>
+            </footer>
         </div>
     </div>
 <%- include('../../partials/end') %>

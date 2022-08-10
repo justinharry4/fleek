@@ -1,7 +1,7 @@
 import { PageManager, addListener } from '../modules/page.js';
 import { checkboxInit } from '../components/checkbox.js';
 
-let source = '/scripts/content/language-setup.js';
+let source = '/js/content/language-setup.js';
 let mainFragmentName = 'languageSetup';
 
 $(initializePage);

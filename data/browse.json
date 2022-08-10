@@ -7,5 +7,20 @@
         { "categoryName": "TV Dramas", "TMDBCategory": "tv-drama", "modelName": "TvShow" },
         { "categoryName": "Comedies", "TMDBCategory": "movie-comedy", "modelName": "Movie" },
         { "categoryName": "Crime Movies", "TMDBCategory": "movie-crime", "modelName": "Movie" }
+    ],
+    "footerNavList": [ 
+        "Audio and Subtitles",
+        "Audio Description",
+        "Help Center", 
+        "Gift Cards", 
+        "Media Center", 
+        "Investor Relations", 
+        "Jobs", 
+        "Terms of Use", 
+        "Privacy", 
+        "Legal Notices", 
+        "Cookie Preferences",
+        "Corporate Information",
+        "Contact Us"
     ]
 }
