@@ -1,11 +1,17 @@
+/* BUG FIXES TO BE MADE:
+    1. overlap of neighbouring elements on `.minContentInfo` popups
+    2. `.minContentInfo` popups when in scrollbar region
+*/
+
 import { PageManager, addListener } from '../modules/page.js';
-import { createSettingsBox } from './fragments/browse.js';
+import { getMinContentInfoStr, getFullContentInfoStr } from './fragments/browse.js';
 
 let source = '/js/content/browse.js';
 let mainFragmentName = 'browse';
 
 $(initializePage);
 
+// PAGE INITIALIZATION
 function initializePage(){
     let $currentScript = $('script').filter(`[src="${source}"]`);
     let fetchMethod = $currentScript.data('fetchmethod');
@@ -28,17 +34,6 @@ function initializePage(){
     loadPosters();
 }
 
-// POPSTATE EVENT HANDLER
-async function showPageInHistory(page){
-    try {
-        await PageManager.showHistory(page, '#toplevel-container');
-    } catch(error){
-        throw error;
-    }
-}
-
-// UTILITY FUCTIONS
-// page initialization
 async function loadPosters(){
     let $posterImages = $('.poster-wrapper img');
 
@@ -92,6 +87,16 @@ async function loadPosters(){
     }
 }
 
+// POPSTATE EVENT HANDLER
+async function showPageInHistory(page){
+    try {
+        await PageManager.showHistory(page, '#toplevel-container');
+    } catch(error){
+        throw error;
+    }
+}
+
+// UTILITY FUCTIONS
 // misc utilities
 function getTime(durationStr){
     let durationMs;
@@ -107,6 +112,32 @@ function getTime(durationStr){
     return durationMs;
 }
 
+function toDurationString(length){
+    length = parseFloat(length);
+
+    let exactHours = length / 60;
+    let fractionalHours = exactHours % 1;
+    let minutes = Math.round(fractionalHours * 60);
+    let hours = exactHours - fractionalHours;
+
+    let hourStr = hours ? hours + 'h ' : '';
+    let minuteStr = minutes ? minutes + 'm' : '';
+
+    return hourStr + minuteStr;
+}
+
+function mouseInElement(coordinates, element){
+    let rect = element.getBoundingClientRect();
+    let withinX = rect.left <= coordinates.clientX && coordinates.clientX <= rect.right;
+    let withinY = rect.top <= coordinates.clientY && coordinates.clientY <= rect.bottom;
+
+    if (withinX && withinY){
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // event handler helpers
 function setScrollCheckInterval(eventData){
     setInterval(() => {
@@ -119,6 +150,30 @@ function setScrollCheckInterval(eventData){
             if ($header.hasClass('scrolled')){
                 $header.removeClass('scrolled');
             }
+        }
+    }, 300);
+}
+
+function setMouseCheckInterval(eventData){
+    setInterval(() => {
+        let $wrappers = $('.poster-wrapper > div:first-of-type');
+        let selectedWrapper;
+
+        $wrappers.each((index, element) => {
+            if (mouseInElement(eventData, element)){
+                if (!selectedWrapper){
+                    // check for overlap in neighbouring elements 
+                    selectedWrapper = element;
+                }
+            } else {
+                let posterWrapper = $(element).parent().get(0);
+                hideMinContentInfo(posterWrapper);
+            }
+        });
+
+        if (selectedWrapper){
+            let selectedPosterWrapper = $(selectedWrapper).parent().get(0);
+            showMinContentInfo(selectedPosterWrapper);
         }
     }, 300);
 }
@@ -162,12 +217,89 @@ function toggleOptionPopup(optionDiv, wrapperSelector, event){
     }
 }
 
+async function showMinContentInfo(posterWrapper){
+    let $contentInfoDiv = $(posterWrapper).find('.minContentInfo-wrapper');
+
+    if ($contentInfoDiv.length === 0){
+        try {
+            let contentId = $(posterWrapper).data('contentid');
+            let resData = await $.get('/content/' + contentId);
+            let contentDoc = resData.contentDoc;
+
+            let contentLength;
+            let length = contentDoc.durationMins;
+            let totalSeasons = contentDoc.seasonCount;
+            if (length){
+                contentLength = toDurationString(length);
+            } else if (totalSeasons){
+                contentLength = totalSeasons + ' Season';
+                if (parseInt(totalSeasons) > 1){
+                    contentLength += 's';
+                }
+            } else {
+                contentLength = '';
+            }
+            
+            let genres = contentDoc.genres;
+
+            $contentInfoDiv = $(getMinContentInfoStr());
+
+            $contentInfoDiv.find('.contentLength').text(contentLength);
+            genres.forEach((genre) => {
+                $contentInfoDiv.find('.genres-wrapper').append(`<li>${genre}</li>`);
+            })
+
+            let svgUrls = [
+                '/images/svg/play.svg',
+                '/images/svg/plus.svg',
+                '/images/svg/like5.svg',
+                '/images/svg/next-button.svg',
+            ];
+            let svgElements = [];
+
+            for (let url of svgUrls){
+                let svgDoc = await $.get(url);
+                let $svgElement = $(svgDoc).find('svg');
+                svgElements.push($svgElement);
+            }
+
+            svgElements.forEach((svgElement, index) => {
+                let $contentInfoButtons = $contentInfoDiv.find('.minContentInfo-button');
+                $($contentInfoButtons.get(index)).append(svgElement);
+            });
+
+            let wrapperDiv = $(posterWrapper).find('> div:first-of-type');
+            wrapperDiv.append($contentInfoDiv);
+        } catch(error) {
+            console.log('An error occured', error);
+        }
+    }
+
+    $contentInfoDiv.removeClass('hidden');
+    $(posterWrapper).addClass('expand')
+}
+
+function hideMinContentInfo(posterWrapper){
+    let $contentInfoDiv = $(posterWrapper).find('.minContentInfo-wrapper');
+
+    $(posterWrapper).removeClass('expand');
+    if ($contentInfoDiv.length > 0){
+        $contentInfoDiv.remove();
+    }
+}
+
 // SET EVENT HANDLERS
 async function setEventHandlers(){
+    // throttled events
     let scrollEventData = { scrolled: false};
     addListener(window, 'scroll', setDocumentScrollFlag, scrollEventData);
     setScrollCheckInterval(scrollEventData);
 
+    let mousemoveEventData = { clientX: -1, clientY: -1 };
+    addListener(window, 'mousemove', setMouseCoordinates, mousemoveEventData);
+    setMouseCheckInterval(mousemoveEventData);
+
+    // regular events
     let $notificationsDiv = $('.notifications-option');
     addListener($notificationsDiv, 'click', toggleNotificationsBox);
     addListener($notificationsDiv, 'mouseenter', showNotificationsBox);
@@ -178,8 +310,26 @@ async function setEventHandlers(){
     addListener($settingsDiv, 'mouseenter', showSettingsBox);
     addListener($settingsDiv, 'mouseleave', clearSettingsBox);
 
-    let otherProfilesLi = $('.settings-wrapper .otherProfiles-list li');
-    addListener(otherProfilesLi, 'click', switchProfile);
+    let $otherProfilesLi = $('.settings-wrapper .otherProfiles-list li');
+    addListener($otherProfilesLi, 'click', switchProfile);
+
+    let $manageProfileDiv = $('.manageProfiles-wrapper');
+    addListener($manageProfileDiv, 'click', getManageProfiles);
+
+    let $signoutDiv = $('.settings-wrapper #signout-div');
+    addListener($signoutDiv, 'click', signout);
+
+    let $contentInfoWrappers = $('.poster-wrapper > div:first-of-type');
+    addListener($contentInfoWrappers, 'click', showFullContentInfo);
+}
+
+function setMinInfoEventHandlers(){
+
+}
+
+function setFullInfoEventHandlers(){
+    let $closeButton = $('.fullContentInfo-wrapper .close-button');
+    addListener($closeButton, 'click', closeFullContentPopup);
 }
 
 // EVENT HANDLERS
@@ -189,6 +339,11 @@ function setDocumentScrollFlag(e){
     } else {
         e.data.scrolled = false;
     }
+}
+
+function setMouseCoordinates(e){
+    e.data.clientX = e.clientX;
+    e.data.clientY = e.clientY;
 }
 
 function showNotificationsBox(e){
@@ -215,6 +370,134 @@ function toggleSettingsBox(e){
     toggleOptionPopup(this, '.settings-wrapper', e);
 }
 
-function switchProfile(e){
-    
+async function switchProfile(e){
+    let url = '/switchprofile';
+    let profileId = $(this).data('profileid')
+    let requestData = { profileId: profileId };
+
+    try {
+        await $.post(url, requestData);
+
+        location.assign('/browse');
+    } catch(jqXHR){
+        PageManager.showError();
+    }
+}
+
+async function getManageProfiles(e){
+    let url = '/manageprofiles';
+
+    try {
+        await $.get(url);
+
+        location.assign(url);
+    } catch(error){
+        PageManager.showError();
+    }
+}
+
+async function signout(e){
+    try {
+        await $.post('/signout');
+
+        location.assign('/signin');
+    } catch(error){
+        PageManager.showError();
+    }
+}
+
+async function showFullContentInfo(e){
+    let $posterWrapper = $(this).parent();
+    let contentId = $posterWrapper.data('contentid');
+
+    try {
+        let resData = await $.get('/content/' + contentId);
+        let contentDoc = resData.contentDoc;
+
+        let releaseYear = contentDoc.releaseYear || contentDoc.firstAirYear;
+        releaseYear = releaseYear || '';
+
+        let contentLength;
+        let length = contentDoc.durationMins;
+        let totalSeasons = contentDoc.seasonCount;
+        if (length){
+            contentLength = toDurationString(length);
+        } else if (totalSeasons){
+            contentLength = totalSeasons + ' Season';
+            if (parseInt(totalSeasons) > 1){
+                contentLength += 's';
+            }
+        } else {
+            contentLength = '';
+        }
+
+        let genres = contentDoc.genres.join(', ');
+        let overview = contentDoc.overview || 'No overview available';
+        let posterUrl = $(this).find('img').attr('src');
+
+        let $fullContentInfoContainer = $(getFullContentInfoStr());
+
+        $fullContentInfoContainer
+            .find('.topPoster-wrapper .fullContent-poster')
+            .attr('src', posterUrl);
+
+        $fullContentInfoContainer
+            .find('.contentInfo-wrapper .date-length-wrapper')
+            .append(`<span>${releaseYear}</span>`)
+            .append(`<span>${contentLength}</span>`);
+
+        $fullContentInfoContainer
+            .find('.contentInfo-wrapper .overview')
+            .text(overview);
+
+        $fullContentInfoContainer
+            .find('.contentInfo-wrapper .genres-wrapper')
+            .append(`<span>${genres}</span>`);
+
+        let svgButtonUrls = [
+            'images/svg/play.svg',
+            'images/svg/plus.svg',
+            'images/svg/like5.svg',
+        ]
+
+        let svgElements = [];
+        for (let url of svgButtonUrls){
+            let svgDoc = await $.get(url);
+            let $svgElement = $(svgDoc).find('svg');
+            svgElements.push($svgElement);
+        }
+        
+        let $buttons = $fullContentInfoContainer.find('.topPoster-wrapper button');
+        svgElements.forEach((svgElement, index) => {
+            let $button = $($buttons.get(index));
+            $button.append(svgElement);
+            if ($button.hasClass('play-button')){
+                $button.append('<span>Play</span>');
+            }
+        });
+
+        let $similarContentPostersWrapper = $fullContentInfoContainer
+            .find('.similarContent-wrapper .posters-wrapper');
+
+        for (let i=1; i<=6; i++){
+            $similarContentPostersWrapper
+                .append('<div class="similarContentInfo-wrapper"></div>');
+        }
+
+        let closeSVGDoc = await $.get('/images/svg/plus.svg');
+        let $closeSVGElement = $(closeSVGDoc).find('svg');
+        $fullContentInfoContainer.find('.close-button').append($closeSVGElement);
+
+        let $toplevelDiv = $('#toplevel-container');
+        $toplevelDiv.append($fullContentInfoContainer);
+
+        setFullInfoEventHandlers();
+    } catch(error){
+        console.log('an error occured', error);
+    }
+}
+
+function closeFullContentPopup(e){
+    let $fullContentInfoContainer = $(this).closest('.fullContentInfo-container');
+    $fullContentInfoContainer.remove();
 }

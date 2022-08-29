@@ -1,18 +1,28 @@
 <%- include('../../partials/head') %>
     <link rel="stylesheet" href="/css/content/profiles.css">
-    <script src="/js/content/profiles.js" type="module" data-fetchmethod="native"></script>
+    <script 
+        src="/js/content/<%= (mode === 'profiles-list') ? 'profiles.js' : 'manage-profiles.js' %>"
+        type="module"
+        data-fetchmethod="native"></script>
 </head>
 <body>
-    <div id="toplevel-container" data-fragment-name="profiles">
+    <div 
+        id="toplevel-container"
+        data-fragment-name="<%= (mode === 'profiles-list') ? 'profiles' : 'manageProfiles' %>">
         <%- include('../../partials/header') %>
         </header>
-        <div id="lowlevel-container" class="transZero zoom" data-transition-class="zoom">
+        <div id="lowlevel-container" class="transZero zoom" data-transition-class="zoom" data-mode="<%= mode %>">
             <div class="main-wrapper">
                 <h2 class="profiles-heading">
-                    <% if (profiles.length === 0) { %>
-                        Create a profile
-                    <% } else if (profiles.length > 1) { %>
-                        Who's watching?
+                    <% if (mode === 'profiles-list') { %>
+                        <% if (profiles.length === 0) { %>
+                            Create a profile
+                        <% } else if (profiles.length > 1) { %>
+                            Who's watching?
+                        <% } %>
+                    <% } %>
+                    <% if (mode === 'manage-profiles') { %>
+                        Manage Profiles:
                     <% } %>
                 </h2>
                 <div class="profiles-wrapper flex-wrapper">
@@ -20,8 +30,13 @@
                         <ul class="profiles-list flex-wrapper">
                             <% for (let profile of profiles) { %>
                                 <li class="profile-wrapper" data-profile-id="<%= profile._id %>">
-                                    <div>
+                                    <div class="overlay-wrapper">
                                         <img class="profile-photo" src="<%= profile.profilePhotoUrl %>" alt="profile photo">
+                                        <% if (mode === 'manage-profiles') { %>
+                                            <div class="overlay editIcon-wrapper">
+                                                <%- include('../../../public/images/svg/edit-pencil.svg') %>
+                                            </div>
+                                        <% } %>
                                     </div>
                                     <span class="profile-name"><%= profile.name %></span>
                                 </li>
@@ -35,9 +50,16 @@
                         <span id="add-profile-label" class="profile-name">Add Profile</span>
                     </div>
                 </div>
-                <div class="manage-link-wrapper">
-                    <a class="manage-link <%= (profiles.length === 0) ? 'disabled': '' %>" <%= (profiles.length > 0) ? 'href=clocks' : '' %>>Manage Profiles</a>
-                </div>
+                <% if (mode === 'profiles-list') { %>
+                    <div class="manage-link-wrapper">
+                        <a 
+                            class="manage-link <%= (profiles.length === 0) ? 'disabled': '' %>"
+                            href="<%= (profiles.length > 0) ? '/manageprofiles' : '' %>">Manage Profiles</a>
+                    </div>
+                <% } %>
+                <% if (mode === 'manage-profiles') { %>
+                    <button type="button" class="done-button">Done</button>
+                <% } %>
             </div>
         </div>
     </div>

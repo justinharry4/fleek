@@ -31,10 +31,12 @@ function setCoverImageSize(contentDoc, imgSize){
     if (!contentDoc){
         throw new Error('A valid content document must be passed.');
     }
-    if (imgSize && (!isNaN(Number(imgSize)) || imgSize === 'original' )){
+    if (imgSize && ( !isNaN(Number(imgSize)) || imgSize === 'original' )){
         let sizePrefix = imgSize === 'original' ? '/' : '/w'
-        contentDoc.coverPath = TMDB.imageBaseUrl + sizePrefix +
-                               imgSize + contentDoc.coverPath;
+        contentDoc.coverPath = TMDB.imageBaseUrl
+                               + sizePrefix 
+                               + imgSize
+                               + contentDoc.coverPath;
     } else {
         throw new Error('Invalid image size selected. Got ' + imgSize);
     }

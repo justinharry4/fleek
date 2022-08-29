@@ -287,6 +287,8 @@ module.exports.postSignout = (req, res, next) => {
 
     req.session.userId = null;
     req.session.authenticated = false;
+    req.session.userProfileId = null;
+    req.session.regProfileId = null;
 
     res.sendStatus(201);
 };

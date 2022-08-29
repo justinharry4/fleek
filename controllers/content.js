@@ -9,7 +9,7 @@ const TMDB = require('../database/tmdb');
 const fileUtil = require('../util/file');
 const modelUtil = require('../util/model');
 
-// CONTROLLER FUNCTIONS
+// HTML-RESPONSE CONTROLLER FUNCTIONS
 module.exports.getIndex = async (req, res, next) => {
     let regAccountCreated = req.session.regAccountCreated;
     let homePageDataPath = 'data/home.json';
@@ -150,11 +150,28 @@ module.exports.getProfiles = async (req, res, next) => {
             pageTitle: 'Fleek',
             leadName: 'profiles',
             profiles: profiles,
+            mode: 'profiles-list',
         });
     } catch (error){
         next(error);
     }
 }
+
+module.exports.getManageProfiles = async (req, res, next) => {
+    try {
+        let user = await req.data.user.populate('profiles');
+        let profiles = user.profiles;
+
+        res.render('pages/content/profiles', {
+            pageTitle: 'Fleek',
+            leadName: 'profiles',
+            profiles: profiles,
+            mode: 'manage-profiles',
+        });
+    } catch (error){
+        next(error);
+    }
+};
 
 module.exports.getAddProfile = async (req, res, next) => {
     try {
@@ -336,3 +353,48 @@ module.exports.getProfile = async (req, res, next) => {
         next(error);
     }
 }
+
+
+// JSON-RESPONSE CONTROLLER FUNCTIONS
+module.exports.postSwitchProfile = async (req, res, next) => {
+    let profileId = req.body.profileId;
+
+    try {
+        let user = req.data.user;
+        let profile = await Profile.findById(profileId);
+
+        let isUserProfile;
+        if (profile){
+            isUserProfile = profile.user.toString() === user._id.toString();
+        }
+        if (!isUserProfile){
+            return res.status(422).json({message: 'Invalid profile ID'});
+        }
+
+        req.session.userProfileId = profile._id;
+        res.status(201).json({message: 'Profile switch successful'})
+    } catch(error){
+        error.data = { resType: 'application/json' };
+        next(error);
+    }
+};
+
+module.exports.getContent = async (req, res, next) => {
+    let contentId = req.params.contentId;
+
+    try {
+        let imgSize = 185;
+        let contentDoc = await modelUtil.findContentById(contentId, imgSize);
+
+        if (!contentDoc){
+            return res.status(404).json({
+                message: 'content with matching id couls not be found.'
+            });
+        }
+
+        return res.status(200).json({ contentDoc: contentDoc });
+    } catch(error){
+        error.data = { resType: 'application/json' };
+        next(error)
+    }
+};

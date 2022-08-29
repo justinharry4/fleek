@@ -98,10 +98,13 @@
                                         data-genres="<%= contentDoc.genres.join(' ') %>"
                                         data-totalseasons="<%= contentDoc.seasonCount %>"
                                         data-length="<%= contentDoc.durationMins %>">
-                                        <img
-                                            <% if (i >= 0 && j >= 0) { %> src="/images/stranger-things-185.jpg" <% } %>
-                                            alt="poster" 
-                                            data-src="/images/def-profile-photo.png">
+                                        <div>
+                                            <img
+                                                <% if (i >= 0 && j >= 0) { %> src="/images/stranger-things-245x130.jpg" <% } %>
+                                                class="poster"
+                                                alt="poster"
+                                                data-src="/images/def-profile-photo.png">
+                                        </div>
                                         <span class="content-title"><%= contentDoc.title %></span>
                                     </div>
                                 <% } %>
@@ -118,10 +121,12 @@
                                             data-genres="<%= contentDoc.genres.join(' ') %>"
                                             data-totalseasons="<%= contentDoc.seasonCount %>"
                                             data-length="<%= contentDoc.durationMins %>">
-                                            <img
-                                                src="/images/stranger-things-185.jpg"
-                                                alt="poster" 
-                                                data-src="/images/stranger-things-185.jpg">
+                                            <div>
+                                                <img
+                                                    src="/images/stranger-things-245x130.jpg"
+                                                    alt="poster" 
+                                                    data-src="/images/stranger-things-185.jpg">
+                                            </div>
                                             <span class="content-title"><%= contentDoc.title %></span>
                                         </div>
                                     <% } %>

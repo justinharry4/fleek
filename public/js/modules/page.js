@@ -415,6 +415,10 @@ class PageManager {
     }
 
     static showError(message){
+        if (!message){
+            message = 'The requested action could not be completed.';
+        }
+
         let $errorDiv = $('<div>')
             .text(message)
             .addClass('pageLoad-error');

@@ -8,7 +8,14 @@ module.exports.get404 = (req, res, next) => {
 };
 
 module.exports.get500 = (req, res, next) => {
-    res.status(500).render('pages/error/500', {
-        pageTitle: 'Internal Server Error'
-    })
+    let type = req.query.type;
+
+    if (!type || type === 'html'){
+        return res.status(500).render('pages/error/500', {
+            pageTitle: 'Internal Server Error'
+        })
+    } 
+    if (type === 'json'){
+        return res.status(500).json({message: 'An internal error occured'});
+    }
 };

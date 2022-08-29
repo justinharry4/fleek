@@ -52,7 +52,13 @@ app.use(errorRoutes);
 // ERROR HANDLING MIDDLEWARE
 app.use((error, req, res, next) => {
     console.log('INSIDE ERROR HANDLER\n', error);
-    res.redirect('/server-error');
+    
+    if (!error.data || error.data.resType === 'text/html'){
+        return res.redirect('/server-error');
+    }
+    if (error.data.resType === 'application/json'){
+        return res.redirect('/server-error?type=json')
+    }
 })
 
 async function startApp(){
