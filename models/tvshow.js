@@ -80,6 +80,14 @@ const tvShowSchema = Schema({
             type: String,
         }
     ],
+    backdropPath: {
+        type: String,
+        required: true
+    },
+    logoURL: {
+        type: String,
+        required: true
+    },
     coverPath:  {
         type: String,
         required: true,

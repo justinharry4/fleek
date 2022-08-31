@@ -1,19 +1,22 @@
 const dotenv = require('dotenv');
 const axios = require('axios');
+const cheerio = require('cheerio');
 
-const fileUtil = require('../util/file');
 const Season = require('../models/season');
 const Episode = require('../models/episode');
+const stringUtil = require('./string');
+const imageUtil = require('./image');
 
 dotenv.config();
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const TMDB_API_BASE_URL = 'https://api.themoviedb.org/3';
+const TMDB_MAIN_BASE_URL = 'https://www.themoviedb.org';
 
 // function name suffixes FC and BC stand for
 // FullContent and BlankContent respectively
 
-function getMovieConfigFC(movieResData){
+async function getMovieConfigFC(movieResData){
     let config = {};
 
     config.title = movieResData.title;
@@ -42,6 +45,16 @@ function getMovieConfigFC(movieResData){
 
     config.coverPath = movieResData.poster_path;
     config.videoPath = '/somevideopath.mkv';
+    config.backdropPath = movieResData.backdrop_path;
+
+    let contentData = {
+        id: movieResData.id,
+        title: movieResData.title,
+        type: 'movie'
+    }
+    config.logoURL = await getContentLogoURL(contentData);
+    // console.log('backdrop =>', config.backdropPath);
+    // console.log('logo =>', config.logoURL);
 
     config.isFullContent = true;
 
@@ -79,6 +92,14 @@ async function getTvShowConfigFC(tvResData){
     config.networks = networks ? networks.map(ntwk => ntwk.name): [];
 
     config.coverPath = tvResData.poster_path;
+    config.backdropPath = tvResData.backdrop_path;
+
+    let contentData = {
+        id: tvResData.id,
+        title: tvResData.name,
+        type: 'tv'
+    }
+    config.logoURL = await getContentLogoURL(contentData);
 
     let tvShowData = { 
         tvShowTitle: config.title,
@@ -232,7 +253,7 @@ function getEpisodeConfig(episodeData, tvShowData){
     return config;
 }
 
-function getMovieConfigBC(movieResData, tmdbGenres){
+async function getMovieConfigBC(movieResData, tmdbGenres){
     let config = {};
 
     config.title = movieResData.title;
@@ -252,13 +273,23 @@ function getMovieConfigBC(movieResData, tmdbGenres){
     config.popularity = movieResData.popularity;
 
     config.coverPath = movieResData.poster_path;
+    config.backdropPath = movieResData.backdrop_path;
+
+    let contentData = {
+        id: movieResData.id,
+        title: movieResData.title,
+        type: 'movie'
+    }
+    config.logoURL = await getContentLogoURL(contentData);
+    // console.log('backdrop =>', config.backdropPath);
+    // console.log('logo =>', config.logoURL);
 
     config.isFullContent = false;
 
     return config;
 }
 
-function getTvShowConfigBC(tvResData, tmdbGenres){
+async function getTvShowConfigBC(tvResData, tmdbGenres){
     let config = {};
 
     config.title = tvResData.name;
@@ -278,14 +309,79 @@ function getTvShowConfigBC(tvResData, tmdbGenres){
     config.popularity = tvResData.popularity;
 
     config.coverPath = tvResData.poster_path;
+    config.backdropPath = tvResData.backdrop_path;
+
+    let contentData = {
+        id: tvResData.id,
+        title: tvResData.name,
+        type: 'tv'
+    }
+    config.logoURL = await getContentLogoURL(contentData);
     
     config.isFullContent = false;
 
     return config;
 }
 
+async function getContentLogoURL(contentData){
+    let type = contentData.type;
+    let id = contentData.id;
+    let title = stringUtil.lowerCaseHyphenate(contentData.title);
+
+    let url = TMDB_MAIN_BASE_URL + `/${type}/${id}-${title}/images/logos`;
+
+    try {
+        let response = await axios.get(url);
+        let $ = cheerio.load(response.data);
+
+        let selector = 'ul.images.logos div.image_content a[title="View Original"] img';
+        let $imgElements = $(selector);
+        
+        let source;
+        for (let imgElement of $imgElements){
+            let src = $(imgElement).attr('src');
+
+            if (src){
+                let absURL = TMDB_MAIN_BASE_URL + src;
+                let isOpaque = await imageUtil.isFullyOpaque(absURL);
+                if (!isOpaque){
+                    source = absURL;
+                    break;
+                }
+            }
+        }
+
+        let logoURL = source || 'No Logo Available';
+
+        return logoURL;
+    } catch(error){
+        console.log('An error occured in getContentLogoURL', error);
+        throw error;
+    }
+}
+
+async function test(){
+    let url = TMDB_API_BASE_URL + '/tv/popular';
+    let response = await axios.get(url, {
+        params: {
+            api_key: TMDB_API_KEY,
+        }
+    })
+    let data = response.data.results[0];
+    let contentData = {
+        id: data.id,
+        title: data.name,
+        type: 'tv',
+    }
+
+    let logoPath = await getContentLogoURL(contentData);
+}
+
+// test()
+
 module.exports.getMovieConfigFC = getMovieConfigFC;
 module.exports.getTvShowConfigFC = getTvShowConfigFC;
 
 module.exports.getMovieConfigBC = getMovieConfigBC;
 module.exports.getTvShowConfigBC = getTvShowConfigBC;
+

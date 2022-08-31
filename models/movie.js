@@ -56,6 +56,14 @@ const movieSchema = Schema({
         type: String,
         required: true
     },
+    backdropPath: {
+        type: String,
+        required: true
+    },
+    logoURL: {
+        type: String,
+        required: true
+    },
     videoPath: {
         type: String,
     },

@@ -15,6 +15,7 @@ class TheMovieDB {
         this.baseUrl = 'https://api.themoviedb.org/3';
         this.imageBaseUrl = 'https://image.tmdb.org/t/p';
         // poster_sizes = ["w92","w154","w185","w342","w500","w780","original"]
+        // backdrop_sizes = ["w300","w780","w1280","original"]
     
         this.movieProps = {};
         this.tvProps = {};
@@ -252,7 +253,7 @@ class TheMovieDB {
                     getMovieConfig = configUtil.getMovieConfigBC;
                     fullContent = false;
                 }
-                console.log('movie iteration', index, gp.categoryName);
+                console.log('movie iteration', index, resData.id, gp.categoryName);
 
                 let movies = await Movie.find({
                     title: resData.title,
@@ -265,7 +266,7 @@ class TheMovieDB {
                     if (!fullContent){
                         await this._loadGenres();
                     }
-                    let config = getMovieConfig(resData, this.movieProps.genres);
+                    let config = await getMovieConfig(resData, this.movieProps.genres);
                     movie = new Movie(config);
                     movie.categories.push(category);
                     await movie.save();
@@ -386,7 +387,7 @@ class TheMovieDB {
                 if (!resData){
                     console.log('invalid resData at index', index);
                 }
-                console.log('tv iteration', index, gp.categoryName);
+                console.log('tv iteration', index, resData.id, gp.categoryName);
 
                 let tvShows = await TvShow.find({
                     title: resData.name,
@@ -400,7 +401,7 @@ class TheMovieDB {
                         config = await getTvConfig(resData);
                     } else {
                         await this._loadGenres();
-                        config = getTvConfig(resData, this.tvProps.genres);
+                        config = await getTvConfig(resData, this.tvProps.genres);
                     }
                     tvShow = new TvShow(config);
                     tvShow.categories.push(category);
@@ -841,6 +842,7 @@ class TheMovieDB {
     }
 
     async initializeDatabase(){
+        console.log('Initializing Database');
         try {
             for (let categoryName in this.categories){
                 let interval = this.getTime(this.generalWriteInterval);
@@ -915,8 +917,8 @@ class TheMovieDB {
     }
 }
 
-const CONTENT_SOURCE = 'LOCAL';
+const CONTENT_SOURCE = 'LOCAL';  // `LOCAL` or `REMOTE`
+
 const TMDB = new TheMovieDB(process.env.TMDB_API_KEY, CONTENT_SOURCE);
 
 module.exports = TMDB;
-

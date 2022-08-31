@@ -35,31 +35,40 @@ function initializePage(){
 }
 
 async function loadPosters(){
-    let $posterImages = $('.poster-wrapper img');
+    let $posters = $('.poster-wrapper div.poster');
 
     let reloadTime = 40;
 
-    let reloadImage = async function (imgElement, relTime, resolve){
-        let src = $(imgElement).attr('src');
-        let alt = $(imgElement).attr('alt');
+    let reloadImage = async function (posterDiv, relTime, resolve){
+        let src = $(posterDiv).data('src');
         
         setTimeout(async () => {
-            let $newImage = $('<img>');
-            $newImage.attr('src', src).attr('alt', alt);
-            $(imgElement).replaceWith($newImage);
-
-            let newImg = $newImage.get(0)
+            $(posterDiv).css({
+                'background-image': 'url(' + src + ')',
+            });
+            let $image = $('<img>');
+            $image.attr('src', src);
+            
             try {
-                await newImg.decode()
+                await $image.get(0).decode()
+
+                let $logoImg = $(posterDiv).find('.logo');
+                try {
+                    await $logoImg.get(0).decode();
+                    $logoImg.removeClass('missing');
+                } catch (error){
+                    $logoImg.addClass('missing');
+                }
+
                 resolve('Image Reload Sucessful');
             } catch(error){
                 reloadTime = reloadTime * 2
-                reloadImage(newImg, reloadTime, resolve)
+                reloadImage(posterDiv, reloadTime, resolve)
             }
         }, relTime);
     }
 
-    for (let [index, imgElement] of $posterImages.get().entries()){
+    for (let [index, posterDiv] of $posters.get().entries()){
         if (index >= 30){
             let $topDiv = $('#toplevel-container');
             if ($topDiv.hasClass('loading')){
@@ -68,22 +77,41 @@ async function loadPosters(){
                 console.log('loaded!');
             }
         }
+
         let success;
         try {
-            // let src = $(imgElement).data('src');
-            // $(imgElement).attr('src', src);
-            await imgElement.decode();
+            let src = $(posterDiv).data('src');
+
+            $(posterDiv).css({
+                'background-image': 'url(' + src + ')',
+            });
+            let $img = $('<img>');
+            $img.attr('src', src);
+            await $img.get(0).decode();
+
+            let $logoImg = $(posterDiv).find('.logo');
+            try {
+                await $logoImg.get(0).decode();
+            } catch (error){
+                $logoImg.addClass('missing');
+            }
+
             success = 'Initial Image Load Successful';
         } catch(error){
             let timeoutID;
             let promise = new Promise((resolve, reject) => {
-                reloadImage(imgElement, reloadTime, resolve);
+                reloadImage(posterDiv, reloadTime, resolve);
                 timeoutID = setTimeout(() => reject('image load timed out'), 30000);
-            })
-            success = await promise;
-            clearTimeout(timeoutID);
+            });
+
+            try {
+                success = await promise;
+                clearTimeout(timeoutID);
+            } catch (error){
+                console.log('PAGE LOAD ERR', error);
+            }
         }
-        // console.log(success);
+        console.log(index, success);
     }
 }
 
@@ -220,7 +248,8 @@ function toggleOptionPopup(optionDiv, wrapperSelector, event){
 async function showMinContentInfo(posterWrapper){
     let $contentInfoDiv = $(posterWrapper).find('.minContentInfo-wrapper');
 
-    if ($contentInfoDiv.length === 0){
+    if (!($(posterWrapper).hasClass('min-content'))){
+        $(posterWrapper).addClass('min-content');
         try {
             let contentId = $(posterWrapper).data('contentid');
             let resData = await $.get('/content/' + contentId);
@@ -282,7 +311,7 @@ async function showMinContentInfo(posterWrapper){
 function hideMinContentInfo(posterWrapper){
     let $contentInfoDiv = $(posterWrapper).find('.minContentInfo-wrapper');
 
-    $(posterWrapper).removeClass('expand');
+    $(posterWrapper).removeClass('expand min-content');
     if ($contentInfoDiv.length > 0){
         $contentInfoDiv.remove();
     }

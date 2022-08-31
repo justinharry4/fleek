@@ -9,6 +9,7 @@
 /* variables */
 :root {
     --category-section-offset: 8rem;
+    --main-left-margin: 4%;
 }
 .fullContentInfo-wrapper {
     --outer-side-margin: 3rem;
@@ -24,7 +25,7 @@ header {
     background-image: linear-gradient(180deg, var(--background-color), transparent);
 }
 header.scrolled {
-    background-color: var(--background-color);
+    background-color: #0e0d0d;
 }
 header nav {
     flex: 1 1 auto;
@@ -172,13 +173,22 @@ header nav > * {
     max-height: max-content;
 }
 .topContentInfo-wrapper {
-    top: 7em;
-    left: 3%;
+    /* top: 7em; */
+    top: calc(var(--header-height) + 50px);
+    left: var(--main-left-margin);
     width: 40%;
     font-size: .95em;
 }
 .topContentInfo-wrapper img ~ * {
     margin-top: 1em;
+}
+.topContent-logo {
+    width: 80%;
+    margin-bottom: 2em;
+    margin-left: 1em;
+}
+.topContent-overview {
+    line-height: 1.4em;
 }
 .topContentInfo-wrapper .actions-wrapper button {
     margin-right: .5em;
@@ -238,7 +248,7 @@ header nav > * {
 }
 
 #contentCategories-section {
-    margin: calc(var(--category-section-offset) * -1) 0em 0em 4%;
+    margin: calc(var(--category-section-offset) * -1) 0em 0em var(--main-left-margin);
     position: relative;
     z-index: 10;
     font-size: .8em;
@@ -262,6 +272,7 @@ header nav > * {
     align-items: center;
     /* border: 1px solid red; */
     transition: transform .1s ease-in;
+    background-color: #353434;
 }
 .poster-wrapper.expand {
     overflow: visible;
@@ -281,8 +292,24 @@ header nav > * {
 }
 .poster-wrapper img {
     width: 100%;
-    max-height: max-content;
+    /* max-height: max-content; */
     border-radius: 4px;
+}
+.poster-wrapper div.poster {
+    width: 100%;
+    height: 130px;
+    background-size: cover;
+    border-radius: 4px;
+}
+.poster-wrapper div.poster .logo {
+    /* top: 20%; */
+    left: 10%;
+    bottom: 15%;
+    width: 60%;
+    max-height: 65%;
+}
+.poster-wrapper div.poster .logo.missing {
+    display: none;
 }
 .poster-wrapper.expand img.poster {
     border-bottom-left-radius: 0px;

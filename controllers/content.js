@@ -59,12 +59,14 @@ module.exports.getBrowse = async (req, res, next) => {
         if (profile.setupStage === 2){
             req.session.userProfileId = profile._id;
 
-            let imgSize = 185;
+            let imgSize = 300;
 
             let myList = [];
             for (let contentId of profile.list){
                 let contentDoc = await modelUtil.findContentById(contentId, imgSize);
-                myList.push(contentDoc);
+                if (contentDoc){
+                    myList.push(contentDoc);
+                }
             }
 
             let otherProfiles = user.profiles.filter(p => {
@@ -80,7 +82,9 @@ module.exports.getBrowse = async (req, res, next) => {
             } else {
                 topContent = await TvShow.findOne({'category.name': 'most-popular'});
             }
-            modelUtil.setCoverImageSize(topContent, 'original');
+            modelUtil.setImageSize('coverPath', topContent, 'original');
+            modelUtil.setImageSize('backdropPath', topContent, 'original');
+
             content.topContent = topContent;
 
             let browseDataPath = 'data/browse.json';
@@ -95,7 +99,7 @@ module.exports.getBrowse = async (req, res, next) => {
                 category.name = cat.categoryName;
 
                 let model, queryFn, blockImgSize;
-                let setCoverImageSize = true;
+                let setImageSize = true;
                 if (cat.modelName === 'Movie'){
                     model = Movie;
                     queryFn = Movie.find;
@@ -104,16 +108,17 @@ module.exports.getBrowse = async (req, res, next) => {
                     queryFn = TvShow.find;
                 } else {
                     queryFn = modelUtil.findContent;
-                    setCoverImageSize = false;
+                    setImageSize = false;
                     blockImgSize = imgSize;
                 }
 
                 let contentDocs = await queryFn.call(model, {
                     'categories.name': cat.TMDBCategory
                 }, blockImgSize);
-                if (setCoverImageSize){
+                if (setImageSize){
                     contentDocs.forEach(contentDoc => {
-                        modelUtil.setCoverImageSize(contentDoc, imgSize)
+                        modelUtil.setImageSize('coverPath', contentDoc, imgSize);
+                        modelUtil.setImageSize('backdropPath', contentDoc, imgSize);
                     })
                 }
 
