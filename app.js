@@ -41,7 +41,7 @@ app.use(session({
 app.use(flash());
 
 // CATCH-ALL MIDDLEWARE
-// app.use(generalController.setCORSHeaders)
+// app.use(generalController.setCORSHeaders);
 app.use(generalController.getUser);
 
 // END POINTS

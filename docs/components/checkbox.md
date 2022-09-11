@@ -4,7 +4,13 @@ USAGE:
 The component inclusion ejs tag should be wrapped by a label tag as shown. 
 <!--
     <label for=`id` class="custom-checkbox-container">
-       `openTag%` include(`checkbox`, {checkboxName:`name`, checkboxId:`id`, checkboxValue:`value`}) `%closeTag`
+       `openTag%` include(`checkbox`, {
+            checkboxName:`name`,
+            checkboxId:`id`,
+            checkboxValue:`value`,
+            checked: `boolean value`,
+            disabled: `boolean value`,
+        }) `%closeTag`
         `Label Text`
     </label>
 -->

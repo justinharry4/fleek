@@ -13,11 +13,6 @@ router.get('/browse',
     contentController.getBrowse
 );
 
-router.get('/profile',
-    authUtil.checkAuth,
-    contentController.getProfile,
-);
-
 router.get('/profiles',
     authUtil.checkAuth,
     contentController.getProfiles
@@ -51,6 +46,16 @@ router.get('/profiles/setup',
 router.post('/profiles/setup',
     authUtil.checkAuth,
     contentController.postProfileListSetup,
+);
+
+router.get('/profiles/editprofile',
+    authUtil.checkAuth,
+    contentController.getEditProfile,
+);
+
+router.post('/profiles/editprofile',
+authUtil.checkAuth,
+contentController.postEditProfile,
 );
 
 router.get('/manageprofiles', 

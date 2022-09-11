@@ -64,9 +64,9 @@
             <div class="main-wrapper">
                 <section id="topContent-section" class="overlay-wrapper">
                     <!-- <img class="topContent-poster" src=" content.topContent.coverPath " alt="poster"> -->
-                    <img class="topContent-poster" src="<%= content.topContent.backdropPath %>" alt="poster">
+                    <img class="topContent-poster" src="<%= 'images/stranger-things-original.jpg' %>" alt="poster">
                     <div class="topContentInfo-wrapper overlay">
-                        <img class="topContent-logo" src="<%= content.topContent.logoURL %>" alt="logo">
+                        <img class="topContent-logo" src="<%= 'images/hod-logo.png' %>" alt="logo">
                         <!-- <h2><img class="topTen-icon" alt="top ten">#1 in TV Shows Today</h2> -->
                         <p class="topContent-overview">
                             <%= content.topContent.overview %>
@@ -92,17 +92,12 @@
                             <h2 class="category-heading"><%= category.name %></h2>
                             <div class="categoryPosters-wrapper flex-wrapper">
                                 <% for (let [j, contentDoc] of category.contentDocs.entries()) { %>
-                                    <div 
-                                        class="poster-wrapper flex-wrapper" 
-                                        data-contentid="<%= contentDoc._id %>"
-                                        data-genres="<%= contentDoc.genres.join(' ') %>"
-                                        data-totalseasons="<%= contentDoc.seasonCount %>"
-                                        data-length="<%= contentDoc.durationMins %>">
+                                    <div class="poster-wrapper flex-wrapper" data-contentid="<%= contentDoc._id %>">
                                         <div>
                                             <div
                                                 class="poster overlay-wrapper"
-                                                data-src="<%= contentDoc.backdropPath %>">
-                                                <img class="logo overlay" src="<%= contentDoc.logoURL %>" alt="logo">
+                                                data-src="<%= 'images/stranger-things-500.jpg' %>">
+                                                <img class="logo overlay" src="<%= 'images/hod-logo.png' %>" alt="logo">
                                             </div>
                                         </div>
                                         <span class="content-title"><%= contentDoc.title %></span>
@@ -115,12 +110,7 @@
                                 <h2 class="category-heading">My List</h2>
                                 <div class="categoryPosters-wrapper flex-wrapper">
                                     <% for (let contentDoc of myList) { %>
-                                        <div 
-                                            class="poster-wrapper flex-wrapper" 
-                                            data-contentid="<%= contentDoc._id %>"
-                                            data-genres="<%= contentDoc.genres.join(' ') %>"
-                                            data-totalseasons="<%= contentDoc.seasonCount %>"
-                                            data-length="<%= contentDoc.durationMins %>">
+                                        <div class="poster-wrapper flex-wrapper" data-contentid="<%= contentDoc._id %>">
                                             <div>
                                                 <div
                                                     class="poster"

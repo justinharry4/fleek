@@ -38,7 +38,6 @@ async function showPageInHistory(page){
 
 // UTILITY FUNCTIONS
 function adjustAddProfileHoverState(){
-
     let $profileWrappers = $('.profile-wrapper');
 
     $profileWrappers.each((index, element) => {
@@ -59,6 +58,12 @@ function setEventHandlers(){
 
     let $addProfileWrapper = $('.add-profile-wrapper');
     addListener($addProfileWrapper, 'click', getAddProfile);
+
+    let $profileWrappers = $allProfileWrappers.filter('[data-profile-id]');
+    addListener($profileWrappers, 'click', getEditProfile);
+
+    let $doneButton = $('.done-button');
+    addListener($doneButton, 'click', exitManageProfiles);
 
     adjustAddProfileHoverState();
 }
@@ -95,4 +100,27 @@ async function getAddProfile(e){
     } catch (jqXHR){
         console.log('FAIL', jqXHR);
     }
+}
+
+async function getEditProfile(e){
+    let profileId = $(this).data('profile-id');
+
+    try {
+        let HTMLStr = await $.get('/profiles/editprofile', {profileId: profileId});
+        
+        PageManager.loadPageFromHTML(
+            HTMLStr,
+            '#toplevel-container',
+            mainFragmentName,
+            true,
+            '/profiles/editprofile',
+            '/profiles/editprofile',
+        );
+    } catch(jqXHR){
+        console.log('FAIL', jqXHR)
+    }
+}
+
+function exitManageProfiles(e){
+    history.back()
 }

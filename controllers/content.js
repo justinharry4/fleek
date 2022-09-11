@@ -344,21 +344,33 @@ module.exports.postProfileListSetup = async (req, res, next) => {
     }
 };
 
-module.exports.getProfile = async (req, res, next) => {
-    try {
-        let userId = req.session.userId;
-        let user = await User.findById(userId).populate('profiles');
-        let userProfiles = user.profiles;
+module.exports.getEditProfile = async (req, res, next) => {
+    let user = await req.data.user;
+    let profileId = req.query.profileId || req.session.userProfileId;
 
-        res.render('pages/content/profile', {
+    try {
+        let profile = await Profile.findById(profileId);
+        let isUserProfile;
+        if (profile){
+            isUserProfile = profile.user.toString() === user._id.toString();
+        }
+        if (!isUserProfile){
+            return res.redirect('/manageprofiles');
+        }
+
+        return res.render('pages/content/edit-profile', {
             pageTitle: 'Fleek',
-            leadName: 'profile',
+            leadName: 'editProfile',
+            profile: profile,
         });
-    } catch (error){
+    } catch(error){
         next(error);
     }
-}
+};
 
+module.exports.postEditProfile = async (req, res, next) => {
+
+};
 
 // JSON-RESPONSE CONTROLLER FUNCTIONS
 module.exports.postSwitchProfile = async (req, res, next) => {
@@ -393,7 +405,7 @@ module.exports.getContent = async (req, res, next) => {
 
         if (!contentDoc){
             return res.status(404).json({
-                message: 'content with matching id couls not be found.'
+                message: 'content with matching id could not be found.'
             });
         }
 

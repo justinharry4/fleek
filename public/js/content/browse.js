@@ -70,12 +70,7 @@ async function loadPosters(){
 
     for (let [index, posterDiv] of $posters.get().entries()){
         if (index >= 30){
-            let $topDiv = $('#toplevel-container');
-            if ($topDiv.hasClass('loading')){
-                $topDiv.removeClass('loading');
-                $('#onload-cover').remove();
-                console.log('loaded!');
-            }
+            displayPage()
         }
 
         let success;
@@ -108,6 +103,7 @@ async function loadPosters(){
                 success = await promise;
                 clearTimeout(timeoutID);
             } catch (error){
+
                 console.log('PAGE LOAD ERR', error);
             }
         }
@@ -126,6 +122,15 @@ async function showPageInHistory(page){
 
 // UTILITY FUCTIONS
 // misc utilities
+function displayPage(){
+    let $topDiv = $('#toplevel-container');
+    if ($topDiv.hasClass('loading')){
+        $topDiv.removeClass('loading');
+        $('#onload-cover').remove();
+        console.log('loaded!');
+    }
+}
+
 function getTime(durationStr){
     let durationMs;
     if (durationStr.includes('s')){
@@ -462,7 +467,7 @@ async function showFullContentInfo(e){
 
         let genres = contentDoc.genres.join(', ');
         let overview = contentDoc.overview || 'No overview available';
-        let posterUrl = $(this).find('img').attr('src');
+        let posterUrl = $(this).find('.poster').data('src');
 
         let $fullContentInfoContainer = $(getFullContentInfoStr());
 
