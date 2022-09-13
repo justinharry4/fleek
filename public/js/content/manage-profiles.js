@@ -85,6 +85,10 @@ function unhighlightProfile(e){
     $profileImg.css({ borderRadius: '4px' })
 }
 
+function exitManageProfiles(e){
+    history.back()
+}
+
 async function getAddProfile(e){
     try {
         let HTMLStr = await $.get('/profiles/addprofile');
@@ -106,21 +110,18 @@ async function getEditProfile(e){
     let profileId = $(this).data('profile-id');
 
     try {
-        let HTMLStr = await $.get('/profiles/editprofile', {profileId: profileId});
+        let url = '/profiles/editprofile'
+        let HTMLStr = await $.get(url, {profileId: profileId});
         
         PageManager.loadPageFromHTML(
             HTMLStr,
             '#toplevel-container',
             mainFragmentName,
             true,
-            '/profiles/editprofile',
-            '/profiles/editprofile',
+            url,
+            url,
         );
     } catch(jqXHR){
         console.log('FAIL', jqXHR)
     }
-}
-
-function exitManageProfiles(e){
-    history.back()
 }

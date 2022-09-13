@@ -54,8 +54,18 @@ router.get('/profiles/editprofile',
 );
 
 router.post('/profiles/editprofile',
-authUtil.checkAuth,
-contentController.postEditProfile,
+    authUtil.checkAuth,
+    contentController.postEditProfile,
+);  
+
+router.get('/profiles/deleteprofile',
+    authUtil.checkAuth,
+    contentController.getDeleteProfile,
+);
+
+router.post('/profiles/deleteprofiles',
+    authUtil.checkAuth,
+    contentController.postDeleteProfile,
 );
 
 router.get('/manageprofiles', 

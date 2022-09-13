@@ -28,8 +28,8 @@
     border-left: var(--checkmark-width) solid transparent;
     border-bottom: var(--checkmark-width) solid transparent;
     position: absolute;
-    bottom: 20%;
-    left: 40%;
+    bottom: 25%; /* 20% */
+    left: 35%; /* 40% */
     transform-origin: 0% 100%;
     transform: rotate(-45deg);
 }

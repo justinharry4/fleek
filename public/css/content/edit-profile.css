@@ -1,0 +1,159 @@
+@charset "utf-8";
+
+/* checkbox component styles */
+@import url('/css/components/checkbox.css');
+
+/* pointer component styles */
+@import url('/css/components/pointer.css');
+
+/* background & header styles */
+@import url('/css/content/content.css');
+
+/* variables */
+:root {
+    --alt-text-color: #9e9a9a;
+    --profile-photo-width: 7em;
+}
+.custom-checkbox-wrapper {
+    --custom-checkbox-wrapper-width: 28px;
+    --custom-checkbox-wrapper-border-color: #666565;
+    --checkmark-width: 2px;
+    --checkmark-color: #949191;
+}
+
+/* main styles */
+.main-wrapper {
+    width: 28em;
+    margin: 0em auto 0em;
+}
+.main-heading {
+    font-weight: normal;
+    font-size: 3em;
+}
+.editProfile-form {
+    border-top: 1px solid var(--alt-text-color);
+}
+.settings-container {
+    margin-top: 1em;
+    padding-bottom: 1.5em;
+    border-bottom: 1px solid var(--alt-text-color);
+}
+.profilePhoto-container {
+    flex: 0 1 var(--profile-photo-width);
+}
+.profilePhoto-wrapper {
+    width: var(--profile-photo-width);
+    height: var(--profile-photo-width);
+}
+.profilePhoto-wrapper img {
+    border-radius: 4px;
+    width: 100%;
+}
+.profilePhoto-wrapper svg {
+    position: absolute;
+    bottom: 5%;
+    left: 10%;
+    width: 1.4em;
+    background-color: #000000c4;
+    border-radius: 0.7em;
+}
+.settings-wrapper {
+    flex: 1 1 auto;
+    margin: 0em 1.2em 0em;
+}
+.languageSettings-wrapper {
+    border-bottom: 1px solid var(--alt-text-color);
+    padding-bottom: 1em;
+}
+.languageSettings-wrapper input[type="text"] {
+    display: block;
+    padding: .3em .5em;
+    color: #fff;
+    width: 100%;
+    margin-bottom: 1.2em;
+    background-color: var(--alt-text-color);
+}
+.languageSettings-wrapper select {
+    width: 5em;
+    display: block;
+    /* background-color: #000; */
+    border: 1px solid #fff;
+    margin-top: .5em;
+    background-color: #000;
+    color: #fff;
+}
+.setting-heading {
+    color: #cac8c8;
+    font-weight: normal;
+    font-size: 1.1em;
+}
+.maturitySettings-wrapper {
+    padding: 1.5em 0em;
+    border-bottom: 1px solid var(--alt-text-color);
+}
+.maturitySettings-wrapper h3 + div {
+    display: block;
+    font-size: .8em;
+    font-weight: bold;
+    padding: .6em;
+    margin: 1em 0em;
+    background-color: #ffffff3d;
+    width: max-content;
+}
+.maturitySettings-wrapper h3 + div + p {
+    font-size: .8em;
+}
+.maturitySettings-wrapper button {
+    color: var(--alt-text-color);
+    border: 1px solid var(--alt-text-color);
+    padding: .3em 1em;
+    margin-top: 1em;
+}
+.autoplaySettings-wrapper {
+    padding-top: 1.5em;
+}
+.autoplaySettings-wrapper ul {
+    margin-top: .5em;
+}
+.autoplaySettings-wrapper li {
+    font-size: .75em;
+}
+.autoplaySettings-wrapper li:not(:last-of-type) {
+    margin-bottom: .3em;
+}
+.actions-wrapper {
+    padding: 1.5em 0em;
+}
+.actions-wrapper button {
+    padding: .5em 1.3em;
+    margin-right: 1em;
+    font-size: .95em;
+}
+.actions-wrapper .save-button {
+    color: #000;
+    background-color: #fff;
+}
+.actions-wrapper .save-button:hover {
+    color: #fff;
+    background-color: var(--native-color);
+}
+.actions-wrapper .cancel-button,
+.actions-wrapper .delete-button {
+    color: var(--alt-text-color);
+    border: 1px solid;
+}
+.actions-wrapper .cancel-button:hover,
+.actions-wrapper .delete-button:hover {
+    color: #fff;
+}
+
+/* misc styles */
+#lowlevel-container {
+    transition: transform .5s ease;
+}
+#lowlevel-container.zoom {
+    transform: scale(1.2); 
+}
+#toplevel-container.no-scroll {
+    overflow: hidden;
+}

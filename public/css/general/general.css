@@ -28,7 +28,7 @@ button {
     background-color: transparent;
     color: inherit;
 }
-input:focus {
+input:focus, select:focus {
     outline: none;
 }
 li {

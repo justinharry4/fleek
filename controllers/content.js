@@ -167,6 +167,9 @@ module.exports.getManageProfiles = async (req, res, next) => {
         let user = await req.data.user.populate('profiles');
         let profiles = user.profiles;
 
+
+        res.setHeader('Resource-Location', '/manageprofiles');
+
         res.render('pages/content/profiles', {
             pageTitle: 'Fleek',
             leadName: 'profiles',
@@ -369,7 +372,79 @@ module.exports.getEditProfile = async (req, res, next) => {
 };
 
 module.exports.postEditProfile = async (req, res, next) => {
+    let user = req.data.user;
+    let profileId = req.body.profileId;
+    let profileName = req.body.profileName;
 
+    try {
+        let profile = await Profile.findById(profileId);
+        let isUserProfile;
+        if (profile){
+            isUserProfile = profile.user.toString() === user._id.toString();
+        }
+        if (!isUserProfile){
+            return res.redirect('/manageprofiles');
+        }
+
+        profile.name = profileName;
+        await profile.save();
+
+        exports.getManageProfiles(req, res, next);
+    } catch (error){
+        next(error);
+    }
+};
+
+module.exports.getDeleteProfile = async (req, res, next) => {
+    let user = req.data.user;
+    let profileId = req.query.profileId;
+
+    try {
+        let profile = await Profile.findById(profileId);
+        let isUserProfile;
+        if (profile){
+            isUserProfile = profile.user.toString() === user._id.toString();
+        }
+        if (!isUserProfile){
+            return res.redirect('/manageprofiles');
+        }
+
+        return res.render('pages/content/delete-profile', {
+            pageTitle: 'Fleek',
+            leadName: 'deleteProfile',
+            profile: profile,
+        })
+    } catch(error){
+        next(error);
+    }
+};
+
+module.exports.postDeleteProfile = async (req, res, next) => {
+    let user = req.data.user;
+    let profileId = req.query.profileId;
+
+    try {
+        let profile = await Profile.findById(profileId);
+        let isUserProfile;
+        if (profile){
+            isUserProfile = profile.user.toString() === user._id.toString();
+        }
+        if (!isUserProfile){
+            return res.redirect('/manageprofiles');
+        }
+
+        await profile.delete();
+
+        let cleanedProfiles = user.profiles.filter((id) => {
+            return id.toString() !== profileId.toString();
+        });
+        user.profiles = cleanedProfiles;
+        await user.save();
+
+        return res.redirect('/manageprofiles');
+    } catch(error){
+        next(error);
+    }
 };
 
 // JSON-RESPONSE CONTROLLER FUNCTIONS

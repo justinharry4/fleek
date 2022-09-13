@@ -551,7 +551,7 @@ class PageManager {
         let setHandlersFnList = [];
         // mainPopstateListener.pageList = [];
         // mainPopstateListener.setHandlersFnList = [];
-        window.fleekPages = pageList;
+        // window.fleekPages = pageList;
     }
 
     static triggerInitWindowEvents(mainFragmentName, page, showHistoryPageFn, setHandlersFn){
@@ -649,4 +649,33 @@ function addListener(element, eventName, eventListener, eventData){
     jqObject.on(eventName, eventData, eventListener);
 }
 
-export { PageManager, addListener };
+class Ajax {
+    genericAjaxRequest(method , url, data){
+        let promise = new Promise((resolve, reject) => {
+            let jqXHR = $[method](url, data);
+            // console.log('JXHR', jqXHR);
+            jqXHR.done(resData => {
+                resolve({ jqXHR, resData })
+            });
+            jqXHR.fail(() => {
+                reject({ jqXHR });
+            });
+        });
+        
+        return promise;
+    }
+
+    async get(url, data){
+        let result =  await this.genericAjaxRequest('get', url, data);
+        return result;
+    }
+
+    async post(url, data){   
+        let result = await this.genericAjaxRequest('post', url, data);
+        return result;
+    }
+}
+
+const ajax = new Ajax();
+
+export { PageManager, addListener, ajax };
