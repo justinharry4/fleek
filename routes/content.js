@@ -63,7 +63,7 @@ router.get('/profiles/deleteprofile',
     contentController.getDeleteProfile,
 );
 
-router.post('/profiles/deleteprofiles',
+router.post('/profiles/deleteprofile',
     authUtil.checkAuth,
     contentController.postDeleteProfile,
 );

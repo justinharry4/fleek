@@ -108,18 +108,17 @@ async function getAddProfile(e){
 
 async function getEditProfile(e){
     let profileId = $(this).data('profile-id');
+    let requestData = { profileId: profileId }
 
     try {
         let url = '/profiles/editprofile'
-        let HTMLStr = await $.get(url, {profileId: profileId});
+        let HTMLStr = await $.get(url, requestData);
         
         PageManager.loadPageFromHTML(
             HTMLStr,
             '#toplevel-container',
             mainFragmentName,
-            true,
-            url,
-            url,
+            false,
         );
     } catch(jqXHR){
         console.log('FAIL', jqXHR)

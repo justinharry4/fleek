@@ -349,7 +349,7 @@ module.exports.postProfileListSetup = async (req, res, next) => {
 
 module.exports.getEditProfile = async (req, res, next) => {
     let user = await req.data.user;
-    let profileId = req.query.profileId || req.session.userProfileId;
+    let profileId = req.query.profileId;
 
     try {
         let profile = await Profile.findById(profileId);
@@ -421,7 +421,7 @@ module.exports.getDeleteProfile = async (req, res, next) => {
 
 module.exports.postDeleteProfile = async (req, res, next) => {
     let user = req.data.user;
-    let profileId = req.query.profileId;
+    let profileId = req.body.profileId;
 
     try {
         let profile = await Profile.findById(profileId);

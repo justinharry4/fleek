@@ -3,9 +3,6 @@
 /* checkbox component styles */
 @import url('/css/components/checkbox.css');
 
-/* pointer component styles */
-@import url('/css/components/pointer.css');
-
 /* background & header styles */
 @import url('/css/content/content.css');
 
@@ -132,6 +129,7 @@
 .actions-wrapper .save-button {
     color: #000;
     background-color: #fff;
+    font-weight: bold;
 }
 .actions-wrapper .save-button:hover {
     color: #fff;

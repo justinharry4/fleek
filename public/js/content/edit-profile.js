@@ -107,6 +107,8 @@ async function getDeleteProfile(e){
     try {
         let { jqXHR, resData } = await ajax.get(url, requestData);
 
+        let resourceLocation = jqXHR.getResponseHeader('Resource-Location');
+
         PageManager.loadPageFromHTML(
             resData,
             '#toplevel-container',
