@@ -1,0 +1,49 @@
+<%- include(coreRoot + '/head') %>
+    <link rel="stylesheet" href="/css/checkbox.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <script src="/js/signin.js"></script>
+</head>
+<body>
+    <div id="signin-container">
+        <%- include(coreRoot + '/header') %>
+        </header>
+        <div id="signin-main-container">
+            <div id="signin-main-wrapper"> 
+                <h2 id="signin-main-header">Sign In</h2>
+                <form id="form-signin" action="/signin" method="POST">
+                    <fieldset id="form-signin-ul-wrapper">
+                        <ul>
+                            <li class="overlay-wrapper">
+                                <label for="form-signin-email" class="overlay">Email or phone number</label>
+                                <input type="email" class="block-strech" id="form-signin-email" name="email" placeholder="">
+                            </li>
+                            <li class="overlay-wrapper">
+                                <label for="form-signin-password" class="overlay">Password</label>
+                                <input type="password" class="block-strech" id="form-signin-password" name="password" placeholder="">
+                            </li>
+                        </ul>
+                        <input type="submit" value="Sign In" class="native-bg block-strech">
+                    </fieldset>
+                    <fieldset id="form-signin-remember-wrapper" class="flex-wrapper">
+                        <label for="form-signin-checkbox" class="custom-checkbox-container">
+                            <%- include(coreRoot+ '/checkbox', {
+                                checkboxName: 'remember-user', 
+                                checkboxId: 'form-signin-checkbox', 
+                                checkboxValue: 'true',
+                                checked: false,
+                                disabled: false,
+                            }) %>
+                            Remember me
+                        </label>
+                        <span><a href="">Need help?</a></span>
+                    </fieldset>
+                </form>
+                <div >
+                    <p>New to Fleek? <span><a href="/">Sign up now</a></span></p>
+                    <p class="signin-text-small">This page is protected by Google reCAPTCHA to ensure you're not a bot. <span><a>Learn more.</a></span></p>
+                </div>
+            </div>
+        </div>
+        <%- include(coreRoot + '/footer') %>
+    </div>
+<%- include(coreRoot + '/end') %>

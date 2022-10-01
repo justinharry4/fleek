@@ -1,0 +1,476 @@
+@charset "utf-8";
+
+/* GENERAL STYLES */
+/* footer styles */
+@import url('/css/footer1.css');
+
+/* misc styles */
+a:hover, a:active {
+    text-decoration: underline;
+}
+
+/* SIGN IN PAGE STYLES */
+/* background styles */
+#signin-container {
+    color: #776f6f;
+    background-color: #000;
+    background-image: url('/images/home-movie-wall-alpha.png');
+    background-size: cover;
+}
+
+/* main styles */
+#signin-main-container {
+    padding: 0% 2%;
+}
+#signin-main-wrapper {
+    margin: 0em auto 6em;
+    max-width: 28em;
+    padding: 3.5em;
+    background-color: rgba(0, 0, 0, .7);
+    border-radius: 3px;
+}
+#signin-main-wrapper h2 {
+    font-size: 2em;
+    color: #fff;
+}
+#form-signin ul {
+    margin: 1.5em 0em 2.5em;
+}
+#form-signin-ul-wrapper input {
+    height: 3.5em;
+    margin-bottom: 1em;
+    border-radius: 4px;
+    padding: 0em 1em;
+}
+#form-signin ul li input {
+    background-color: #454546;
+}
+#form-signin ul li input::placeholder {
+    color: #919191;
+}
+#form-signin input[type="submit"] {
+    color: #fff;
+    font-weight: bold;
+}
+#form-signin-remember-wrapper {
+    font-size: .8em;
+    font-weight: bold;
+}
+#form-signin-remember-wrapper label {
+    margin-left: .5em;
+}
+#form-signin-remember-wrapper span:last-child {
+    margin-left: auto;
+}
+#signin-main-wrapper > div:last-child {
+    margin: 5em 0em 4em;
+}
+#signin-main-wrapper > div:last-child p:first-child a {
+    color: #fff;
+}
+#signin-main-wrapper > div:last-child p:last-child {
+    margin-top: 1em;
+} 
+#signin-main-wrapper > div:last-child p:last-child a {
+    color: #1010f1;
+}
+#signin-main-wrapper .custom-checkbox-wrapper {
+    background-color: #fff;
+}
+
+/* footer styles */
+.signin-footer {
+    background-color: rgba(0, 0, 0, .7);
+}
+/* misc styles */
+.signin-text-small {
+    font-size: .8em;
+}
+#form-signin li label {
+    display: flex;
+    color: #8a8989;
+    left: 4.5%;
+    top: 0%;
+    z-index: 100;
+    height: 100%;
+    align-items: center;
+    padding-top: 0em;
+    transition-property: align-items, font-size;
+    transition-duration: 100ms;
+}
+#form-signin li label.focus-label {
+    align-items: flex-start;
+    font-size: .8em;
+    padding-top: .2em;
+}
+
+
+/* SIGNUP PAGE STYLES */
+/* variables */
+.signup-main-wrapper .signup-step-img-wrapper {
+    --step-header-img-height: 3.87em;
+}
+/* header styles */
+.toplevel-header.signup-pg {
+    border-bottom: 2px solid #eceaea;
+}
+.toplevel-header-link-text {
+    margin-left: auto;
+    align-self: center;
+    font-weight: bold;
+    /* font-size: 2em; */
+}
+
+/* main styles */
+.signup-main-container {
+    padding: 0% 2%;
+}
+.signup-main-wrapper {
+    padding: 2em;
+    /* border: 2px solid #0d0; */
+    /* margin: 4em auto 7em;  */
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 7em;
+}
+.signup-step-regstep1, .signup-step-regstep2,
+.signup-step-regstep3 {
+    max-width: 26em;
+    text-align: center;
+    margin-top: 3em;
+}
+.signup-step-regform {
+    max-width: 30em;
+}
+.signup-step-chooseplan {
+    max-width: 80%;
+}
+.signup-step-img-wrapper {
+    margin: 0em 3.5em 2em;
+    height: var(--step-header-img-height);
+}
+.signup-step-img-wrapper img {
+    max-height: var(--step-header-img-height);
+}
+.signup-stepno-heading {
+    font-variant: small-caps;
+    font-weight: normal;
+    font-size: 1.1em;
+}
+.signup-stepno-heading .small-num {
+    font-size: .8em;
+    font-weight: bold;
+}
+.signup-step-heading {
+    font-size: 2em;
+}
+.signup-step-regstep1 .signup-step-info-text,
+.signup-step-regstep2 .signup-step-info-ul {
+    margin: 1.5em 2em 0em;
+}
+.signup-step-info-text {
+    line-height: 1.4em;
+}
+.signup-main-wrapper button, .signup-main-wrapper input {
+    border-radius: 4px;
+    height: 3.9rem;
+}
+.signup-main-wrapper input:focus {
+    border-color: #2181da;
+}
+.signup-main-wrapper button,
+.signup-main-wrapper input[type="submit"] {
+    color: #fff;
+    font-size: 1.3em;
+    margin-top: 1.5rem;
+}
+.signup-step-regform .signup-step-info-text {
+    margin: .7em 0em;
+}
+#signup-reg-email {
+    margin: 2.5em 0em;
+    text-align: center;
+}
+.signup-main-wrapper input {
+    border: 2px solid #c9c7c7;
+    margin-bottom: .7em;
+}
+.signup-step-info-ul .signup-step-info-text {
+    margin-left: 1em;
+}
+.signup-step-regstep2 .signup-step-info-ul {
+    text-align: left;
+    margin-left: 1em;
+    margin-right: 4em;
+}
+.signup-step-regstep2 .signup-step-info-ul li {
+    margin-bottom: 1em;
+}
+.signup-step-chooseplan .signup-step-info-ul {
+    margin: 1em 0em;
+}
+.signup-extra-plan-info {
+    color: #7a7a7a;
+}
+.signup-extra-plan-info p:last-child {
+    margin-top: 1em;
+}
+.signup-step-chooseplan button:last-child {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.signup-step-regstep3 {
+    max-width: 35em;
+}
+#signup-secure-server-icon {
+    width: 10px;
+} 
+.signup-step-regstep3 .signup-step-info-text-wrapper {
+    margin-top: 1em;
+}
+.signup-step-regstep3 .signup-step-info-text:last-child {
+    margin-top: .5em;
+    font-weight: bold;
+}
+.signup-proceed-button-wrapper 
+.signup-secure-server-wrapper {
+    justify-content: flex-end;
+    padding: .3em 0em;
+    font-size: .8em;
+}
+#signup-secure-server-icon {
+    margin: 0em 5px;
+}
+.signup-proceed-button-wrapper {
+    margin-top: 1em;
+}
+.signup-step-regstep3 .proceed-button {
+    margin-top: 0em;
+    width: 100%;
+    color: #000;
+    font-size: 1em;
+    background-color: #fff;
+    border: 2px solid #c4c3c3;
+    align-items: center;
+    padding: 1em;
+}
+.signup-step-regstep3 .proceed-button .signup-card-option-icon {
+    margin: 0em .2em;
+}
+.signup-step-regstep3 .proceed-button span {
+    margin-right: .5em;
+}
+.signup-step-regstep3 .proceed-button svg:last-child {
+    margin-left: auto;
+    height: 20px;
+    color: #c4c3c3;
+}
+.signup-step-creditoption {
+    max-width: 33em;
+}
+.signup-card-icons-wrapper {
+    height: 1.2em;
+    margin: .5em 0em;
+}
+.signup-header-card-icon {
+    margin-right: .3em;
+}
+/* .signup-step-creditoption .signup-form 
+.signup-form-ul #signup-cvv-input-wrapper { */
+#signup-cvv-input-wrapper {
+    border: solid 2px #c9c7c7;
+    width: 100%;
+    align-items: center;
+    border-radius: 4px;
+}
+.signup-main-wrapper #signup-cvv-input-wrapper.focus-input-wrapper {
+    border-color: #2181da;
+}
+#signup-form-moreinfo-icon {
+    width: 40px;
+    margin: 0em .7em;
+}
+#signup-form-cvv {
+    flex: 1 1 auto;
+    margin-bottom: 0em;
+    border: none;
+}
+.signup-step-creditoption button {
+    width: 100%;
+    padding: 1em;
+    align-items: center;
+    color: #000;
+    font-size: 1em;
+    margin-bottom: 1.5em;
+    text-transform: capitalize;
+}
+#signup-change-plan-link {
+    margin-left: auto;
+}
+#signup-change-plan-link:hover {
+    text-decoration: none;
+}
+.signup-step-creditoption button ~ p:first-of-type {
+    margin-bottom: 2em;
+}
+.signup-step-creditoption button ~ p:nth-of-type(2) {
+    margin-bottom: 1em;
+}
+.signup-step-creditoption .submit-button {
+    border-radius: 4px;
+    color: #fff;
+    border: none;
+}
+
+
+/* table styles */  
+#sub-plan-table td { 
+    text-align: center;
+}
+#sub-plan-table tr {
+    justify-content: flex-end;
+}
+#sub-plan-table tbody tr {
+    padding: 1em 0em;
+}
+.tr-plans th {
+    border-radius: 3px;
+    height: 7.5em;
+    /* height: 100%; */
+}
+.lead-cell-th {
+    flex: 0 0 auto;
+    text-align: left;
+    margin-right: auto;
+    /* width: 27em; */
+    width: 44%;
+    font-weight: normal;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+.lead-cell-th ~ *{
+    flex: 1 0 0px;
+    /* margin: 0em .5em; */
+    margin: 0% 1.5%;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+#sub-plan-table thead .lead-cell-th ~ * {
+    align-items: center;
+    color: #fff;
+    justify-content: center;
+}
+.tr-plans {
+    padding-bottom: 1em;
+}
+#sub-plan-table tbody tr:last-child {
+    height: auto;
+}
+.tr-devices td div {
+    flex-direction: column;
+    align-items: center;
+}
+.tr-devices .tr-svg-wrapper {
+    display: block;
+}
+.tr-devices .tr-svg-icon-container {
+    margin-bottom: .7em;
+}
+#sub-plan-table tbody tr:not(:last-child) {
+    border-bottom: 2px solid #c7c3c3;
+}
+#sub-plan-table tbody td {
+    color: #8d8c8c;
+}
+.tr-plans {
+    position: sticky;
+    top: 50px;
+}
+
+/* footer styles */
+.signup-footer {
+    background-color: #eceaea;
+    color: #776f6f;
+}
+.signup-footer nav {
+    margin: 0% 5%;
+}
+
+/* error styles */
+.validation-error {
+    color: #fff;
+    background-color: #f8ae0e;
+    padding: 1em;
+    border-radius: 2px;
+    align-items: center;
+    margin-bottom: 1.5em;
+}
+.validation-error::before {
+    content: "!";
+    margin-right: 1em;
+}
+.signup-step-creditoption p.warning-text {
+    margin: .4em 0em;
+}
+.signup-main-wrapper .invalid-input {
+    /* border: 2px solid #e64e4e; */
+    border-color: #e64e4e;
+}
+#signup-cvv-input-wrapper.invalid-input {
+    border-color: #e64e4e;
+}
+.required-field {
+    margin: -0.5em 0em 0.5em;
+}
+.signup-step-creditoption .signup-form 
+ul li:last-child .required-field {
+    margin: 0.2em 0em 0.5em;
+}
+
+/* misc styles */
+.signup-text-small {
+    font-size: .8em;
+}
+.signup-sub-main-text {
+    font-size: .9em;
+}
+.signup-checkmark-svg {
+    color: var(--native-color);
+}
+#sub-plan-table .signup-inactive-native-bg {
+    background-color: #e96565;
+}
+#sub-plan-table .signup-native-bg {
+    background-color: var(--native-color);
+}
+#sub-plan-table .signup-native-fg {
+    color: var(--native-color);
+}
+.greyed-text {
+    color: #757775;
+}
+.link-blue {
+    color: #0676df;
+}
+.warning-text {
+    color: #bb2924;
+}
+.signup-form li label {
+    /* display: flex; */
+    color: #8a8989;
+    left: 2.5%;
+    top: 1.5em;
+    z-index: 100;
+    height: 100%;
+    /* align-items: center; */
+    padding-top: 0em;
+    transition-property: align-items, font-size, top;
+    transition-duration: 150ms;
+}
+.signup-form li label.focus-label {
+    /* align-items: flex-start; */
+    font-size: .8em;
+    top: 0%;
+    padding-top: .5em;
+}
