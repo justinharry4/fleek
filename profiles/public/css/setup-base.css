@@ -1,0 +1,62 @@
+@charset "UTF-8";
+
+/* header styles */
+.toplevel-header {
+    padding-left: 0%;
+    margin: 0% 15%;
+    border-bottom: 2px solid #eceaea;
+}
+.help-link {
+    font-weight: bold;
+    margin-left: auto;
+    align-self: center;
+}
+.help-link:hover, .help-link:active {
+    text-decoration: underline;
+}
+
+/* main styles */
+.main-wrapper {
+    margin: 1em 15% 8em;
+}
+.heading-wrapper {
+    flex: 0 0 42%;
+    margin-right: 8%;
+}
+.step-no {
+    font-weight: normal;
+    font-size: .85em;
+}
+.step-heading {
+    font-size: 2.5em;
+    font-weight: 800;
+}
+.heading-wrapper p {
+    font-size: .95em;
+    margin-top: 1em;
+    line-height: 1.5em;
+}
+
+/* footer styles */
+footer {
+    background-color: #eceaea;
+    color: #776f6f;
+}
+footer nav ul {
+    font-size: .8em;
+}
+
+/* misc styles */
+a:hover {
+    text-decoration: underline;
+}
+#lowlevel-container {
+    opacity: 1;
+    transition-property: transform opacity;
+    transition-duration: .5s;
+    transition-timing-function: ease-out;
+}
+#lowlevel-container.offScreenRight {
+    transform: translateX(50%);
+    opacity: 0;
+}

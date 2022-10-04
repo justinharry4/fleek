@@ -1,0 +1,32 @@
+<%- include(coreRoot + '/head') %>
+    <link rel="stylesheet" href="/css/delete-profile.css">
+    <script src="/js/delete-profile.js" type="module" data-fetchmethod="native"></script>
+</head>
+<body>
+    <div id="toplevel-container" data-fragment-name="deleteProfile">
+        <%- include(coreRoot + '/header') %>
+        </header>
+        <div id="lowlevel-container" class="transZero zoom" data-transition-class="zoom">
+            <div class="main-wrapper">
+                <h2 class="main-heading">Delete Profile?</h2>
+                <form class="deleteProfile-form" action="/profiles/deleteprofile" method="POST">
+                    <div class="info-wrapper flex-wrapper">
+                        <div class="profilePhoto-wrapper">
+                            <img src="<%= profile.profilePhotoUrl %>" alt="profile photo">
+                            <span><%= profile.name %></span>
+                        </div>
+                        <p>
+                            This profiles history - including My List, ratings and activity -
+                            will be gone forever, and you won't be able to access it again.
+                        </p>
+                    </div>
+                    <div class="actions-wrapper flex-wrapper">
+                        <button type="button" class="cancel-button">Keep Profile</button>
+                        <button type="submit" class="delete-button">Delete Profile</button>
+                    </div>
+                    <input type="hidden" name="profileId" value="<%= profile._id %>">
+                </form>
+            </div>
+        </div>
+    </div>
+<%- include(coreRoot + '/end') %>

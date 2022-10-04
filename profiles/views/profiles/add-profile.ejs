@@ -1,0 +1,45 @@
+<%- include(coreRoot + '/head') %>
+    <link rel="stylesheet" href="/css/add-profile.css">
+    <script src="/js/add-profile.js" type="module" data-fetchmethod="native"></script>
+</head>
+<body>
+    <div id="toplevel-container" data-fragment-name="addProfile">
+        <%- include(coreRoot + '/header') %>
+        </header>
+        <div id="lowlevel-container" class="transZero zoom" data-transition-class="zoom">
+            <div class="main-wrapper">
+                <h2 class="addProfile-heading">Add Profile</h2>
+                <h3 class="addProfile-subheading">
+                    <% if (profiles.length > 0) { %>
+                        Add a profile for another person watching watching Fleek.
+                    <% } else { %>
+                        Add a profile to start watching Fleek.
+                    <% } %>
+                </h3>
+                <hr class="input-section-hr">
+                <div class="flex-wrapper input-section-div">
+                    <img class="profile-photo" src="/images/def-profile-photo.png" alt="profile photo">
+                    <form action="/profiles/create" method="POST" class="profile-form flex-wrapper">
+                        <input type="text" name="profileName" placeholder="Name">
+                        <label for="kid-checkbox" class="custom-checkbox-container kidCheckbox-label overlay-wrapper">
+                            <%- include(coreRoot + '/checkbox', { 
+                                checkboxName: 'kid',
+                                checkboxId: 'kid-checkbox', 
+                                checkboxValue: 'kid',
+                                checked: false,
+                                disabled: false,
+                            }) %>
+                            Kid?
+                            <span class="kidLabelHint overlay">If selected, this profile will only see TV shows and movies rated for ages 12 and under.</span>
+                        </label>
+                    </form>
+                </div>
+                <hr class="input-section-hr">
+                <div class="options-div flex-wrapper">
+                    <button type="button" class="continue-button option-button">Continue</button>
+                    <button type="button" class="cancel-button option-button">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<%- include(coreRoot + '/end') %>

@@ -1,0 +1,50 @@
+@charset "UTF-8";
+
+/* header, main, footer & misc styles */
+@import url('/css/setup-base.css');
+/* checkbox styles */
+@import url('/css/checkbox.css');
+/* footer styles */
+@import url('/css/footer1.css');
+
+/* variables */
+.custom-checkbox-wrapper {
+    --custom-checkbox-wrapper-width: 25px;
+    --checkmark-width: 3px;
+    --checkmark-color: #000;
+}
+.default-language-wrapper .custom-checkbox-wrapper {
+    --custom-checkbox-wrapper-border-color: transparent;
+}
+
+/* main styles */
+.languages-wrapper {
+    font-size: .96em;
+    flex: 1 1 auto;
+}
+.default-language-wrapper {
+    margin-top: 2em;
+    background-color: #dfdede;
+    padding: .5em;
+    font-weight: bold;
+}
+.other-languages-container {
+    margin-top: 2em;
+}
+.languages-column-div {
+    flex-direction: column;
+    flex: 1 0 0px;
+}
+.language-wrapper {
+    margin-bottom: 1em;
+    height: 2em;
+}
+.next-button {
+    padding: 1em;
+    width: 41%;
+    border-radius: 3px;
+    color: #fff;
+    margin: 1em 0em 0em auto;
+    display: block;
+}
+

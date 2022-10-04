@@ -1,0 +1,75 @@
+<%- include(coreRoot + '/head') %>
+    <link rel="stylesheet" href="/css/edit-profile.css">
+    <script src="/js/edit-profile.js" type="module" data-fetchmethod="native"></script>
+</head>
+<body>
+    <div id="toplevel-container" class="no-scroll" data-fragment-name="editProfile">
+        <%- include(coreRoot + '/header') %>
+        </header>   
+        <div id="lowlevel-container" class="transZero zoom" data-transition-class="zoom">
+            <div class="main-wrapper">
+                <h2 class="main-heading">Edit Profile</h2>
+                <form class="editProfile-form" action="/profiles/editprofile" method="POST">
+                    <div class="settings-container flex-wrapper">
+                        <div class="profilePhoto-container flex-wrapper">
+                            <div class="profilePhoto-wrapper overlay-wrapper">
+                                <img src="<%= profile.profilePhotoUrl %>" alt="profile photo">
+                                <%- include(svgRoot + '/edit-pencil.svg') %>
+                            </div>
+                        </div>
+                        <div class="settings-wrapper">
+                            <div class="languageSettings-wrapper">
+                                <input type="text" name="profileName" value="<%= profile.name %>">
+                                <h3 class="setting-heading"><label for="language-select">Language:</label></h3>
+                                <select id="language-select" name="profileLanguage">
+                                    <option>English</option>
+                                </select>
+                            </div>
+                            <div class="maturitySettings-wrapper">
+                                <h3 class="setting-heading">Maturity Settings</h3>
+                                <div>All Maturity Ratings</div>
+                                <p>Show titles of <b>all maturity ratings</b> for this profile.</p>
+                                <button type="button" class="editMaturity-button">Edit</button>
+                            </div>
+                            <div class="autoplaySettings-wrapper">
+                                <h3 class="setting-heading">Autoplay Controls</h3>
+                                <ul>
+                                    <li>
+                                        <label for="autoNextEpisode-checkbox" class="custom-checkbox-container autoplayCheckbox-label">
+                                            <%- include(coreRoot + '/checkbox', { 
+                                                checkboxName: 'autoNextEpisode',
+                                                checkboxId: 'autoNextEpisode-checkbox', 
+                                                checkboxValue: 'true',
+                                                checked: true,
+                                                disabled: false,
+                                            }) %>
+                                            Autoplay next episode in a series on all devices.
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label for="autoPreview-checkbox" class="custom-checkbox-container autoplayCheckbox-label">
+                                            <%- include(coreRoot + '/checkbox', { 
+                                                checkboxName: 'autoPreview',
+                                                checkboxId: 'autoNextPreview-checkbox', 
+                                                checkboxValue: 'true',
+                                                checked: true,
+                                                disabled: false,
+                                            }) %>
+                                            Autoplay previews while browsing on all devices.
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-wrapper actions-wrapper">
+                        <button type="submit" class="save-button">Save</button>
+                        <button type="button" class="cancel-button">Cancel</button>
+                        <button type="button" class="delete-button">Delete Profile</button>
+                    </div>
+                    <input type="hidden" name="profileId" value="<%= profile._id %>">
+                </form>
+            </div>
+        </div>
+    </div>
+<%- include(coreRoot + '/end') %>

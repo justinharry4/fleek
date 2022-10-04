@@ -1,0 +1,67 @@
+@charset "UTF-8";
+
+/* header, main, footer & misc styles */
+@import url('/css/setup-base.css');
+/* footer styles */
+@import url('/css/footer1.css');
+
+/* main styles */
+.posters-container {
+    flex: 1 1 auto;
+}
+.posters-wrapper {
+    grid-template-columns: repeat(auto-fit, 89px);
+    grid-auto-rows: 120px;
+    justify-content: end;
+    row-gap: 10px;
+    column-gap: 6px;
+    margin-top: 2em;
+}
+.poster-wrapper {
+    overflow: hidden;
+    border-radius: 4px;
+    /* border: 1px solid red; */
+}
+.poster-wrapper.selected {
+    background-color: #000;
+}
+img.poster {
+    /* max-height: max-content; */
+    max-width: max-content;
+}
+.poster.selected {
+    opacity: .2;
+}
+.poster-wrapper svg {
+    display: none;
+    fill: #fff;
+    position: absolute;
+    width: 28%;
+    left: 36%;
+    top: 40%;
+}
+.poster-wrapper.selected svg {
+    display: block;
+}
+.continue-button {
+    display: block;
+    font-size: .9em;
+    width: 16em;
+    margin: 2em 0em 0em auto;
+    padding: 1em;
+    border-radius: 3px;
+    color: black;
+}
+.continue-button[disabled] {
+    background-color: #dfdbdb;
+}
+.continue-button.ready {
+    color: #fff;
+    background-color: var(--native-color);
+}
+.continue-button.ready:hover {
+    background-color: #eb3434;
+}
+.continue-button.ready:active {
+    background-color: var(--native-color);
+}
