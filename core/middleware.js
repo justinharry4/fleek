@@ -18,6 +18,7 @@ module.exports.sessionsMiddleware = session({
     store: sessionStore
 });
 
+
 // User-defined middleware
 module.exports.authenticationMiddleware = async (req, res, next) => {
     req.data = {};
@@ -37,7 +38,7 @@ module.exports.responseLocalsMiddleware = (req, res, next) => {
     next();
 }
 
-module.exports.topLevelErrorMiddleware = (error, req, res, next) => {
+module.exports.errorMiddleware = (error, req, res, next) => {
     console.log('INSIDE ERROR HANDLER\n', error);
     
     if (!error.data || error.data.resType === 'text/html'){

@@ -1,12 +1,14 @@
-const express = require('express');
+const express = require('./express');
 
 const coreConfig = require('./core/config');
-const middleware = require('./core/middleware');
-const authRouter = require('./auth/routes');
-const profilesRouter = require('./profiles/routes');
 const errorRouter = require('./core/routes');
 const { startServer } = require('./core/server');
+let middleware = require('./core/middleware');
+const authRouter = require('./auth/routes');
+const profilesRouter = require('./profiles/routes');
+const { makeSafe } = require('./core/utils/middleware');
 
+middleware = makeSafe(middleware);
 
 const app = express();
 
@@ -27,6 +29,6 @@ app.use('/profiles', profilesRouter);
 app.use(errorRouter);
 
 // ERROR-HANDLING MIDDLEWARE
-app.use(middleware.topLevelErrorMiddleware);
+app.use(middleware.errorMiddleware);
 
 startServer(app);

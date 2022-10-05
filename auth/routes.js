@@ -1,10 +1,14 @@
 const express = require('express');
 
-const controllers = require('./controllers');
+let controllers = require('./controllers');
+let middleware = require('./middleware');
 const validators = require('./validators');
-const middleware = require('./middleware');
+const { makeSafe } = require('../core/utils/middleware');
 
 const router = express.Router();
+
+controllers = makeSafe(controllers);
+middleware = makeSafe(middleware);
 
 router.use('/', middleware.routeProtectionMiddleware);
 

@@ -1,11 +1,15 @@
 const express = require('express');
 
-const controllers = require('./controllers');
-const { checkAuthMiddleware } = require('../auth/middleware');
+let controllers = require('./controllers');
+let middleware = require('../auth/middleware');
+const { makeSafe } = require('../core/utils/middleware');
+
+controllers = makeSafe(controllers);
+middleware = makeSafe(middleware);
 
 const router = express.Router();
 
-router.use(checkAuthMiddleware);
+router.use(middleware.checkAuthMiddleware);
 
 // HTML-RESPONSE ROUTES
 router.get('/',

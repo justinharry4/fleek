@@ -4,22 +4,19 @@ const bcrypt = require('bcryptjs');
 const { User } = require('./models');
 const fileUtil = require('../util/file');
 
+
 module.exports.getSignin = async (req, res, next) => {
-    try {
-        let authDataPath = 'data/auth.json';
+    let authDataPath = 'data/auth.json';
 
-        let dataString = await fileUtil.loadFile(authDataPath);
-        let authData = JSON.parse(dataString);
-        let navList = authData.footerNavList;
+    let dataString = await fileUtil.loadFile(authDataPath);
+    let authData = JSON.parse(dataString);
+    let navList = authData.footerNavList;
 
-        res.render('auth/sign-in', {
-            pageTitle: 'Fleek | Sign in',
-            navList: navList,
-            leadName: 'signin',
-        })
-    } catch(error){
-        next(error);
-    }
+    res.render('auth/sign-in', {
+        pageTitle: 'Fleek | Sign in',
+        navList: navList,
+        leadName: 'signin',
+    });
 };
 
 module.exports.postSignin = async (req, res, next) => {
@@ -33,29 +30,25 @@ module.exports.postSignin = async (req, res, next) => {
         remeberUser: rememberUser
     };
 
-    try {
-        let user = await User.findOne({email: email});
-        if (!user){
-            return res.redirect('/signin');
-        }
-
-        let hashedPassword = user.password;
-        let passwordMatch = await bcrypt.compare(password, hashedPassword);
-
-        if (!passwordMatch){
-            return res.redirect('/signin');
-        }
-
-        req.session.userId = user._id;
-        req.session.authenticated = true;
-        if (rememberUser === 'true'){
-            // remember user
-        }
-
-        res.redirect('/browse');
-    } catch(error){
-        next(error);
+    let user = await User.findOne({email: email});
+    if (!user){
+        return res.redirect('/signin');
     }
+
+    let hashedPassword = user.password;
+    let passwordMatch = await bcrypt.compare(password, hashedPassword);
+
+    if (!passwordMatch){
+        return res.redirect('/signin');
+    }
+
+    req.session.userId = user._id;
+    req.session.authenticated = true;
+    if (rememberUser === 'true'){
+        // remember user
+    }
+
+    res.redirect('/browse');
 }
 
 async function renderSignupView(req, res, next, steps){
@@ -137,36 +130,32 @@ module.exports.postSignupRegform = async (req, res, next) => {
     let email = req.body.email;
     let password = req.body.password;
 
-    try {
-        let existingUser = await User.findOne({email: email});
-        if (existingUser){
-            let message = 'A user with this email already exists.';
-            let invalidFields = [];
+    let existingUser = await User.findOne({email: email});
+    if (existingUser){
+        let message = 'A user with this email already exists.';
+        let invalidFields = [];
 
-            return res.status(422).json({ message: message, fields: invalidFields });
-        }
-
-        let hashedPassword = await bcrypt.hash(password, 12);
-        let user = new User({
-            email: email,
-            password: hashedPassword
-        });
-
-        await user.save();
-        req.session.regUser = user._id;
-        req.session.regAccountCreated = true;
-
-        let nextSignupStep = 'regstep2';
-        let upperSignupStep = 'chooseplan';
-        let steps = { 
-            signupStep: nextSignupStep,
-            nextSignupStep: upperSignupStep
-        };
-
-        renderSignupView(req, res, next, steps)
-    } catch (error){
-        next(error);
+        return res.status(422).json({ message: message, fields: invalidFields });
     }
+
+    let hashedPassword = await bcrypt.hash(password, 12);
+    let user = new User({
+        email: email,
+        password: hashedPassword
+    });
+
+    await user.save();
+    req.session.regUser = user._id;
+    req.session.regAccountCreated = true;
+
+    let nextSignupStep = 'regstep2';
+    let upperSignupStep = 'chooseplan';
+    let steps = { 
+        signupStep: nextSignupStep,
+        nextSignupStep: upperSignupStep
+    };
+
+    renderSignupView(req, res, next, steps);
 };
 
 module.exports.getSignupStep2 = (req, res, next) => {
@@ -201,26 +190,22 @@ module.exports.postSignupChoosePlan = async (req, res, next) => {
         return res.status(422).json({ message: message, fields: invalidFields });
     }
 
-    try {
-        let subPlan = req.body.subPlan;
-        let userId = req.session.regUser;
-        let user = await User.findById(userId);
+    let subPlan = req.body.subPlan;
+    let userId = req.session.regUser;
+    let user = await User.findById(userId);
 
-        user.subscriptionPlan = subPlan;
-        req.session.regSubPlan = subPlan;
-        await user.save();
+    user.subscriptionPlan = subPlan;
+    req.session.regSubPlan = subPlan;
+    await user.save();
 
-        let nextSignupStep = 'regstep3';
-        let upperSignupStep = 'creditoption';
-        let steps = { 
-            signupStep: nextSignupStep,
-            nextSignupStep: upperSignupStep
-        };
+    let nextSignupStep = 'regstep3';
+    let upperSignupStep = 'creditoption';
+    let steps = { 
+        signupStep: nextSignupStep,
+        nextSignupStep: upperSignupStep
+    };
 
-        renderSignupView(req, res, next, steps);
-    } catch(error){
-        next(error);
-    }
+    renderSignupView(req, res, next, steps);
 };
 
 module.exports.getSignupStep3 = (req, res, next) => {
@@ -283,3 +268,4 @@ module.exports.postSignout = (req, res, next) => {
 
     res.sendStatus(201);
 };
+
