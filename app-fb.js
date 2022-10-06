@@ -16,12 +16,6 @@ coreConfig.configureViews(app);
 coreConfig.configureStatic(app);
 
 // CATCH-ALL MIDDLEWARE (third-party)
-// console.log(middleware);
-// for (let [name, fn] of Object.entries(middleware)){
-//     console.log(name, fn.length);
-// }
-
-
 app.use(middleware.UrlEncodedParserMiddleware);
 app.use(middleware.sessionsMiddleware);
 

@@ -2,7 +2,7 @@ const fileUtil = require('./utils/file');
 
 module.exports.getIndex = async (req, res, next) => {
     let regAccountCreated = req.session.regAccountCreated;
-    let homePageDataPath = 'data/home.json';
+    let homePageDataPath = 'core/data/home.json';
 
     let dataString = await fileUtil.loadFile(homePageDataPath);
     let homePageData = JSON.parse(dataString);

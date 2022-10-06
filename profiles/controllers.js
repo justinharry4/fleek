@@ -68,7 +68,7 @@ module.exports.getLanguageSetup = async (req, res, next) => {
         return res.redirect('/browse');
     }
     
-    let languagesDataPath = 'data/languages.json';
+    let languagesDataPath = 'profiles/data/languages.json';
     let languagesDataStr = await fileUtil.loadFile(languagesDataPath);
     let languagesData = JSON.parse(languagesDataStr);
     let languages = languagesData.languages;
@@ -77,10 +77,10 @@ module.exports.getLanguageSetup = async (req, res, next) => {
     let column2 = languages.slice(column1Length);
     let langData = [column1, column2];
 
-    let authDataPath = 'data/auth.json';
-    let authDataString = await fileUtil.loadFile(authDataPath);
-    let authData = JSON.parse(authDataString);
-    let navList = authData.footerNavList;
+    let footerDataPath = 'core/data/footer-slim.json';
+    let footerDataString = await fileUtil.loadFile(footerDataPath);
+    let footerData = JSON.parse(footerDataString);
+    let navList = footerData.footerNavList;
 
     res.render('profiles/language-setup', {
         pageTitle: 'Fleek',
@@ -130,10 +130,10 @@ module.exports.getProfileListSetup = async (req, res, next) => {
         return doc;
     });
 
-    let authDataPath = 'data/auth.json';
-    let authDataString = await fileUtil.loadFile(authDataPath);
-    let authData = JSON.parse(authDataString);
-    let navList = authData.footerNavList;
+    let footerDataPath = 'core/data/footer-slim.json';
+    let footerDataString = await fileUtil.loadFile(footerDataPath);
+    let footerData = JSON.parse(footerDataString);
+    let navList = footerData.footerNavList;
 
     res.render('profiles/setup', {
         pageTitle: 'Fleek',

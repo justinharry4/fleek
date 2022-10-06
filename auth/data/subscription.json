@@ -1,0 +1,14 @@
+{
+    "urls" : {
+        "phone": "../../../assets/images/svg/phone.svg",
+        "tablet": "../../../assets/images/svg/tablet.svg",
+        "computer": "../../../assets/images/svg/computer.svg",
+        "tv": "../../../assets/images/svg/tv.svg"
+    },
+    "plans": {
+        "mobile": { "price": "1200", "videoQuality": "Good", "resolution": "480p", "devices": ["phone", "tablet"]},
+        "basic": { "price": "2900", "videoQuality": "Good", "resolution": "480p", "devices": ["phone", "tablet", "computer", "tv"]},
+        "standard": { "price": "3600", "videoQuality": "Better", "resolution": "1080p", "devices": ["phone", "tablet", "computer", "tv"]},
+        "premium": { "price": "4400", "videoQuality": "Best", "resolution": "4K+HDR", "devices": ["phone", "tablet", "computer", "tv"]}
+    }
+}

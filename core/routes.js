@@ -7,9 +7,10 @@ controllers = makeSafe(controllers);
 
 const router = express.Router();
 
-// ERROR ROUTES
+// index route
 router.get('/', controllers.getIndex);
 
+// error routes
 router.use('/server-error', controllers.get500);
 
 router.use('/', controllers.get404);

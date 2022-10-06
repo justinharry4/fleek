@@ -6,11 +6,11 @@ const fileUtil = require('../util/file');
 
 
 module.exports.getSignin = async (req, res, next) => {
-    let authDataPath = 'data/auth.json';
+    let footerDataPath = 'core/data/footer-slim.json';
 
-    let dataString = await fileUtil.loadFile(authDataPath);
-    let authData = JSON.parse(dataString);
-    let navList = authData.footerNavList;
+    let dataString = await fileUtil.loadFile(footerDataPath);
+    let footerData = JSON.parse(dataString);
+    let navList = footerData.footerNavList;
 
     res.render('auth/sign-in', {
         pageTitle: 'Fleek | Sign in',
@@ -59,14 +59,19 @@ async function renderSignupView(req, res, next, steps){
     let regUser = await User.findById(req.session.regUser);
     let regEmail = (regUser) ? regUser.email : req.session.regEmail;
 
-    let authDataPath = 'data/auth.json';
     try {
-        let dataString = await fileUtil.loadFile(authDataPath);
-        let authData = JSON.parse(dataString);
-        let navList = authData.footerNavList;
+        let footerDataPath = 'core/data/footer-slim.json';
+        let footerDataString = await fileUtil.loadFile(footerDataPath);
+        let footerData = JSON.parse(footerDataString);
+        let navList = footerData.footerNavList;
+
+        let subDataPath = 'auth/data/subscription.json'
+        let subDataString = await fileUtil.loadFile(subDataPath);
+        let subData = JSON.parse(subDataString);
+
         let subscriptionData;
         if (signupStep === 'chooseplan' || signupStep === 'creditoption'){
-            subscriptionData = authData.subscriptionInfo;
+            subscriptionData = subData;
         }
         res.render('auth/sign-up', {
             pageTitle: 'Fleek | Sign up',
