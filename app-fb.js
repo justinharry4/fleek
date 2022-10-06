@@ -1,7 +1,7 @@
-const express = require('./express');
+const express = require('express');
 
 const coreConfig = require('./core/config');
-const errorRouter = require('./core/routes');
+const coreRouter = require('./core/routes');
 const { startServer } = require('./core/server');
 let middleware = require('./core/middleware');
 const authRouter = require('./auth/routes');
@@ -16,6 +16,12 @@ coreConfig.configureViews(app);
 coreConfig.configureStatic(app);
 
 // CATCH-ALL MIDDLEWARE (third-party)
+// console.log(middleware);
+// for (let [name, fn] of Object.entries(middleware)){
+//     console.log(name, fn.length);
+// }
+
+
 app.use(middleware.UrlEncodedParserMiddleware);
 app.use(middleware.sessionsMiddleware);
 
@@ -26,9 +32,10 @@ app.use(middleware.responseLocalsMiddleware);
 // ROUTES
 app.use(authRouter);
 app.use('/profiles', profilesRouter);
-app.use(errorRouter);
+app.use(coreRouter);
 
 // ERROR-HANDLING MIDDLEWARE
 app.use(middleware.errorMiddleware);
 
 startServer(app);
+

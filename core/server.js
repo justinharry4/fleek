@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
-const { MONGO_DB_URI, PORT } = require('../config/config');
+const config = require('../config/config');
+
+const CONFIGPORT = config.PORT;
+const MONGO_DB_URI = config.MONGO_DB_URI;
+
+const PORT = process.argv[2] || CONFIGPORT;
 
 module.exports.startServer = async (app) => {
     try {

@@ -38,8 +38,16 @@ module.exports.responseLocalsMiddleware = (req, res, next) => {
     next();
 }
 
+// module.exports.CORSMiddleware = (req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET');
+//     res.setHeader('Access-Control-Allow-Headers', '*');
+
+//     next();
+// };
+
 module.exports.errorMiddleware = (error, req, res, next) => {
-    console.log('INSIDE ERROR HANDLER\n', error);
+    console.log('DEFAULT ERROR HANDLER\n', error);
     
     if (!error.data || error.data.resType === 'text/html'){
         return res.redirect('/server-error');
@@ -48,5 +56,3 @@ module.exports.errorMiddleware = (error, req, res, next) => {
         return res.redirect('/server-error?type=json')
     }
 };
-
-module.exports.session = session;

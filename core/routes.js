@@ -8,7 +8,10 @@ controllers = makeSafe(controllers);
 const router = express.Router();
 
 // ERROR ROUTES
+router.get('/', controllers.getIndex);
+
 router.use('/server-error', controllers.get500);
+
 router.use('/', controllers.get404);
 
 module.exports = router;

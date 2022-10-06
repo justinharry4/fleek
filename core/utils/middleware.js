@@ -29,6 +29,20 @@ function makeSafeAsyncMiddleware(middlewareFn){
     }
 }
 
+function makeSafeErrorMiddleware(middlewareFn){
+    return (err, req, res, next) => {
+        try {
+            middlewareFn(err, req, res, next);
+        } catch(error) {
+            console.log('sync error catch');
+            if (middlewareFn.onError){
+                return middlewareFn.onError(error, next);
+            }
+            console.log(error);
+        }
+    }
+}
+
 function makeSafe(middleware){
     let safeMiddleware = {};
 
@@ -36,7 +50,10 @@ function makeSafe(middleware){
         let [middlewareName, middlewareFn] = entry;
 
         let safeMiddlewareFn;
-        if (isAsync(middlewareFn)){
+        
+        if (middlewareFn.length === 4){
+            safeMiddlewareFn = makeSafeErrorMiddleware(middlewareFn);
+        } else if (isAsync(middlewareFn)){
             safeMiddlewareFn = makeSafeAsyncMiddleware(middlewareFn);
         } else {
             safeMiddlewareFn = makeSafeRegularMiddleware(middlewareFn);
@@ -48,6 +65,4 @@ function makeSafe(middleware){
     return safeMiddleware;
 }
 
-module.exports = {
-    makeSafe,
-}
+module.exports = { makeSafe };

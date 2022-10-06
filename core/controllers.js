@@ -1,5 +1,22 @@
-const fs = require('fs');
-const path = require('path');
+const fileUtil = require('./utils/file');
+
+module.exports.getIndex = async (req, res, next) => {
+    let regAccountCreated = req.session.regAccountCreated;
+    let homePageDataPath = 'data/home.json';
+
+    let dataString = await fileUtil.loadFile(homePageDataPath);
+    let homePageData = JSON.parse(dataString);
+    let faqList = homePageData.faqList;
+    let navList = homePageData.footerNavList;
+
+    res.render('core/index', {
+        pageTitle: 'Fleek',
+        faqList: faqList,
+        navList: navList,
+        leadName: 'home',
+        regAccountCreated: regAccountCreated,
+    });
+};
 
 module.exports.get404 = (req, res, next) => {
     res.status(404).render('core/404', {
