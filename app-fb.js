@@ -6,6 +6,7 @@ const { startServer } = require('./core/server');
 let middleware = require('./core/middleware');
 const authRouter = require('./auth/routes');
 const profilesRouter = require('./profiles/routes');
+const contentRouter = require('./content/routes');
 const { makeSafe } = require('./core/utils/middleware');
 
 middleware = makeSafe(middleware);
@@ -26,6 +27,7 @@ app.use(middleware.responseLocalsMiddleware);
 // ROUTES
 app.use(authRouter);
 app.use('/profiles', profilesRouter);
+app.use(contentRouter);
 app.use(coreRouter);
 
 // ERROR-HANDLING MIDDLEWARE

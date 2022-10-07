@@ -1,0 +1,148 @@
+<%- include(coreRoot + '/head') %>
+    <link rel="stylesheet" href="/css/browse.css">
+    <script src="/js/browse.js" type="module" data-fetchmethod="native"></script>
+</head>
+<body>
+    <div id="toplevel-container" class="loading" data-fragment-name="browse">
+        <div id="onload-cover">Loading...</div>
+        <%- include(coreRoot + '/header') %>
+            <nav class="header-nav flex-wrapper">
+                <ul class="header-nav-list flex-wrapper">
+                    <li><a href="" class="header-nav-link selected">Home</a></li>
+                    <li><a href="" class="header-nav-link">TV Shows</a></li>
+                    <li><a href="" class="header-nav-link">Movies</a></li>
+                    <li><a href="" class="header-nav-link">New &amp; Popular</a></li>
+                    <li><a href="" class="header-nav-link">My List</a></li>
+                </ul>
+                <div class="options-container flex-wrapper">
+                    <div class="option-wrapper search-option">
+                        <%- include(svgRoot + '/search-browse.svg') %>
+                    </div>
+                    <div class="option-wrapper dvd-option">
+                        <span>DVD</span>
+                    </div>
+                    <div class="option-wrapper notifications-option overlay-wrapper">
+                        <%- include(svgRoot + '/notification.svg') %>
+                        <div class="notifications-wrapper off-screen pointer-base">No recent notifications</div>
+                    </div>
+                    <div class="option-wrapper settings-option overlay-wrapper pointer-base">
+                        <img class="profile-photo" src="<%= profile.profilePhotoUrl %>">
+                        <div class="settings-wrapper off-screen pointer-base">
+                            <div class="otherProfiles-wrapper">
+                                <ul class="otherProfiles-list">
+                                    <% for (let profile of otherProfiles) { %>
+                                        <li class="settings-item" data-profileid="<%= profile._id %>">
+                                            <img src="<%= profile.profilePhotoUrl %>" alt="profile photo">
+                                            <span><%= profile.name %></span>
+                                        </li>
+                                    <% } %>
+                                </ul>
+                                <div class="settings-item manageProfiles-wrapper flex-wrapper">
+                                    <%- include(svgRoot + '/info.svg') %>
+                                    <span>Manage Profiles</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="otherSettings-wrapper">
+                                <div class="settings-item account-wrapper flex-wrapper">
+                                    <%- include(svgRoot + '/info.svg') %>
+                                    <span>Account</span>
+                                </div>
+                                <div class="settings-item helpCenter-wrapper flex-wrapper">
+                                    <%- include(svgRoot + '/info.svg') %>
+                                    <span>Help Center</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div id="signout-div">Sign out of Fleek</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div id="lowlevel-container">
+            <div class="main-wrapper">
+                <section id="topContent-section" class="overlay-wrapper">
+                    <!-- <img class="topContent-poster" src=" content.topContent.coverPath " alt="poster"> -->
+                    <img class="topContent-poster" src="<%= 'images/stranger-things-original.jpg' %>" alt="poster">
+                    <div class="topContentInfo-wrapper overlay">
+                        <img class="topContent-logo" src="<%= 'images/hod-logo.png' %>" alt="logo">
+                        <!-- <h2><img class="topTen-icon" alt="top ten">#1 in TV Shows Today</h2> -->
+                        <p class="topContent-overview">
+                            <%= content.topContent.overview %>
+                        </p>
+                        <div class="actions-wrapper flex-wrapper">
+                            <button type="button" class="play-button flex-wrapper">
+                                <%- include(svgRoot + '/play.svg') %>
+                                <span>Play</span>
+                            </button>
+                            <button type="button" class="moreInfo-button flex-wrapper">
+                                <%- include(svgRoot + '/info.svg') %>
+                                <span>More Info</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="topContent-ageRating-wrapper flex-wrapper overlay">
+                        <span class="topContent-ageRating">16+</span>
+                    </div>
+                </section>
+                <section id="contentCategories-section">
+                    <% for (let [i, category] of content.categories.entries()) { %>
+                        <div class="category-wrapper">
+                            <h2 class="category-heading"><%= category.name %></h2>
+                            <div class="categoryPosters-wrapper flex-wrapper">
+                                <% for (let [j, contentDoc] of category.contentDocs.entries()) { %>
+                                    <div class="poster-wrapper flex-wrapper" data-contentid="<%= contentDoc._id %>">
+                                        <div>
+                                            <div
+                                                class="poster overlay-wrapper"
+                                                data-src="<%= 'images/stranger-things-500.jpg' %>">
+                                                <img class="logo overlay" src="<%= 'images/hod-logo.png' %>" alt="logo">
+                                            </div>
+                                        </div>
+                                        <span class="content-title"><%= contentDoc.title %></span>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                        <% if (i === 1) { %>
+                            <div class="category-wrapper myList-wrapper">
+                                <h2 class="category-heading">My List</h2>
+                                <div class="categoryPosters-wrapper flex-wrapper">
+                                    <% for (let contentDoc of myList) { %>
+                                        <div class="poster-wrapper flex-wrapper" data-contentid="<%= contentDoc._id %>">
+                                            <div>
+                                                <div
+                                                    class="poster"
+                                                    data-src="<%= contentDoc.backdropPath %>">
+                                                    <img class="logo overlay" src="<%= contentDoc.logoURL %>" alt="logo">
+                                                </div>
+                                            </div>
+                                            <span class="content-title"><%= contentDoc.title %></span>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        <% } %>
+                    <% } %>
+                </section>
+            </div>
+            <footer>
+                <nav class="footer-nav-wrapper">
+                    <p class="footer-heading">
+                        <a href="" class="socialIcon-wrapper"><%- include(svgRoot + '/facebook.svg') %></a>
+                        <a href="" class="socialIcon-wrapper"><%- include(svgRoot + '/instagram.svg') %></a>
+                        <a href="" class="socialIcon-wrapper"><%- include(svgRoot + '/youtube.svg') %></a>
+                    </p>
+                    <ul class="flex-wrapper footer-nav-list">
+                        <% for (let navItem of navList) { %>
+                            <li class="footer-nav-item"><a href=""><%= navItem %></a></li>
+                        <% } %>
+                    </ul>
+                <nav>
+                <div id="service-code">Service Code</div>
+                <div id="copyright">&copy; 2022 Fleek, Inc.</div>
+            </footer>
+        </div>
+    </div>
+<%- include(coreRoot + '/end') %>

@@ -1,4 +1,4 @@
-const { isAsync } = require('./functional');
+const { isAsync } = require('./misc');
 
 
 function makeSafeRegularMiddleware(middlewareFn){
