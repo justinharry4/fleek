@@ -2,7 +2,9 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const PORT = 16001;
+const FALLBACK_PORT = 16001;
+
+const PORT = process.argv[2] || FALLBACK_PORT;
 
 const MONGO_DB_URI = 'mongodb://127.0.0.1:27017/fleek';
 

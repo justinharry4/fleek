@@ -1,12 +1,9 @@
 const express = require('express');
 
+    
 const coreConfig = require('./core/config');
-const coreRouter = require('./core/routes');
-const { startServer } = require('./core/server');
 let middleware = require('./core/middleware');
-const authRouter = require('./auth/routes');
-const profilesRouter = require('./profiles/routes');
-const contentRouter = require('./content/routes');
+const { startServer } = require('./core/server');
 const { makeSafe } = require('./core/utils/middleware');
 
 middleware = makeSafe(middleware);
@@ -25,13 +22,13 @@ app.use(middleware.authenticationMiddleware);
 app.use(middleware.responseLocalsMiddleware);
 
 // ROUTES
-app.use(authRouter);
-app.use('/profiles', profilesRouter);
-app.use(contentRouter);
-app.use(coreRouter);
+coreConfig.registerFeatureRoutes('auth');
+coreConfig.registerFeatureRoutes('/profiles', 'profiles');
+coreConfig.registerFeatureRoutes('content');
+coreConfig.registerFeatureRoutes('core');
 
 // ERROR-HANDLING MIDDLEWARE
-app.use(middleware.errorMiddleware);
+// app.use(middleware.errorMiddleware);
+coreConfig.registerErrorMiddleware(middleware.errorMiddleware);
 
 startServer(app);
-

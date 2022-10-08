@@ -4,7 +4,10 @@ const mongoDbSessionStore = require('connect-mongodb-session')(session);
 
 const features = require('../config/features');
 const config = require('../config/config');
-const { makePath } = require('./utils/file');
+const events = require('./events/events');
+const handlers = require('./events/handlers');
+const { routeEmitter, dbEmitter } = require('./events/emitters');
+const { makePath, dirExists, ROOTDIR } = require('./utils/file');
 
 
 const VIEWENGINE = 'ejs';
@@ -27,6 +30,7 @@ function getViewDirs(){
     return viewDirs;
 }
 
+
 // EXPORTS
 module.exports.sessionStore = sessionStore;
 
@@ -43,4 +47,54 @@ module.exports.configureStatic = (app) => {
 
     let assetsPath = makePath('assets');
     app.use(express.static(assetsPath));
+};
+
+let registerFeatureRoutesOld = (featureName, routePrefix) => {
+    if (!dirExists(featureName, ROOTDIR)){
+        throw new Error(
+            'Route registration failed. ' +
+            `Feature directory \`${featureName}\` does not exist.`
+        );
+    }
+
+    let registerFeatureRouter = handlers.getRegisterFeatureRouter(
+        featureName,
+        routePrefix
+    );
+
+    if (routeEmitter.routerCount === 0){
+        dbEmitter.once(events.POST_DB_CONNECTION, registerFeatureRouter);
+        return routeEmitter.routerCount++;
+    }
+
+    routeEmitter.addListenerToQueue(registerFeatureRouter);
+};
+
+module.exports.registerFeatureRoutes = (routePrefix, featureName) => {
+    if (!featureName){
+        featureName = routePrefix;
+    }
+
+    if (!dirExists(featureName, ROOTDIR)){
+        throw new Error(
+            'Route registration failed. ' +
+            `Feature directory \`${featureName}\` does not exist.`
+        );
+    }
+
+    let registerFeatureRouter = handlers.getRegisterFeatureRouter(
+        featureName,
+        routePrefix
+    );
+
+    dbEmitter.once(events.POST_DB_CONNECTION, registerFeatureRouter);
+};
+
+module.exports.registerErrorMiddleware = (middleware) => {
+    let registerErrorMiddleware = handlers.getRegisterErrorMiddleware(middleware);
+
+    routeEmitter.once(
+        events.POST_FINAL_ROUTE_REGISTRATION,
+        registerErrorMiddleware
+    );
 };

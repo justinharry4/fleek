@@ -923,6 +923,4 @@ class TheMovieDB {
 }
 
 
-const tmdb = new TheMovieDB(config.TMDB_API_KEY, config.CONTENT_SOURCE);
-
-module.exports = tmdb;
+module.exports = TheMovieDB;

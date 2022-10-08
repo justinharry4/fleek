@@ -1,22 +1,20 @@
-const mongoose = require('mongoose');
+const events = require('./events/events');
+const { middlewareEmitter } = require('./events/emitters');
+const { listenForConnections } = require('./events/handlers');
+const { makeDatabaseConnection } = require('./db');
 
-const config = require('../config/config');
-
-const CONFIGPORT = config.PORT;
-const MONGO_DB_URI = config.MONGO_DB_URI;
-
-const PORT = process.argv[2] || CONFIGPORT;
 
 module.exports.startServer = async (app) => {
     try {
-        await mongoose.connect(MONGO_DB_URI, { useNewUrlParser: true });
-        console.log('mongoose connected');
+        makeDatabaseConnection(app);
         
-        app.listen(PORT, () => {
-            console.log(`server running on port ${PORT}`);
-        });
+        middlewareEmitter.on(
+            events.POST_FINAL_ERROR_MIDDLEWARE_REGISTRATION,
+            listenForConnections
+        );
     } catch (err) {
         console.log('AN ERROR OCCURED IN STARTSERVER:\n', err);
     }
 }
+
 

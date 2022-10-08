@@ -1,10 +1,9 @@
 const { Movie, TvShow } = require('./models');
-const tmdb = require('./tmdb');
+const { tmdb } = require('../core/db');
 const contentUtil = require('./utils');
 const fileUtil = require('../core/utils/file');
 const { isUserProfile } = require('../profiles/utils');
 
-// console.log('DB\n', db);
 
 // HTML-RESPONSE CONTROLLERS
 module.exports.getBrowse = async (req, res, next) => {

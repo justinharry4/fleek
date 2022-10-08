@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const { ROOTDIR } = require('../core/utils/file');
+const { ROOTDIR, dirExists } = require('../core/utils/file');
 
 // register app features by adding feature name to the 'FEATURES' array.
 
@@ -11,10 +11,8 @@ const FEATURES = [
     'content',
 ]
 
-let rootContents = fs.readdirSync(ROOTDIR);
-
 for (let feature of FEATURES){
-    if (!rootContents.includes(feature)){
+    if (!dirExists(feature, ROOTDIR)){
         throw new Error(`feature directory '${feature}' does not exist.`);
     }
 }

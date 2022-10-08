@@ -41,7 +41,20 @@ function writeFile(filePath, data){
     return promise;
 }
 
-module.exports.ROOTDIR = ROOTDIR;
-module.exports.loadFile = loadFile;
-module.exports.makePath = makePath;
-module.exports.writeFile = writeFile;
+function dirExists(dirName, parentDir){
+    let dirContents = fs.readdirSync(parentDir);
+
+    if (dirContents.includes(dirName)){
+        return true;
+    }
+    return false;
+}
+
+
+module.exports = {
+    ROOTDIR,
+    loadFile,
+    makePath,
+    writeFile,
+    dirExists,
+}
