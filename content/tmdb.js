@@ -3,8 +3,7 @@ const axios = require('axios');
 const config = require('../config/config');
 const { Movie, TvShow } = require('./models');
 const modelConfig = require('./model-config');
-const fileUtil = require('../util/file');
-
+const fileUtil = require('../core/utils/file');
 
 
 class TheMovieDB {

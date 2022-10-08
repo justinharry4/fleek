@@ -2,7 +2,7 @@ const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 
 const { User } = require('./models');
-const fileUtil = require('../util/file');
+const fileUtil = require('../core/utils/file');
 
 
 module.exports.getSignin = async (req, res, next) => {
