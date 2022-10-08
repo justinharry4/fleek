@@ -23,12 +23,16 @@ function getRegisterFeatureRouterOld(featureName, prefix='/'){
     }
 }
 
-function getRegisterFeatureRouter(featureName, prefix='/'){
+function getRegisterFeatureRouter(featureName, prefix){
     return function (app){
         let routerPath = makePath(featureName + '/routes.js');
         let router = require(routerPath);
 
-        app.use(prefix, router);
+        if (prefix){
+            app.use(prefix, router);
+        } else {
+            app.use(router);
+        }
 
         // console.log(`${featureName} routes registered.`);
 

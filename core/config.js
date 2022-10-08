@@ -73,6 +73,7 @@ let registerFeatureRoutesOld = (featureName, routePrefix) => {
 module.exports.registerFeatureRoutes = (routePrefix, featureName) => {
     if (!featureName){
         featureName = routePrefix;
+        routePrefix = null;
     }
 
     if (!dirExists(featureName, ROOTDIR)){
