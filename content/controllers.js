@@ -1,5 +1,6 @@
 const { Movie, TvShow } = require('./models');
 const { tmdb } = require('../core/db');
+const { getProfiles } = require('../profiles/controllers');
 const contentUtil = require('./utils');
 const fileUtil = require('../core/utils/file');
 const { isUserProfile } = require('../profiles/utils');
@@ -13,8 +14,8 @@ module.exports.getBrowse = async (req, res, next) => {
 
     let profile = await isUserProfile(profileId, user);
     if (!profile){
-        return exports.getProfiles(req, res, next);
-    }
+        return getProfiles(req, res, next);
+    } 
 
     if (profile.setupStage === 0){
         req.session.regProfileId = profile._id;
