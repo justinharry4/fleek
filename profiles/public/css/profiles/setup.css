@@ -1,9 +1,10 @@
 @charset "UTF-8";
 
 /* header, main, footer & misc styles */
-@import url('/css/setup-base.css');
+@import url('/css/profiles/setup-base.css');
+
 /* footer styles */
-@import url('/css/footer1.css');
+@import url('/css/core/footer1.css');
 
 /* main styles */
 .posters-container {

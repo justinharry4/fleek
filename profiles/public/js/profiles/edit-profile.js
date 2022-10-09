@@ -1,7 +1,7 @@
-import { PageManager, addListener, ajax } from '/js/page.js';
-import { checkboxInit } from '/js/checkbox.js';
+import { PageManager, addListener, ajax } from '/js/core/page.js';
+import { checkboxInit } from '/js/core/checkbox.js';
 
-let source = '/js/edit-profile.js';
+let source = '/js/profiles/edit-profile.js';
 let mainFragmentName = 'editProfile';
 
 $(initializePage);

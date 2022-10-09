@@ -1,6 +1,6 @@
-import { PageManager, addListener } from '/js/page.js';
+import { PageManager, addListener } from '/js/core/page.js';
 
-let source = '/js/manage-profiles.js';
+let source = '/js/profiles/manage-profiles.js';
 let mainFragmentName = 'manageProfiles';
 
 $(initializePage);

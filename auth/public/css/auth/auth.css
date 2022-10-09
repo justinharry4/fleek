@@ -2,7 +2,7 @@
 
 /* GENERAL STYLES */
 /* footer styles */
-@import url('/css/footer1.css');
+@import url('/css/core/footer1.css');
 
 /* misc styles */
 a:hover, a:active {

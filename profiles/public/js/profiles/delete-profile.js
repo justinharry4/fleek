@@ -1,6 +1,6 @@
-import { PageManager, addListener, ajax } from '/js/page.js';
+import { PageManager, addListener, ajax } from '/js/core/page.js';
 
-let source = '/js/delete-profile.js';
+let source = '/js/profiles/delete-profile.js';
 let mainFragmentName = 'deleteProfile';
 
 $(initializePage);

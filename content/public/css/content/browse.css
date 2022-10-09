@@ -1,10 +1,10 @@
 @charset "UTF-8";
 
 /* background & header-logo styles */
-@import url('/css/content.css');
+@import url('/css/core/main-base.css');
 
 /* pointer component */
-@import url('/css/pointer.css');
+@import url('/css/core/pointer.css');
 
 /* variables */
 :root {

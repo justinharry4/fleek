@@ -1,4 +1,4 @@
-/*  This module defines tools used to manage pages i the browser.
+/*  This module defines tools used to manage pages in the browser.
 
     The functionality these tools provide help manage page loads,
     track history and register event listeners efficiently.

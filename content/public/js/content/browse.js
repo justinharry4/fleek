@@ -3,10 +3,10 @@
     2. `.minContentInfo` popups when in scrollbar region
 */
 
-import { PageManager, addListener } from '/js/page.js';
-import { getMinContentInfoStr, getFullContentInfoStr } from '/js/templates.js';
+import { PageManager, addListener } from '/js/core/page.js';
+import { getMinContentInfoStr, getFullContentInfoStr } from '/js/content/templates.js';
 
-let source = '/js/browse.js';
+let source = '/js/content/browse.js';
 let mainFragmentName = 'browse';
 
 $(initializePage);

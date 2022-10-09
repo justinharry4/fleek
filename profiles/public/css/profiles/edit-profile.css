@@ -1,10 +1,10 @@
 @charset "utf-8";
 
 /* checkbox component styles */
-@import url('/css/checkbox.css');
+@import url('/css/core/checkbox.css');
 
 /* background & header styles */
-@import url('/css/content.css');
+@import url('/css/core/main-base.css');
 
 /* variables */
 :root {
