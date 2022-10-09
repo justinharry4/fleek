@@ -80,14 +80,27 @@ function createFeature(featureNames, flags){
             continue
         }
 
+        // create directory paths
         let viewsPath = path.join(featurePath, 'views');
         let subViewsPath = path.join(viewsPath, featureName);
         let publicPath = path.join(featurePath, 'public');
         let cssPath = path.join(publicPath, 'css');
+        let subCssPath = path.join(cssPath, featureName);
         let jsPath = path.join(publicPath, 'js');
+        let subJsPath = path.join(jsPath, featureName)
 
-        let dirPaths = [featurePath, viewsPath, subViewsPath, publicPath, cssPath, jsPath];
+        let dirPaths = [
+            featurePath,
+            viewsPath,
+            subViewsPath,
+            publicPath,
+            cssPath,
+            subCssPath,
+            jsPath,
+            subJsPath,
+        ];
 
+        // create file paths
         let controllersPath = path.join(featurePath, 'controllers.js');
         let modelsPath = path.join(featurePath, 'models.js');
         let routesPath = path.join(featurePath, 'routes.js');
@@ -108,9 +121,18 @@ function createFeature(featureNames, flags){
     }
 
     if (createdFeatures.length > 0){
-        console.log(
-            'successfully created feature(s): ' + createdFeatures.join(', ') + '.'
-        )
+        let quotedFeatures = createdFeatures.map(feature => "'" + feature + "'");
+
+        let heading = 'successfully created feature(s): '
+        if (quotedFeatures.length === 1){
+            console.log(heading + quotedFeatures[0] + '.');
+        } else {
+            console.log(
+                heading +
+                quotedFeatures.slice(0, -1).join(', ') +
+                ' and ' + quotedFeatures.slice(-1)[0] + '.'
+            );
+        }
 
         let configPath = path.join(projectRoot, 'config');
         if (!fs.existsSync(configPath)){
