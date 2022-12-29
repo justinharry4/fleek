@@ -6,6 +6,9 @@
 /* background & header styles */
 @import url('/css/core/main-base.css');
 
+/* transition styles */
+@import url('/css/profiles/profile-base.css');
+
 /* variables */
 :root {
     --alt-text-color: #9e9a9a;
@@ -73,13 +76,3 @@
     color: #fff;
 }
 
-/* misc styles */
-#lowlevel-container {
-    transition: transform .5s ease;
-}
-#lowlevel-container.zoom {
-    transform: scale(1.2); 
-}
-#toplevel-container.no-scroll {
-    overflow: hidden;
-}

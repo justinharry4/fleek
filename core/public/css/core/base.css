@@ -121,6 +121,10 @@ button.native-bg:hover, input[type="submit"].native-bg:hover {
     text-align: center;
 }
 
+#toplevel-container.no-scroll {
+    overflow: hidden;
+}
+
 /* header styles */
 .toplevel-header {
     padding: .7rem 3%;

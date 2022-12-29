@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+/* misc styles */
+#lowlevel-container {
+    transition: transform .5s ease;
+}
+#lowlevel-container.zoom {
+    transform: scale(1.2);
+}

@@ -1,9 +1,9 @@
-import { Page } from '/js/core/page-cb.js';
+import { FixedPage } from '/js/core/page-cb.js';
 import { loadPageFromHTML, showError } from '/js/core/utils.js';
 import { checkboxInit } from '/js/core/checkbox.js';
 
 
-class AddProfilePage extends Page {
+class AddProfilePage extends FixedPage {
     setPageProperties(){
         this.source = '/js/profiles/add-profile-cb.js';
         this.mainFragmentName = 'addProfile';
