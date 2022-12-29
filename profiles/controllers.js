@@ -82,6 +82,8 @@ module.exports.getLanguageSetup = async (req, res, next) => {
     let footerData = JSON.parse(footerDataString);
     let navList = footerData.footerNavList;
 
+    res.setHeader('Resource-Location', '/profiles/languagesetup');
+
     res.render('profiles/language-setup', {
         pageTitle: 'Fleek',
         leadName: 'languageSetup',

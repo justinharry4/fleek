@@ -1,5 +1,5 @@
 import { FixedPage } from '/js/core/page-cb.js';
-import { loadPageFromHTML } from '/js/core/utils.js';
+import { loadPageFromHTML, ajax } from '/js/core/utils.js';
 
 
 class ProfilesPage extends FixedPage {
@@ -79,15 +79,17 @@ class ProfilesPage extends FixedPage {
         try {
             let page = e.data.page;
             let profileId = $(this).data('profile-id');
-            let HTMLStr = await $.get('/browse', {profileId: profileId});
+            let { jqXHR, resData } = await ajax.get('/browse', {profileId: profileId});
             
+            let resourceLocation = jqXHR.getResponseHeader('Resource-Location');
+
             loadPageFromHTML(
-                HTMLStr,
+                resData,
                 '#toplevel-container',
                 page.mainFragmentName,
                 true,
-                '/profiles/languagesetup',
-                '/profiles/languagesetup',
+                resourceLocation,
+                resourceLocation,
             );
         } catch(jqXHR){
             console.log('FAIL', jqXHR);

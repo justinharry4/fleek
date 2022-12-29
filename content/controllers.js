@@ -94,10 +94,11 @@ module.exports.getBrowse = async (req, res, next) => {
 
             category.contentDocs = contentDocs;
             categories.push(category);
-            // console.log(category.name, '=>', category.contentDocs.length);
         }
 
         content.categories = categories;
+
+        res.setHeader('Resource-Location', '/browse');
 
         return res.render('content/browse', {
             pageTitle: 'Fleek',
