@@ -1,5 +1,5 @@
 import { FixedPage } from '/js/core/page-cb.js';
-import { loadPageFromHTML } from '/js/core/utils.js';
+import { ajax, loadPageFromHTML } from '/js/core/utils.js';
 import { checkboxInit } from '/js/core/checkbox.js';
 
 
@@ -34,10 +34,10 @@ class LanguageSetupPage extends FixedPage {
         
         try {
             let url = $languagesForm.attr('action');
-            let HTMLStr = await $.post(url, requestData);
+            let { resData } = await ajax.post(url, requestData);
             
             loadPageFromHTML(
-                HTMLStr,
+                resData,
                 '#toplevel-container',
                 page.mainFragmentName,
                 true,

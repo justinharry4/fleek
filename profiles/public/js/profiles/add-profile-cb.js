@@ -1,5 +1,5 @@
 import { FixedPage } from '/js/core/page-cb.js';
-import { loadPageFromHTML, showError } from '/js/core/utils.js';
+import { loadPageFromHTML, showError, ajax } from '/js/core/utils.js';
 import { checkboxInit } from '/js/core/checkbox.js';
 
 
@@ -55,10 +55,10 @@ class AddProfilePage extends FixedPage {
             let requestData = $profileForm.serialize();
     
             try {
-                let HTMLStr = await $.post(url, requestData);
+                let { resData } = await ajax.post(url, requestData);
                 
                 loadPageFromHTML(
-                    HTMLStr,
+                    resData,
                     '#toplevel-container',
                     page.mainFragmentName,
                     true,

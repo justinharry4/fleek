@@ -1,5 +1,5 @@
 import { ProfilesPage } from '/js/profiles/profiles-cb.js';
-import { loadPageFromHTML } from '/js/core/utils.js';
+import { ajax, loadPageFromHTML } from '/js/core/utils.js';
 
 
 class ManageProfilesPage extends ProfilesPage {
@@ -29,10 +29,10 @@ class ManageProfilesPage extends ProfilesPage {
     
         try {
             let url = '/profiles/editprofile'
-            let HTMLStr = await $.get(url, requestData);
+            let { resData } = await ajax.get(url, requestData);
             
             loadPageFromHTML(
-                HTMLStr,
+                resData,
                 '#toplevel-container',
                 page.mainFragmentName,
                 false,

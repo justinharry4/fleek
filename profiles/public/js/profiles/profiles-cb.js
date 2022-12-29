@@ -60,10 +60,10 @@ class ProfilesPage extends FixedPage {
     async getAddProfile(e){
         try {
             let page = e.data.page;
-            let HTMLStr = await $.get('/profiles/addprofile');
+            let { resData } = await ajax.get('/profiles/addprofile');
 
             loadPageFromHTML(
-                HTMLStr,
+                resData,
                 '#toplevel-container',
                 page.mainFragmentName,
                 true,
