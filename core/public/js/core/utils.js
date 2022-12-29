@@ -17,6 +17,32 @@ function showError(message){
         $('body').append($errorDiv);
 }
 
+function genericAJAXRequest(method, url, data){
+    let promise = new Promise((resolve, reject) => {
+        let jqXHR = $[method](url, data);
+
+        jqXHR.done(resData => {
+            resolve({ jqXHR, resData })
+        });
+        jqXHR.fail(() => {
+            reject({ jqXHR });
+        });
+    });
+    
+    return promise;
+}
+
+async function get(url, data){
+    let result =  await genericAJAXRequest('get', url, data);
+    return result;
+}
+
+async function post(url, data){   
+    let result = await genericAJAXRequest('post', url, data);
+    return result;
+}
+
+
 function loadPageFromHTML(HTMLStr, levelSelector, mainFragmentName, setHistory, stateUrl, trueUrl){
     let parser = new DOMParser();
     let htmlDoc = parser.parseFromString(HTMLStr, 'text/html');
@@ -60,36 +86,12 @@ function loadPageFromHTML(HTMLStr, levelSelector, mainFragmentName, setHistory, 
     $(window).trigger(requestPageEvent);
 }
 
-class Ajax {
-    genericAjaxRequest(method , url, data){
-        let promise = new Promise((resolve, reject) => {
-            let jqXHR = $[method](url, data);
-            // console.log('JXHR', jqXHR);
-            jqXHR.done(resData => {
-                resolve({ jqXHR, resData })
-            });
-            jqXHR.fail(() => {
-                reject({ jqXHR });
-            });
-        });
-        
-        return promise;
-    }
 
-    async get(url, data){
-        let result =  await this.genericAjaxRequest('get', url, data);
-        return result;
-    }
-
-    async post(url, data){   
-        let result = await this.genericAjaxRequest('post', url, data);
-        return result;
-    }
-}
+const ajax = { get, post }
 
 export {
     addListener,
     showError,
     loadPageFromHTML,
-    Ajax,
+    ajax,
 }

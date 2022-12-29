@@ -62,9 +62,8 @@ function addPage(e){
 
 function getPage(e){
     let pageList = e.data;
-    console.log('pagelist:', pageList)
+
     let fragmentName = e.eventData.fragmentName;
-    console.log(pageList[0].mainFragmentName, fragmentName)
     let $element = e.eventData.element;
     let [ page ] = pageList.filter(p => p.mainFragmentName === fragmentName);
         
@@ -100,14 +99,13 @@ class Page {
         // script element linked to the running JS file
         let $currentScript = $('script').filter(`[src="${this.source}"]`);
         let fetchMethod = $currentScript.data('fetchmethod');
-
+        
         // if fetchmethod is `native`, run page initialization code 
         if (fetchMethod === 'native'){
             console.log('if block entered', this.trueURL);
             setWindowEventListeners();
             this.saveState('#toplevel-container', null, this.trueURL);
             this.showInitialTransition();
-            console.log('if block ended');
         }
 
         this.setEventHandlers();
@@ -120,7 +118,14 @@ class Page {
     }
 
     showInitialTransition(){
-        setTimeout(() => $('#lowlevel-container').removeClass('zoom'), 1);
+        setTimeout(() => {
+            let $transitionElements = $('body').find('.transZero');
+
+            $transitionElements.each((index, element) => {
+                let transitionClass = $(element).data('transition-class');
+                $(element).toggleClass(transitionClass);
+            });
+        }, 1);
     }
 
     setEventHandlers(){
@@ -129,9 +134,13 @@ class Page {
 
         // event map structure => [[selector, event, handler], [.., .., ..], ..]
         for (let eventEntry of eventMap){
-            let [selector, event, handlerName] = eventEntry;
+            let [selector, event, handler] = eventEntry;
 
-            addListener($(selector), event, this[handlerName], eventData);
+            if (typeof handler === 'string'){
+                addListener($(selector), event, this[handler], eventData);
+            } else if (typeof handler === 'boolean'){
+                addListener($(selector), event, handler, eventData);
+            }
         }
 
         console.log('super set handlers run');
@@ -601,4 +610,33 @@ class Page {
     }
 }
 
-export { Page };
+
+class FixedPage extends Page {
+    /*  This type of page is non-scrollable at the time
+        of initial page transitions but becomes scrollable
+        at a later time, when the initial transitions are
+        completed.
+    */
+
+    setPageScroll(){
+        let $toplevelDiv = $('#toplevel-container');
+        let $lowlevelDiv = $('#lowlevel-container');
+        
+        let intervalID = setInterval(() => {
+            let trans = $lowlevelDiv.css('transform');
+            if (trans === 'none'){
+                $toplevelDiv.removeClass('no-scroll');
+                clearTimeout(intervalID);
+            }
+        }, 100);
+    }
+
+    setEventHandlers(){
+        super.setEventHandlers();
+
+        this.setPageScroll();
+    }
+}
+
+
+export { Page, FixedPage };

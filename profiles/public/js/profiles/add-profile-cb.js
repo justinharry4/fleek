@@ -45,6 +45,8 @@ class AddProfilePage extends Page {
     }
     
     async submitProfileForm(e){
+        let page = e.data.page;
+
         let $profileForm = $('.profile-form');
         let $textInput = $profileForm.find('input[type="text"]');
     
@@ -58,12 +60,13 @@ class AddProfilePage extends Page {
                 loadPageFromHTML(
                     HTMLStr,
                     '#toplevel-container',
-                    mainFragmentName,
+                    page.mainFragmentName,
                     true,
                     '/browse',
                     '/browse',
                 );
             } catch(jqXHR){
+                console.log(jqXHR);
                 let message = 'The requested action could not be completed.'
                 showError(message);
             }

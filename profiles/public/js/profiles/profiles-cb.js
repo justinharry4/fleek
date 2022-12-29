@@ -1,10 +1,9 @@
-import { Page } from '/js/core/page-cb.js';
+import { FixedPage } from '/js/core/page-cb.js';
 import { loadPageFromHTML } from '/js/core/utils.js';
 
 
-class Profiles extends Page {
+class ProfilesPage extends FixedPage {
     setPageProperties(){
-        console.log('pageproperties set')
         this.source = '/js/profiles/profiles-cb.js';
         this.mainFragmentName = 'profiles';
         this.trueURL = '/profiles';
@@ -97,4 +96,6 @@ class Profiles extends Page {
 }
 
 
-$(() => { new Profiles() });
+$(() => { new ProfilesPage() });
+
+export { ProfilesPage };
