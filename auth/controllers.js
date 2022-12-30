@@ -12,7 +12,7 @@ module.exports.getSignin = async (req, res, next) => {
     let footerData = JSON.parse(dataString);
     let navList = footerData.footerNavList;
 
-    res.render('auth/sign-in', {
+    res.render('auth/sign-in-cb', {
         pageTitle: 'Fleek | Sign in',
         navList: navList,
         leadName: 'signin',
