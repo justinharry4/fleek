@@ -1,4 +1,4 @@
-// This file defines utility functions for efficient page loads
+// This file defines utility functions for more efficient page loads
 
 function addListener(element, eventName, eventListener, eventData){
     let jqObject = element.jquery ? element : $(element);
@@ -43,7 +43,13 @@ async function post(url, data){
 }
 
 
-function loadPageFromHTML(HTMLStr, levelSelector, mainFragmentName, setHistory, stateUrl, trueUrl){
+function loadPageFromHTML(HTMLStr,
+                          levelSelector,
+                          mainFragmentName,
+                          setHistory,
+                          stateUrl,
+                          trueUrl,
+                          setPageState){
     let parser = new DOMParser();
     let htmlDoc = parser.parseFromString(HTMLStr, 'text/html');
 
@@ -69,6 +75,7 @@ function loadPageFromHTML(HTMLStr, levelSelector, mainFragmentName, setHistory, 
                 setHistory,
                 stateUrl,
                 trueUrl,
+                setPageState,
             );
         } catch(error){
             console.log(error.message);

@@ -92,7 +92,7 @@ img {
     display: block;
     width: 100%;
 }
-.off-screen-left {
+/* .off-screen-left {
     position: relative;
     right: 100%;
     transition-property: right;
@@ -100,7 +100,7 @@ img {
 }
 .on-screen-to-right {
     right: 0%;
-}
+} */
 .page-error {
     text-align: center;
 }

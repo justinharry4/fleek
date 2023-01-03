@@ -1,0 +1,67 @@
+<%- include(coreRoot + '/head') %>
+    <link rel="stylesheet" href="/css/auth/auth.css">
+    <link rel="stylesheet" href="/css/core/checkbox.css">
+    <script src="/js/auth/signup.js"></script>
+    <script src="/js/core/checkbox.js"></script>
+</head>
+<body>
+    <div id="signup-toplevel-container">
+        <%- include(coreRoot + '/header') %>
+            <span class="toplevel-header-link-text"><a href="/">Sign Out</a></span>
+        </header>
+        <div class="signup-main-container">
+            <div class="signup-main-wrapper signup-step-<%= signupStep %>">
+                <h2 class="signup-stepno-heading">step <span class="small-num">3</span> of <span class="small-num">3</span></h2>
+                <h3 class="signup-step-heading">Set up your credit or debit card</h3>
+                <h2 class="flex-wrapper signup-card-icons-wrapper">
+                    <img src="/images/svg/visa.svg" class="signup-header-card-icon">
+                    <img src="/images/svg/mastercard.svg" class="signup-header-card-icon">
+                    <img src="/images/verve.png" class="signup-header-card-icon">
+                </h2>
+                <form class="signup-form" method="POST" action="/signup/creditoption">
+                    <fieldset>
+                        <ul class="signup-form-ul">
+                            <li class="overlay-wrapper">
+                                <label for="signup-form-first-name" class="overlay">First name</label>
+                                <input type="text" name="first-name" id="signup-form-first-name" class="block-strech" placeholder="">
+                            </li>
+                            <li class="overlay-wrapper">
+                                <label for="signup-form-last-name" class="overlay">Last name</label>
+                                <input type="text" name="last-name" id="signup-form-last-name" class="block-strech" placeholder="">
+                            </li>
+                            <li class="overlay-wrapper">
+                                <label for="signup-form-card-number" class="overlay">Card number</label>
+                                <input type="number" name="card-number" id="signup-form-card-number" class="block-strech" placeholder="">
+                            </li>
+                            <li class="overlay-wrapper">
+                                <label for="signup-form-expiry-date" class="overlay">Expiry Date (MM/YY)</label>
+                                <input type="number" name="expiry-date" id="signup-form-expiry-date" class="block-strech" placeholder="">
+                            </li>
+                            <li class="overlay-wrapper">
+                                <div class="flex-wrapper" id="signup-cvv-input-wrapper">
+                                    <label for="signup-form-cvv" class="overlay">Security Code (CVV)</label>
+                                    <input type="number" name="cvv" id="signup-form-cvv" class="" placeholder="">
+                                    <img src="/images/svg/question-mark.svg" id="signup-form-moreinfo-icon">
+                                </div>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <button type="button" class="flex-wrapper">
+                        <span><span class="text-bold">N<%= subscriptionData.plans[regSubPlan].price %>/month</span><br><span class="greyed-text"><%= regSubPlan %> Plan</span></span><a id="signup-change-plan-link" class="text-bold link-blue">Change</a>
+                    </button>
+                    <p class="signup-sub-main-text greyed-text">Your payments will be processed internationally. Additional bank fees may apply.</p>
+                    <p class="signup-sub-main-text greyed-text">
+                        By checking the checkbox below you agree to our <a class="link-blue text-bold">Terms of Use</a>, <a class="link-blue text-bold">Privacy Statement</a>,
+                        and that you are over 18. Fleek will automatically continue your membership and charge the membership fee (currently N4400/month) to your payment method until you cancel. You may cancel at any time to avoid future charges.
+                    </p>
+                    <label for="signup-form-tou-checkbox" class="signup-tou-checkbox-label custom-checkbox-container">
+                        <%- include(coreRoot + '/checkbox', {checkboxName: 'terms-of-use', checkboxId: 'signup-form-tou-checkbox', checkboxValue: 'true', checked: false, disabled: false}) %>
+                        I agree
+                    </label>
+                    <input type="submit" class="native-bg block-strech submit-button" value="Start Membership" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">
+                </form>
+            </div>
+        </div>
+        <%- include(coreRoot + '/footer') %>
+    </div>
+<%- include(coreRoot + '/end') %>

@@ -1,0 +1,38 @@
+<%- include(coreRoot + '/head') %>
+    <link rel="stylesheet" href="/css/auth/auth.css">
+    <link rel="stylesheet" href="/css/core/checkbox.css">
+    <script src="/js/auth/signup.js"></script>
+    <script src="/js/core/checkbox.js"></script>
+</head>
+<body>
+    <div id="signup-toplevel-container">
+        <%- include(coreRoot + '/header') %>
+            <span class="toplevel-header-link-text"><a href="/">Sign Out</a></span>
+        </header>
+        <div class="signup-main-container">
+            <div class="signup-main-wrapper signup-step-<%= signupStep %>">
+                <div class="signup-step-img-wrapper">
+                    <img src="/images/checkmark.png" alt="checkmark">
+                </div>
+                <h2 class="signup-stepno-heading">step <span class="small-num">2</span> of <span class="small-num">3</span></h2>
+                <h3 class="signup-step-heading">Choose your plan.</h3>
+                <ul class="signup-step-info-ul">
+                    <li class="flex-wrapper">
+                        <span class="svg-wraper"><%- include(svgRoot + '/checkmark.svg') %></span>
+                        <span class="signup-step-info-text">No commitments, Cancel anytime.</span>
+                    </li>
+                    <li class="flex-wrapper">
+                        <span class="svg-wraper"><%- include(svgRoot + '/checkmark.svg') %></span>
+                        <span class="signup-step-info-text">Everything on Fleek for one low price</span>
+                    </li>
+                    <li class="flex-wrapper">
+                        <span class="svg-wraper"><%- include(svgRoot + '/checkmark.svg') %></span>
+                        <span class="signup-step-info-text">No ads and no extra fees. Ever.</span>
+                    </li>
+                </ul>
+                <button type="button" class="native-bg block-strech proceed-button" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
+            </div>
+        </div>
+        <%- include(coreRoot + '/footer') %>
+    </div>
+<%- include(coreRoot + '/end') %>

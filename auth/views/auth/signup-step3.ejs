@@ -1,0 +1,39 @@
+<%- include(coreRoot + '/head') %>
+    <link rel="stylesheet" href="/css/auth/auth.css">
+    <link rel="stylesheet" href="/css/core/checkbox.css">
+    <script src="/js/auth/signup.js"></script>
+    <script src="/js/core/checkbox.js"></script>
+</head>
+<body>
+    <div id="signup-toplevel-container">
+        <%- include(coreRoot + '/header') %>
+            <span class="toplevel-header-link-text"><a href="/">Sign Out</a></span>
+        </header>
+        <div class="signup-main-container">
+            <div class="signup-main-wrapper signup-step-<%= signupStep %>">
+                <div class="signup-step-img-wrapper">
+                    <img src="/images/lock.png" alt="lock">
+                </div>
+                <h2 class="signup-stepno-heading">step <span class="small-num">3</span> of <span class="small-num">3</span></h2>
+                <h3 class="signup-step-heading">Set up your payment</h3>
+                <div class="signup-step-info-text-wrapper">
+                    <p class="signup-step-info-text">Your membership starts<br>as soon as you set up<br>payment.</p>
+                    <p class="signup-step-info-text">No commitments.<br>Cancel online anytime</p>
+                </div>
+                <div class="signup-proceed-button-wrapper">
+                    <div class="flex-wrapper signup-secure-server-wrapper signup-sub-main-text">
+                        <span>Secure Server</span><img src="/images/svg/secure.svg" id="signup-secure-server-icon" alt="padlock icon">
+                    </div>
+                    <button type="button" class="proceed-button flex-wrapper" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">
+                        <span>Credit or Debit Card</span>
+                        <img class="signup-card-option-icon" src="/images/svg/visa.svg">
+                        <img class="signup-card-option-icon" src="/images/svg/mastercard.svg">
+                        <img class="signup-card-option-icon" src="/images/verve.png">
+                        <%- include(svgRoot + '/next-button.svg') %>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <%- include(coreRoot + '/footer') %>
+    </div>
+<%- include(coreRoot + '/end') %>

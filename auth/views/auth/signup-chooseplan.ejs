@@ -1,0 +1,94 @@
+<%- include(coreRoot + '/head') %>
+    <link rel="stylesheet" href="/css/auth/auth.css">
+    <link rel="stylesheet" href="/css/core/checkbox.css">
+    <script src="/js/auth/signup.js"></script>
+    <script src="/js/core/checkbox.js"></script>
+</head>
+<body>
+    <div id="signup-toplevel-container">
+        <%- include(coreRoot + '/header') %>
+            <span class="toplevel-header-link-text"><a href="/">Sign Out</a></span>
+        </header>
+        <div class="signup-main-container">
+            <div class="signup-main-wrapper signup-step-<%= signupStep %>">
+                <h2 class="signup-stepno-heading">step <span class="small-num">2</span> of <span class="small-num">3</span></h2>
+                <h3 class="signup-step-heading">Choose the plan that's right for you</h3>
+                <ul class="signup-step-info-ul">
+                    <li class="flex-wrapper">
+                        <span class="svg-wraper"><%- include(svgRoot + '/checkmark.svg') %></span>
+                        <span class="signup-step-info-text">Watch all you want. Ad-free.</span>
+                    </li>
+                    <li class="flex-wrapper">
+                        <span class="svg-wraper"><%- include(svgRoot + '/checkmark.svg') %></span>
+                        <span class="signup-step-info-text">Recommendations just for you.</span>
+                    </li>
+                    <li class="flex-wrapper">
+                        <span class="svg-wraper"><%- include(svgRoot + '/checkmark.svg') %></span>
+                        <span class="signup-step-info-text">Change or cancel your plan anytime.</span>
+                    </li>
+                </ul>
+                <table id="sub-plan-table" cellspacing="0">
+                    <thead>
+                        <tr class="tr-plans flex-wrapper">
+                            <th class="lead-cell-th"></th>
+                            <% for (let plan in subscriptionData.plans) { %>
+                                <th class="signup-<%= (plan === regSubPlan) ? '' : 'inactive-' %>native-bg flex-wrapper sub-plan-button sub-plan-<%= plan %>" data-sub-plan="<%= plan %>">
+                                    <label class="off-screen" for="signup-sub-plan-radio"><%= plan %> Plan</label>
+                                    <input type="radio" name="sub-plan" value="<%= plan %>" class="off-screen" id="signup-sub-plan-radio" <%= (plan === regSubPlan) ? 'checked' : '' %>>
+                                    <span><%= plan %></span>
+                                </th>
+                            <% } %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="tr-price flex-wrapper">
+                            <th scope="row" class="lead-cell-th">Monthly Price</th>
+                            <% for (let plan in subscriptionData.plans) { %>
+                                <td class="<%= (plan===regSubPlan) ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>"><span>N<%= subscriptionData.plans[plan].price %></span></td>
+                            <% } %>
+                        </tr>
+                        <tr class="tr-vid-quality flex-wrapper">
+                            <th scope="row" class="lead-cell-th">Video Quality</th>
+                            <% for (let plan in subscriptionData.plans) { %>
+                                <td class="<%= (plan===regSubPlan) ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>"><span><%= subscriptionData.plans[plan].videoQuality %></span></td>
+                            <% } %>
+                        </tr>
+                        <tr class="tr-resolution flex-wrapper">
+                            <th scope="row" class="lead-cell-th">Resolution</th>
+                            <% for (let plan in subscriptionData.plans) { %>
+                                <td class="<%= (plan===regSubPlan) ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>"><span><%= subscriptionData.plans[plan].resolution %></span></td>
+                            <% } %>
+                        </tr>
+                        <tr class="tr-devices flex-wrapper">
+                            <th scope="row" class="lead-cell-th">Devices you can use to watch</th>
+                            <% for (let plan in subscriptionData.plans) { %>
+                                <td class="<%= (plan===regSubPlan) ? 'signup-native-fg' : '' %> sub-plan-<%= plan %>" data-sub-plan="<%= plan %>">
+                                    <div class="flex-wrapper">
+                                        <% for (let device of subscriptionData.plans[plan].devices) { %>
+                                            <span class="tr-svg-icon-container signup-sub-main-text">
+                                                <span class="tr-svg-wrapper signup-sub-main-text"><%- include(subscriptionData.urls[device]) %></span>
+                                                <%= device %>
+                                            </span>
+                                        <% } %>
+                                    </div>
+                                </td>
+                            <% } %>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="signup-sub-main-text signup-extra-plan-info">
+                    <p>
+                        HD (720p), Full HD (1080p), Ultra HD (4K) and HDR availability subject to your internet service and device capabilities.
+                        Not all content is available in all resolutions. See our <a>Terms of Use</a> for more details.
+                    </p>
+                    <p>
+                        Only people who live with you may use your account.
+                        Watch on 4 different devices at the same time with Premium, 2 with Standard, and 1 with Basic and Mobile.
+                    </p>
+                </div>
+                <button class="native-bg block-strech proceed-button" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
+            </div>
+        </div>
+        <%- include(coreRoot + '/footer') %>
+    </div>
+<%- include(coreRoot + '/end') %>

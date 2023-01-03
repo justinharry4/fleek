@@ -122,7 +122,7 @@ a:hover, a:active {
 }
 
 /* main styles */
-.signup-main-container {
+#lowlevel-container {
     padding: 0% 2%;
 }
 .signup-main-wrapper {
@@ -473,4 +473,15 @@ ul li:last-child .required-field {
     font-size: .8em;
     top: 0%;
     padding-top: .5em;
+}
+
+#lowlevel-container {
+    opacity: 1;
+    transition-property: transform opacity;
+    transition-duration: .3s;
+    transition-timing-function: ease-out;
+}
+#lowlevel-container.offScreenLeft {
+    transform: translateX(-50%);
+    opacity: 0;
 }

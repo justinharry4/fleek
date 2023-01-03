@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 
 const { User } = require('./models');
 const fileUtil = require('../core/utils/file');
+const { getFooterNavList } = require('./utils');
 
 
 module.exports.getSignin = async (req, res, next) => {
@@ -89,7 +90,7 @@ async function renderSignupView(req, res, next, steps){
     }
 }
 
-module.exports.getSignupStep1 = (req, res, next) => {
+module.exports.getSignupStep1 = async (req, res, next) => {
     let nextSignupStep = 'regstep1';
     let upperSignupStep = 'regform';
     let steps = { 
@@ -97,7 +98,16 @@ module.exports.getSignupStep1 = (req, res, next) => {
         nextSignupStep: upperSignupStep
     };
 
-    renderSignupView(req, res, next, steps);
+    let navList = await getFooterNavList();
+
+    res.render('auth/signup-step1', {
+        pageTitle: 'Fleek | Sign up',
+        navList: navList,
+        leadName: 'signup',
+        signupStep: steps.signupStep,
+        nextSignupStep: steps.nextSignupStep,
+    })
+    // renderSignupView(req, res, next, steps);
 };
 
 module.exports.postSignup = (req, res, next) => {
@@ -107,7 +117,7 @@ module.exports.postSignup = (req, res, next) => {
     res.redirect('/signup');
 };
 
-module.exports.getSignupRegform = (req, res, next) => {
+module.exports.getSignupRegform = async (req, res, next) => {
     let nextSignupStep = 'regform';
     let upperSignupStep = req.session.regAccountCreated ? 'regstep2': 'regform';
     let steps = { 
@@ -115,7 +125,37 @@ module.exports.getSignupRegform = (req, res, next) => {
         nextSignupStep: upperSignupStep
     };
 
-    renderSignupView(req, res, next, steps);
+    let regAccountCreated = req.session.regAccountCreated;
+    let regUser = await User.findById(req.session.regUser);
+    let regEmail = (regUser) ? regUser.email : req.session.regEmail;
+
+    let navList = await getFooterNavList();
+
+    res.render('auth/signup-regform', {
+        pageTitle: 'Fleek | Sign up',
+        navList: navList,
+        leadName: 'signup',
+        signupStep: steps.signupStep,
+        nextSignupStep: steps.nextSignupStep,
+        regEmail: regEmail,
+        regAccountCreated: regAccountCreated,
+    })
+
+    // let navList = await getFooterNavList();
+
+    // res.render('auth/sign-up', {
+    //     pageTitle: 'Fleek | Sign up',
+    //     navList: navList,
+    //     leadName: 'signup',
+    //     signupStep: signupStep,
+    //     nextSignupStep: nextSignupStep,
+    //     subscriptionData: subscriptionData,
+    //     regEmail: regEmail,
+    //     regSubPlan: regSubPlan,
+    //     regAccountCreated: regAccountCreated,
+    // });
+
+    // renderSignupView(req, res, next, steps);
 };
 
 module.exports.postSignupRegform = async (req, res, next) => {
@@ -153,6 +193,19 @@ module.exports.postSignupRegform = async (req, res, next) => {
     req.session.regUser = user._id;
     req.session.regAccountCreated = true;
 
+    res.redirect('/signup/regstep2');
+
+    // let nextSignupStep = 'regstep2';
+    // let upperSignupStep = 'chooseplan';
+    // let steps = { 
+    //     signupStep: nextSignupStep,
+    //     nextSignupStep: upperSignupStep
+    // };
+
+    // renderSignupView(req, res, next, steps);
+};
+
+module.exports.getSignupStep2 = async (req, res, next) => {
     let nextSignupStep = 'regstep2';
     let upperSignupStep = 'chooseplan';
     let steps = { 
@@ -160,21 +213,20 @@ module.exports.postSignupRegform = async (req, res, next) => {
         nextSignupStep: upperSignupStep
     };
 
-    renderSignupView(req, res, next, steps);
+    let navList = await getFooterNavList();
+
+    res.render('auth/signup-step2', {
+        pageTitle: 'Fleek | Sign up',
+        navList: navList,
+        leadName: 'signup',
+        signupStep: steps.signupStep,
+        nextSignupStep: steps.nextSignupStep,
+    });
+
+    // renderSignupView(req, res, next, steps);
 };
 
-module.exports.getSignupStep2 = (req, res, next) => {
-    let nextSignupStep = 'regstep2';
-    let upperSignupStep = 'chooseplan';
-    let steps = { 
-        signupStep: nextSignupStep,
-        nextSignupStep: upperSignupStep
-    };
-
-    renderSignupView(req, res, next, steps);
-};
-
-module.exports.getSignupChoosePlan = (req, res, next) => {
+module.exports.getSignupChoosePlan = async (req, res, next) => {
     let nextSignupStep = 'chooseplan';
     let upperSignupStep = 'chooseplan';
     let steps = { 
@@ -182,7 +234,26 @@ module.exports.getSignupChoosePlan = (req, res, next) => {
         nextSignupStep: upperSignupStep
     };
 
-    renderSignupView(req, res, next, steps);
+    let regSubPlan = req.session.regSubPlan ? req.session.regSubPlan: 'premium';
+    
+    let navList = await getFooterNavList();
+
+    let subDataPath = 'auth/data/subscription.json'
+    let subDataString = await fileUtil.loadFile(subDataPath);
+    let subData = JSON.parse(subDataString);
+    let subscriptionData = subData;
+
+    res.render('auth/signup-chooseplan', {
+        pageTitle: 'Fleek | Sign up',
+        navList: navList,
+        leadName: 'signup',
+        signupStep: steps.signupStep,
+        nextSignupStep: steps.nextSignupStep,
+        subscriptionData: subscriptionData,
+        regSubPlan: regSubPlan,
+    });
+
+    // renderSignupView(req, res, next, steps);
 };
 
 module.exports.postSignupChoosePlan = async (req, res, next) => {
@@ -203,6 +274,19 @@ module.exports.postSignupChoosePlan = async (req, res, next) => {
     req.session.regSubPlan = subPlan;
     await user.save();
 
+    res.redirect('/signup/regstep3');
+
+    // let nextSignupStep = 'regstep3';
+    // let upperSignupStep = 'creditoption';
+    // let steps = { 
+    //     signupStep: nextSignupStep,
+    //     nextSignupStep: upperSignupStep
+    // };
+
+    // renderSignupView(req, res, next, steps);
+};
+
+module.exports.getSignupStep3 = async (req, res, next) => {
     let nextSignupStep = 'regstep3';
     let upperSignupStep = 'creditoption';
     let steps = { 
@@ -210,21 +294,20 @@ module.exports.postSignupChoosePlan = async (req, res, next) => {
         nextSignupStep: upperSignupStep
     };
 
-    renderSignupView(req, res, next, steps);
+    let navList = await getFooterNavList();
+
+    res.render('auth/signup-step3', {
+        pageTitle: 'Fleek | Sign up',
+        navList: navList,
+        leadName: 'signup',
+        signupStep: steps.signupStep,
+        nextSignupStep: steps.nextSignupStep,
+    });
+
+    // renderSignupView(req, res, next, steps);
 };
 
-module.exports.getSignupStep3 = (req, res, next) => {
-    let nextSignupStep = 'regstep3';
-    let upperSignupStep = 'creditoption';
-    let steps = { 
-        signupStep: nextSignupStep,
-        nextSignupStep: upperSignupStep
-    };
-
-    renderSignupView(req, res, next, steps);
-};
-
-module.exports.getSignupCreditOption = (req, res, next) => {
+module.exports.getSignupCreditOption = async (req, res, next) => {
     let nextSignupStep = 'creditoption';
     let upperSignupStep = '';
     let steps = { 
@@ -232,7 +315,26 @@ module.exports.getSignupCreditOption = (req, res, next) => {
         nextSignupStep: upperSignupStep
     };
 
-    renderSignupView(req, res, next, steps);
+    let regSubPlan = req.session.regSubPlan ? req.session.regSubPlan: 'premium';
+    
+    let navList = await getFooterNavList();
+
+    let subDataPath = 'auth/data/subscription.json'
+    let subDataString = await fileUtil.loadFile(subDataPath);
+    let subData = JSON.parse(subDataString);
+    let subscriptionData = subData;
+
+    res.render('auth/signup-creditoption', {
+        pageTitle: 'Fleek | Sign up',
+        navList: navList,
+        leadName: 'signup',
+        signupStep: steps.signupStep,
+        nextSignupStep: steps.nextSignupStep,
+        subscriptionData: subscriptionData,
+        regSubPlan: regSubPlan,
+    });
+
+    // renderSignupView(req, res, next, steps);
 };
 
 module.exports.postSignupCreditOption = async (req, res, next) => {

@@ -9,10 +9,18 @@ middleware = makeSafe(middleware);
 
 const router = express.Router();
 
-router.use(middleware.checkAuthMiddleware);
+// router.use(middleware.checkAuthMiddleware);
 
-router.get('/browse', controllers.getBrowse);
+router.get(
+    '/browse',
+    middleware.checkAuthMiddleware,
+    controllers.getBrowse,
+);
 
-router.get('/content/:contentId', controllers.getContent);
+router.get(
+    '/content/:contentId',
+    middleware.checkAuthMiddleware,
+    controllers.getContent,
+);
 
 module.exports = router;

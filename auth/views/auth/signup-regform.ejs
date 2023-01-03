@@ -1,0 +1,53 @@
+<%- include(coreRoot + '/head') %>
+    <link rel="stylesheet" href="/css/auth/auth.css">
+    <link rel="stylesheet" href="/css/core/checkbox.css">
+    <script src="/js/auth/signup-regform.js" type="module" data-fetchmethod="native"></script>
+    <!-- <script src="/js/core/checkbox.js"></script> -->
+</head>
+<body>
+    <div id="toplevel-container" class="no-scroll" data-fragment-name="regform">
+        <%- include(coreRoot + '/header') %>
+            <span class="toplevel-header-link-text"><a href="/signin">Sign In</a></span>
+        </header>
+        <div id="lowlevel-container" class="offScreenLeft transZero" data-transition-class="offScreenLeft">
+            <div class="signup-main-wrapper signup-step-<%= signupStep %>">
+                <h2 class="signup-stepno-heading">step <span class="small-num">1</span> of <span class="small-num">3</span></h2>
+                <% if (regAccountCreated) { %>
+                    <h3 class="signup-step-heading">Account Created</h3>
+                    <p class="signup-step-info-text">Use this email to access your account:</p>
+                    <div id="signup-reg-email" class="text-bold"><%= regEmail %></div>
+                    <button type="button" id="account-created-proceed" class="native-bg block-strech proceed-button" data-signup-stepname="<%= signupStep %>">Next</button>
+                <% } else { %>
+                    <h3 class="signup-step-heading">Create a password to start your membership</h3>
+                    <p class="signup-step-info-text">Just a few more steps and you're done!<br>We hate paperwork, too.</p>
+                    <form class="signup-form">
+                        <fieldset>
+                            <ul class="signup-form-ul">
+                                <li class="overlay-wrapper">
+                                    <label for="signup-form-email" class="overlay focus-label">Add an email address</label>
+                                    <input type="email" name="email" value="<%= regEmail %>" id="signup-form-email" class="block-strech" placeholder="">
+                                </li>
+                                <li class="overlay-wrapper">
+                                    <label for="signup-form-password" class="overlay">Add a password</label>
+                                    <input type="password" name="password" id="signup-form-password" class="block-strech" placeholder="">
+                                </li>
+                            </ul>
+                        </fieldset>
+                        <label class="signup-sub-main-text custom-checkbox-container">
+                            <%- include(coreRoot + '/checkbox', {
+                                checkboxName: 'fleek-special-offers', 
+                                checkboxId: 'signup-form-offers-checkbox', 
+                                checkboxValue: 'true',
+                                checked: false,
+                                disabled: false,
+                            }) %>
+                            Please do not email me Fleek special offers.
+                        </label>
+                        <button type="button" id="signup-form-proceed" class="native-bg block-strech proceed-button" data-signup-stepname="<%= signupStep %>">Next</button>
+                    </form>
+                <% } %>
+            </div>
+        </div>
+        <%- include(coreRoot + '/footer') %>
+    </div>
+<%- include(coreRoot + '/end') %>

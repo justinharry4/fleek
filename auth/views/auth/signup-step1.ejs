@@ -1,0 +1,24 @@
+<%- include(coreRoot + '/head') %>
+    <link rel="stylesheet" href="/css/auth/auth.css">
+    <link rel="stylesheet" href="/css/core/checkbox.css">
+    <script src="/js/auth/signup-step1.js" type="module" data-fetchmethod="native"></script>
+</head>
+<body>
+    <div id="toplevel-container" class="no-scroll" data-fragment-name="regstep1">
+        <%- include(coreRoot + '/header') %>
+            <span class="toplevel-header-link-text"><a href="/signin">Sign In</a></span>
+        </header>
+        <div id="lowlevel-container" class="offScreenLeft transZero" data-transition-class="offScreenLeft">
+            <div class="signup-main-wrapper signup-step-<%= signupStep %>">
+                <div class="signup-step-img-wrapper">
+                    <img src="/images/devices.png" alt="laptop tv tablet">
+                </div>
+                <h2 class="signup-stepno-heading">step <span class="small-num">1</span> of <span class="small-num">3</span></h2>
+                <h3 class="signup-step-heading">Finish setting up your account</h3>
+                <p class="signup-step-info-text">Fleek is personalized for you.<br>Create a password to watch on any device at any time</p>
+                <button type="button" class="native-bg block-strech proceed-button" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">Next</button>
+            </div>
+        </div>
+        <%- include(coreRoot + '/footer') %>
+    </div>
+<%- include(coreRoot + '/end') %>

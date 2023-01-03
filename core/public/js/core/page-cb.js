@@ -264,7 +264,7 @@ class Page {
         }
     }
 
-    _startPageLoad(stateElements, levelSelector, fetchType, setHistory, stateUrl, trueUrl){
+    _startPageLoad(stateElements, levelSelector, fetchType, setHistory, stateUrl, trueUrl, setPageState){
         /*  This function carries out the first part of a
             two-part process to replace the present DOM elements
             with elements from a different document. 
@@ -358,6 +358,7 @@ class Page {
             levelSelector,
             stateUrl,
             trueUrl,
+            setPageState,
         };
         
         // Promise created to be resolved when the entire page load process
@@ -448,9 +449,9 @@ class Page {
                           called after page load.
         */
 
-        let { $styleSheetLinks, $scripts, $newContainerDiv } = args;
-        let { $containerDivParent, nonRepeatedScripts, existingLinks } = args;
-        let { existingScripts, levelSelector, stateUrl, trueUrl } = args;
+        let { $styleSheetLinks, $scripts, $newContainerDiv, $containerDivParent } = args;
+        let { nonRepeatedScripts, existingLinks, existingScripts } = args;
+        let { levelSelector, stateUrl, trueUrl, setPageState } = args;
         let { resolve, promiseTimeoutID } = promiseArgs;
         
         /*  DESTRUCTURED VARIABLES
@@ -561,7 +562,11 @@ class Page {
         // (optionally) create a new browser history entry for the
         // new page being loaded.
         if (setHistory){
-            this.saveNewState(levelSelector, stateUrl, trueUrl);
+            if (setPageState === false){
+                this.saveNewState(levelSelector, stateUrl, trueUrl, setPageState);
+            } else {
+                this.saveNewState(levelSelector, stateUrl, trueUrl);
+            }
         }
         
         // create element to be used for event-based communication
