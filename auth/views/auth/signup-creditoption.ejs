@@ -1,15 +1,14 @@
 <%- include(coreRoot + '/head') %>
     <link rel="stylesheet" href="/css/auth/auth.css">
     <link rel="stylesheet" href="/css/core/checkbox.css">
-    <script src="/js/auth/signup.js"></script>
-    <script src="/js/core/checkbox.js"></script>
+    <script src="/js/auth/signup-creditoption.js" type="module" data-fetchmethod="native"></script>
 </head>
 <body>
-    <div id="signup-toplevel-container">
+    <div id="toplevel-container" class="no-scroll" data-fragment-name="creditoption">
         <%- include(coreRoot + '/header') %>
             <span class="toplevel-header-link-text"><a href="/">Sign Out</a></span>
         </header>
-        <div class="signup-main-container">
+        <div id="lowlevel-container" class="offScreenLeft transZero" data-transition-class="offScreenLeft">
             <div class="signup-main-wrapper signup-step-<%= signupStep %>">
                 <h2 class="signup-stepno-heading">step <span class="small-num">3</span> of <span class="small-num">3</span></h2>
                 <h3 class="signup-step-heading">Set up your credit or debit card</h3>
@@ -55,7 +54,13 @@
                         and that you are over 18. Fleek will automatically continue your membership and charge the membership fee (currently N4400/month) to your payment method until you cancel. You may cancel at any time to avoid future charges.
                     </p>
                     <label for="signup-form-tou-checkbox" class="signup-tou-checkbox-label custom-checkbox-container">
-                        <%- include(coreRoot + '/checkbox', {checkboxName: 'terms-of-use', checkboxId: 'signup-form-tou-checkbox', checkboxValue: 'true', checked: false, disabled: false}) %>
+                        <%- include(coreRoot + '/checkbox', {
+                            checkboxName: 'terms-of-use',
+                            checkboxId: 'signup-form-tou-checkbox',
+                            checkboxValue: 'true',
+                            checked: false,
+                            disabled: false,
+                        }) %>
                         I agree
                     </label>
                     <input type="submit" class="native-bg block-strech submit-button" value="Start Membership" data-signup-stepname="<%= signupStep %>" data-next-signup-stepname="<%= nextSignupStep %>">

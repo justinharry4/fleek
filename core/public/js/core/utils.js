@@ -2,7 +2,7 @@
 
 function addListener(element, eventName, eventListener, eventData){
     let jqObject = element.jquery ? element : $(element);
-    jqObject.off(eventName);
+    // jqObject.off(eventName);
     jqObject.on(eventName, eventData, eventListener);
 }
 

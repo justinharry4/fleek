@@ -131,8 +131,13 @@ class Page {
     setEventHandlers(){
         let eventData = { page: this };
         let eventMap = this.getEventMap();
-
+        
         // event map structure => [[selector, event, handler], [.., .., ..], ..]
+        for (let eventEntry of eventMap){
+            let [selector, event] = eventEntry;
+            $(selector).off(event);
+        }
+
         for (let eventEntry of eventMap){
             let [selector, event, handler] = eventEntry;
 

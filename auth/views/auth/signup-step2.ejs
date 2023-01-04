@@ -1,15 +1,15 @@
 <%- include(coreRoot + '/head') %>
     <link rel="stylesheet" href="/css/auth/auth.css">
     <link rel="stylesheet" href="/css/core/checkbox.css">
-    <script src="/js/auth/signup.js"></script>
-    <script src="/js/core/checkbox.js"></script>
+    <script src="/js/auth/signup-step2.js" type="module" data-fetchmethod="native"></script>
+    <!-- <script src="/js/core/checkbox.js"></script> -->
 </head>
 <body>
-    <div id="signup-toplevel-container">
+    <div id="toplevel-container" class="no-scroll" data-fragment-name="regstep2">
         <%- include(coreRoot + '/header') %>
             <span class="toplevel-header-link-text"><a href="/">Sign Out</a></span>
         </header>
-        <div class="signup-main-container">
+        <div id="lowlevel-container" class="offScreenLeft transZero" data-transition-class="offScreenLeft">
             <div class="signup-main-wrapper signup-step-<%= signupStep %>">
                 <div class="signup-step-img-wrapper">
                     <img src="/images/checkmark.png" alt="checkmark">
