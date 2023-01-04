@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+/* checkbox component styles */
+@import url('/css/core/checkbox.css');
+
+/* header and main styles */
+@import url('/css/auth/signup-base.css');
+
+/* main styles */
+.signup-step-regform {
+    max-width: 30em;
+}
+.signup-step-regform .signup-step-info-text {
+    margin: .7em 0em;
+}
+#signup-reg-email {
+    margin: 2.5em 0em;
+    text-align: center;
+}

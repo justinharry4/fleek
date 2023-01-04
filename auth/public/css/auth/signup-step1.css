@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+/* header and main styles */
+@import url('/css/auth/signup-base.css');
+
+/* main styles */
+.signup-step-regstep1 .signup-step-info-text {
+    margin: 1.5em 2em 0em;
+}

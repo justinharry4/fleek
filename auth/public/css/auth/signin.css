@@ -1,0 +1,107 @@
+@charset "UTF-8"; 
+
+/* checkbox component styles */
+@import url('/css/core/checkbox.css');
+
+/* footer styles */
+@import url('/css/core/footer1.css');
+
+/* misc styles */
+a:hover, a:active {
+    text-decoration: underline;
+}
+
+/* background styles */
+#signin-container {
+    color: #776f6f;
+    background-color: #000;
+    background-image: url('/images/home-movie-wall-alpha.png');
+    background-size: cover;
+}
+
+/* main styles */
+#signin-main-container {
+    padding: 0% 2%;
+}
+#signin-main-wrapper {
+    margin: 0em auto 6em;
+    max-width: 28em;
+    padding: 3.5em;
+    background-color: rgba(0, 0, 0, .7);
+    border-radius: 3px;
+}
+#signin-main-wrapper h2 {
+    font-size: 2em;
+    color: #fff;
+}
+#form-signin ul {
+    margin: 1.5em 0em 2.5em;
+}
+#form-signin-ul-wrapper input {
+    height: 3.5em;
+    margin-bottom: 1em;
+    border-radius: 4px;
+    padding: 0em 1em;
+}
+#form-signin ul li input {
+    background-color: #454546;
+}
+#form-signin ul li input::placeholder {
+    color: #919191;
+}
+#form-signin input[type="submit"] {
+    color: #fff;
+    font-weight: bold;
+}
+#form-signin-remember-wrapper {
+    font-size: .8em;
+    font-weight: bold;
+}
+#form-signin-remember-wrapper label {
+    margin-left: .5em;
+}
+#form-signin-remember-wrapper span:last-child {
+    margin-left: auto;
+}
+#signin-main-wrapper > div:last-child {
+    margin: 5em 0em 4em;
+}
+#signin-main-wrapper > div:last-child p:first-child a {
+    color: #fff;
+}
+#signin-main-wrapper > div:last-child p:last-child {
+    margin-top: 1em;
+} 
+#signin-main-wrapper > div:last-child p:last-child a {
+    color: #1010f1;
+}
+#signin-main-wrapper .custom-checkbox-wrapper {
+    background-color: #fff;
+}
+
+/* footer styles */
+.signin-footer {
+    background-color: rgba(0, 0, 0, .7);
+}
+
+/* misc styles */
+.signin-text-small {
+    font-size: .8em;
+}
+#form-signin li label {
+    display: flex;
+    color: #8a8989;
+    left: 4.5%;
+    top: 0%;
+    z-index: 100;
+    height: 100%;
+    align-items: center;
+    padding-top: 0em;
+    transition-property: align-items, font-size;
+    transition-duration: 100ms;
+}
+#form-signin li label.focus-label {
+    align-items: flex-start;
+    font-size: .8em;
+    padding-top: .2em;
+}

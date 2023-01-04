@@ -1,0 +1,98 @@
+@charset "UTF-8";
+
+/* header and main styles */
+@import url('/css/auth/signup-base.css');
+
+/* main styles */
+.signup-step-chooseplan {
+    max-width: 80%;
+}
+.signup-step-chooseplan .signup-step-info-ul {
+    margin: 1em 0em;
+}
+.signup-extra-plan-info {
+    color: #7a7a7a;
+}
+.signup-extra-plan-info p:last-child {
+    margin-top: 1em;
+}
+.signup-step-chooseplan button:last-child {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* table styles */  
+#sub-plan-table td { 
+    text-align: center;
+}
+#sub-plan-table tr {
+    justify-content: flex-end;
+}
+#sub-plan-table tbody tr {
+    padding: 1em 0em;
+}
+.tr-plans th {
+    border-radius: 3px;
+    height: 7.5em;
+    /* height: 100%; */
+}
+.lead-cell-th {
+    flex: 0 0 auto;
+    text-align: left;
+    margin-right: auto;
+    /* width: 27em; */
+    width: 44%;
+    font-weight: normal;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+.lead-cell-th ~ *{
+    flex: 1 0 0px;
+    /* margin: 0em .5em; */
+    margin: 0% 1.5%;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+#sub-plan-table thead .lead-cell-th ~ * {
+    align-items: center;
+    color: #fff;
+    justify-content: center;
+}
+.tr-plans {
+    padding-bottom: 1em;
+}
+#sub-plan-table tbody tr:last-child {
+    height: auto;
+}
+.tr-devices td div {
+    flex-direction: column;
+    align-items: center;
+}
+.tr-devices .tr-svg-wrapper {
+    display: block;
+}
+.tr-devices .tr-svg-icon-container {
+    margin-bottom: .7em;
+}
+#sub-plan-table tbody tr:not(:last-child) {
+    border-bottom: 2px solid #c7c3c3;
+}
+#sub-plan-table tbody td {
+    color: #8d8c8c;
+}
+.tr-plans {
+    position: sticky;
+    top: 50px;
+}
+
+/* misc styles */
+#sub-plan-table .signup-inactive-native-bg {
+    background-color: #e96565;
+}
+#sub-plan-table .signup-native-bg {
+    background-color: var(--native-color);
+}
+#sub-plan-table .signup-native-fg {
+    color: var(--native-color);
+}

@@ -1,0 +1,52 @@
+@charset "UTF-8";
+
+/* header and main styles */
+@import url('/css/auth/signup-base.css');
+
+/* main styles */
+.signup-step-regstep3 {
+    max-width: 35em;
+}
+#signup-secure-server-icon {
+    width: 10px;
+} 
+.signup-step-regstep3 .signup-step-info-text-wrapper {
+    margin-top: 1em;
+}
+.signup-step-regstep3 .signup-step-info-text:last-child {
+    margin-top: .5em;
+    font-weight: bold;
+}
+.signup-proceed-button-wrapper 
+.signup-secure-server-wrapper {
+    justify-content: flex-end;
+    padding: .3em 0em;
+    font-size: .8em;
+}
+#signup-secure-server-icon {
+    margin: 0em 5px;
+}
+.signup-proceed-button-wrapper {
+    margin-top: 1em;
+}
+.signup-step-regstep3 .proceed-button {
+    margin-top: 0em;
+    width: 100%;
+    color: #000;
+    font-size: 1em;
+    background-color: #fff;
+    border: 2px solid #c4c3c3;
+    align-items: center;
+    padding: 1em;
+}
+.signup-step-regstep3 .proceed-button .signup-card-option-icon {
+    margin: 0em .2em;
+}
+.signup-step-regstep3 .proceed-button span {
+    margin-right: .5em;
+}
+.signup-step-regstep3 .proceed-button svg:last-child {
+    margin-left: auto;
+    height: 20px;
+    color: #c4c3c3;
+}
